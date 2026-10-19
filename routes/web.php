@@ -2,10 +2,16 @@
 
 use App\Http\Controllers\Admin\ShopApprovalController;
 use App\Http\Controllers\Buyer\ShopOnboardingController;
+use App\Http\Controllers\ProductCatalogController;
 use App\Http\Controllers\Seller\DashboardController as SellerDashboardController;
+use App\Http\Controllers\Seller\ProductController as SellerProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
+
+// Public Marketplace Catalog Routes
+Route::get('/products', [ProductCatalogController::class, 'index'])->name('products.index');
+Route::get('/products/{slug}', [ProductCatalogController::class, 'show'])->name('products.show');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -25,6 +31,7 @@ Route::middleware(['auth', 'role:buyer,seller'])->prefix('buyer')->name('buyer.'
 // Seller Routes (Protected by role seller AND approved shop)
 Route::middleware(['auth', 'role:seller', 'shop.approved'])->prefix('seller')->name('seller.')->group(function () {
     Route::get('/dashboard', [SellerDashboardController::class, 'index'])->name('dashboard');
+    Route::resource('products', SellerProductController::class);
 });
 
 // Admin Routes (Shop Approval Center & Administrative Controls)

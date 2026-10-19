@@ -46,16 +46,41 @@
                     </div>
                 </div>
 
-                <!-- Products Readiness Card (Phase 3 placeholder) -->
-                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Katalog Produk</h4>
-                    <p class="text-xs text-gray-600 mt-3 leading-relaxed">
-                        Manajemen katalog, matriks varian (ukuran/warna), galeri foto, dan stok produk akan aktif pada <strong>Phase 3</strong>.
-                    </p>
-                    <div class="mt-4 pt-3 border-t border-gray-100">
-                        <span class="inline-flex items-center text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">
-                            Siap untuk Phase 3 (Catalog)
-                        </span>
+                <!-- Products Management Card (Phase 3 Active) -->
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Katalog Produk Toko</h4>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                Phase 3 Aktif
+                            </span>
+                        </div>
+                        <div class="mt-4 grid grid-cols-3 gap-2 text-center">
+                            <div class="p-2.5 bg-gray-50 rounded-lg border border-gray-100">
+                                <span class="block text-xl font-black text-gray-900">{{ $totalProducts }}</span>
+                                <span class="block text-[10px] uppercase font-bold text-gray-400 mt-0.5">Total</span>
+                            </div>
+                            <div class="p-2.5 bg-emerald-50/60 rounded-lg border border-emerald-100">
+                                <span class="block text-xl font-black text-emerald-700">{{ $publishedProducts }}</span>
+                                <span class="block text-[10px] uppercase font-bold text-emerald-600 mt-0.5">Tayang</span>
+                            </div>
+                            <div class="p-2.5 bg-amber-50/60 rounded-lg border border-amber-100">
+                                <span class="block text-xl font-black text-amber-700">{{ $draftProducts }}</span>
+                                <span class="block text-[10px] uppercase font-bold text-amber-600 mt-0.5">Draft</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-3 leading-relaxed">
+                            Kelola harga, stok inventaris, status publikasi, dan spesifikasi produk toko Anda.
+                        </p>
+                    </div>
+
+                    <div class="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
+                        <a href="{{ route('seller.products.index') }}" class="text-xs font-bold text-emerald-700 hover:text-emerald-800 transition">
+                            Lihat Semua &rarr;
+                        </a>
+                        <a href="{{ route('seller.products.create') }}" class="inline-flex items-center px-3 py-1.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition">
+                            + Tambah Produk
+                        </a>
                     </div>
                 </div>
 

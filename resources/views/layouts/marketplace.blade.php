@@ -23,6 +23,10 @@
                 Selamat Datang di NexaMarket — Belanja Aman, Cepat & Terpercaya dari Ribuan Toko Terbaik.
             </p>
             <div class="hidden md:flex items-center space-x-6 text-emerald-100">
+                <a href="{{ route('products.index') }}" class="hover:text-white transition font-semibold text-white flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+                    Jelajah Katalog
+                </a>
                 <span class="hover:text-white cursor-pointer transition">Bantuan & FAQ</span>
                 <span class="hover:text-white cursor-pointer transition">Garansi NexaCare</span>
                 <span class="font-semibold text-white">IDR (Rp)</span>
@@ -52,7 +56,7 @@
                 </div>
 
                 <!-- Search Input Simulation (Catalog ready) -->
-                <div class="hidden lg:flex flex-1 max-w-2xl">
+                <form action="{{ route('products.index') }}" method="GET" class="hidden lg:flex flex-1 max-w-2xl">
                     <div class="relative w-full">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -61,17 +65,22 @@
                         </div>
                         <input
                             type="search"
+                            name="search"
+                            value="{{ request('search') }}"
                             placeholder="Cari jutaan produk berkualitas, kategori, atau toko..."
                             class="w-full pl-11 pr-24 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition outline-none"
                         />
-                        <button class="absolute right-1.5 top-1.5 bottom-1.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-lg transition shadow-sm">
+                        <button type="submit" class="absolute right-1.5 top-1.5 bottom-1.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-lg transition shadow-sm">
                             Cari
                         </button>
                     </div>
-                </div>
+                </form>
 
                 <!-- Navigation Actions -->
                 <div class="flex items-center space-x-3 sm:space-x-5">
+                    <a href="{{ route('products.index') }}" class="hidden sm:inline-flex items-center text-xs font-bold text-gray-700 hover:text-emerald-600 transition px-2.5 py-1.5 rounded-lg hover:bg-gray-100">
+                        Katalog
+                    </a>
                     @auth
                         <!-- Role-Specific Action Links -->
                         @if (auth()->user()->isAdmin())

@@ -39,14 +39,21 @@ new class extends Component
                             {{ __('Approval Toko') }}
                         </x-nav-link>
                     @elseif (auth()->user()->isSeller())
-                        <x-nav-link :href="route('seller.dashboard')" :active="request()->routeIs('seller.*')" wire:navigate>
+                        <x-nav-link :href="route('seller.dashboard')" :active="request()->routeIs('seller.dashboard')">
                             {{ __('Seller Center') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('seller.products.index')" :active="request()->routeIs('seller.products.*')">
+                            {{ __('Produk Saya') }}
                         </x-nav-link>
                     @else
                         <x-nav-link :href="route('buyer.shop.apply')" :active="request()->routeIs('buyer.shop.*')" wire:navigate>
                             {{ __('Buka Toko') }}
                         </x-nav-link>
                     @endif
+
+                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
+                        {{ __('Katalog') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -97,6 +104,27 @@ new class extends Component
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+
+            @if (auth()->user()->isAdmin())
+                <x-responsive-nav-link :href="route('admin.shops.index')" :active="request()->routeIs('admin.shops.*')" wire:navigate>
+                    {{ __('Approval Toko') }}
+                </x-responsive-nav-link>
+            @elseif (auth()->user()->isSeller())
+                <x-responsive-nav-link :href="route('seller.dashboard')" :active="request()->routeIs('seller.dashboard')">
+                    {{ __('Seller Center') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('seller.products.index')" :active="request()->routeIs('seller.products.*')">
+                    {{ __('Produk Saya') }}
+                </x-responsive-nav-link>
+            @else
+                <x-responsive-nav-link :href="route('buyer.shop.apply')" :active="request()->routeIs('buyer.shop.*')" wire:navigate>
+                    {{ __('Buka Toko') }}
+                </x-responsive-nav-link>
+            @endif
+
+            <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
+                {{ __('Katalog Produk') }}
             </x-responsive-nav-link>
         </div>
 
