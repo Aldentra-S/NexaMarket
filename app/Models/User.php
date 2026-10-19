@@ -63,4 +63,14 @@ class User extends Authenticatable
 
         return $currentValue === $roleValue;
     }
+
+    public function shop(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Shop::class);
+    }
+
+    public function hasApprovedShop(): bool
+    {
+        return $this->shop !== null && $this->shop->isApproved();
+    }
 }

@@ -44,33 +44,69 @@
                         </div>
 
                         <!-- Seller Portal Card -->
-                        <div class="p-5 rounded-xl border {{ auth()->user()->isSeller() ? 'border-emerald-300 bg-emerald-50/50' : 'border-gray-200 bg-gray-50' }}">
-                            <div class="flex items-center justify-between">
-                                <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Seller Center</span>
+                        <div class="p-5 rounded-xl border flex flex-col justify-between {{ auth()->user()->isSeller() ? 'border-emerald-300 bg-emerald-50/50' : 'border-gray-200 bg-gray-50' }}">
+                            <div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Seller Center</span>
+                                    @if (auth()->user()->isSeller())
+                                        <span class="text-[10px] font-bold px-2 py-0.5 bg-emerald-600 text-white rounded-full">Aktif</span>
+                                    @elseif (auth()->user()->shop?->isSuspended())
+                                        <span class="text-[10px] font-bold px-2 py-0.5 bg-gray-600 text-white rounded-full">Ditangguhkan</span>
+                                    @elseif (auth()->user()->shop?->isPending())
+                                        <span class="text-[10px] font-bold px-2 py-0.5 bg-amber-500 text-white rounded-full">Menunggu Review</span>
+                                    @else
+                                        <span class="text-[10px] font-semibold text-gray-500">Tersedia</span>
+                                    @endif
+                                </div>
+                                <p class="text-xs text-gray-600 mt-2">
+                                    Manajemen katalog produk, variasi harga & stok, resi pengiriman, serta buku besar keuangan toko.
+                                </p>
+                            </div>
+
+                            <div class="mt-4 pt-3 border-t border-gray-200/60">
                                 @if (auth()->user()->isSeller())
-                                    <span class="text-[10px] font-bold px-2 py-0.5 bg-emerald-600 text-white rounded-full">Aktif</span>
+                                    <a href="{{ route('seller.dashboard') }}" class="inline-flex items-center text-xs font-bold text-emerald-700 hover:text-emerald-800">
+                                        Buka Seller Center &rarr;
+                                    </a>
+                                @elseif (auth()->user()->shop?->isSuspended())
+                                    <a href="{{ route('buyer.shop.apply') }}" class="inline-flex items-center text-xs font-bold text-gray-700 hover:text-gray-900">
+                                        Lihat Status Penangguhan &rarr;
+                                    </a>
+                                @elseif (auth()->user()->shop?->isPending())
+                                    <a href="{{ route('buyer.shop.apply') }}" class="inline-flex items-center text-xs font-bold text-amber-700 hover:text-amber-800">
+                                        Lihat Status Pengajuan &rarr;
+                                    </a>
                                 @else
-                                    <span class="text-[10px] font-semibold text-gray-500">Pendaftaran Toko (Fase 2)</span>
+                                    <a href="{{ route('buyer.shop.apply') }}" class="inline-flex items-center text-xs font-bold text-emerald-700 hover:text-emerald-800">
+                                        Daftar Buka Toko &rarr;
+                                    </a>
                                 @endif
                             </div>
-                            <p class="text-xs text-gray-600 mt-2">
-                                Manajemen katalog produk, variasi harga & stok, resi pengiriman, serta buku besar keuangan toko.
-                            </p>
                         </div>
 
                         <!-- Admin Portal Card -->
-                        <div class="p-5 rounded-xl border {{ auth()->user()->isAdmin() ? 'border-purple-300 bg-purple-50/50' : 'border-gray-200 bg-gray-50' }}">
-                            <div class="flex items-center justify-between">
-                                <span class="text-xs font-bold uppercase tracking-wider text-purple-700">Admin Control</span>
-                                @if (auth()->user()->isAdmin())
-                                    <span class="text-[10px] font-bold px-2 py-0.5 bg-purple-600 text-white rounded-full">Aktif</span>
-                                @else
-                                    <span class="text-[10px] font-semibold text-gray-400">Akses Terbatas</span>
-                                @endif
+                        <div class="p-5 rounded-xl border flex flex-col justify-between {{ auth()->user()->isAdmin() ? 'border-purple-300 bg-purple-50/50' : 'border-gray-200 bg-gray-50' }}">
+                            <div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-purple-700">Admin Control</span>
+                                    @if (auth()->user()->isAdmin())
+                                        <span class="text-[10px] font-bold px-2 py-0.5 bg-purple-600 text-white rounded-full">Aktif</span>
+                                    @else
+                                        <span class="text-[10px] font-semibold text-gray-400">Akses Terbatas</span>
+                                    @endif
+                                </div>
+                                <p class="text-xs text-gray-600 mt-2">
+                                    Verifikasi approval toko baru, moderasi sengketa refund, kontrol komisi platform, dan analitik GMV.
+                                </p>
                             </div>
-                            <p class="text-xs text-gray-600 mt-2">
-                                Verifikasi approval toko baru, moderasi sengketa refund, kontrol komisi platform, dan analitik GMV.
-                            </p>
+
+                            @if (auth()->user()->isAdmin())
+                                <div class="mt-4 pt-3 border-t border-gray-200/60">
+                                    <a href="{{ route('admin.shops.index') }}" class="inline-flex items-center text-xs font-bold text-purple-700 hover:text-purple-800">
+                                        Kelola Persetujuan Toko &rarr;
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

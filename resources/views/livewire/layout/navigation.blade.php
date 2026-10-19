@@ -33,6 +33,20 @@ new class extends Component
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @if (auth()->user()->isAdmin())
+                        <x-nav-link :href="route('admin.shops.index')" :active="request()->routeIs('admin.shops.*')" wire:navigate>
+                            {{ __('Approval Toko') }}
+                        </x-nav-link>
+                    @elseif (auth()->user()->isSeller())
+                        <x-nav-link :href="route('seller.dashboard')" :active="request()->routeIs('seller.*')" wire:navigate>
+                            {{ __('Seller Center') }}
+                        </x-nav-link>
+                    @else
+                        <x-nav-link :href="route('buyer.shop.apply')" :active="request()->routeIs('buyer.shop.*')" wire:navigate>
+                            {{ __('Buka Toko') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 

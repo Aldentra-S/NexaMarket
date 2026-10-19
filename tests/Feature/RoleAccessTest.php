@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\UserRole;
+use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;
@@ -82,6 +83,7 @@ class RoleAccessTest extends TestCase
     public function test_sellers_cannot_access_admin_routes(): void
     {
         $seller = User::factory()->seller()->create();
+        Shop::factory()->approved()->create(['user_id' => $seller->id]);
 
         $this->actingAs($seller)->get('/seller/dashboard')->assertOk();
         $this->actingAs($seller)->get('/admin/dashboard')->assertForbidden();
@@ -122,5 +124,35 @@ class RoleAccessTest extends TestCase
         $response->assertSee('Peran Pembeli (Buyer)');
         $response->assertSee('Peran Penjual (Seller)');
         $response->assertSee('Peran Administrator');
+    }
+
+    public function test_marketplace_welcome_screen_renders_successfully_for_authenticated_user(): void
+    {
+        $user = User::factory()->create([
+            'name' => 'Budi Pembeli',
+        ]);
+
+        $response = $this->actingAs($user)->get('/');
+
+        $response->assertOk();
+        $response->assertSee('NexaMarket');
+        $response->assertSee('Budi Pembeli');
+        $response->assertSee('Keluar (Logout)');
+    }
+
+    public function test_logout_named_route_is_available_and_uses_post(): void
+    {
+        $this->assertTrue(\Illuminate\Support\Facades\Route::has('logout'));
+
+        $route = \Illuminate\Support\Facades\Route::getRoutes()->getByName('logout');
+        $this->assertNotNull($route);
+        $this->assertContains('POST', $route->methods());
+
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post(route('logout'));
+
+        $response->assertRedirect('/');
+        $this->assertGuest();
     }
 }

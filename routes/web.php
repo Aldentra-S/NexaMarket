@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\ShopApprovalController;
+use App\Http\Controllers\Buyer\ShopOnboardingController;
+use App\Http\Controllers\Seller\DashboardController as SellerDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
@@ -12,17 +15,27 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
-// Role-Protected Route Boundaries (for Phase 1 verification and subsequent phases)
-Route::middleware(['auth', 'role:buyer'])->prefix('buyer')->name('buyer.')->group(function () {
+// Buyer Routes (Shop Onboarding & Shopping Area)
+Route::middleware(['auth', 'role:buyer,seller'])->prefix('buyer')->name('buyer.')->group(function () {
     Route::get('/area', fn () => response()->json(['status' => 'ok', 'message' => 'Buyer Area Access Granted']))->name('area');
+    Route::get('/shop/apply', [ShopOnboardingController::class, 'create'])->name('shop.apply');
+    Route::post('/shop/apply', [ShopOnboardingController::class, 'store'])->name('shop.store');
 });
 
-Route::middleware(['auth', 'role:seller'])->prefix('seller')->name('seller.')->group(function () {
-    Route::get('/dashboard', fn () => response()->json(['status' => 'ok', 'message' => 'Seller Center Access Granted']))->name('dashboard');
+// Seller Routes (Protected by role seller AND approved shop)
+Route::middleware(['auth', 'role:seller', 'shop.approved'])->prefix('seller')->name('seller.')->group(function () {
+    Route::get('/dashboard', [SellerDashboardController::class, 'index'])->name('dashboard');
 });
 
+// Admin Routes (Shop Approval Center & Administrative Controls)
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn () => response()->json(['status' => 'ok', 'message' => 'Admin Portal Access Granted']))->name('dashboard');
+    Route::get('/dashboard', [ShopApprovalController::class, 'index'])->name('dashboard');
+    Route::get('/shops', [ShopApprovalController::class, 'index'])->name('shops.index');
+    Route::get('/shops/{shop}', [ShopApprovalController::class, 'show'])->name('shops.show');
+    Route::post('/shops/{shop}/approve', [ShopApprovalController::class, 'approve'])->name('shops.approve');
+    Route::post('/shops/{shop}/reject', [ShopApprovalController::class, 'reject'])->name('shops.reject');
+    Route::post('/shops/{shop}/suspend', [ShopApprovalController::class, 'suspend'])->name('shops.suspend');
+    Route::post('/shops/{shop}/reactivate', [ShopApprovalController::class, 'reactivate'])->name('shops.reactivate');
 });
 
 require __DIR__.'/auth.php';

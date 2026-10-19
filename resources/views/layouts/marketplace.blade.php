@@ -75,16 +75,16 @@
                     @auth
                         <!-- Role-Specific Action Links -->
                         @if (auth()->user()->isAdmin())
-                            <span class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200">
-                                Portal Admin
-                            </span>
+                            <a href="{{ route('admin.shops.index') }}" class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200 hover:bg-purple-200 transition">
+                                Approval Toko (Admin)
+                            </a>
                         @elseif (auth()->user()->isSeller())
-                            <span class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                            <a href="{{ route('seller.dashboard') }}" class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200 hover:bg-emerald-200 transition">
                                 Seller Center
-                            </span>
+                            </a>
                         @else
-                            <a href="{{ route('dashboard') }}" class="hidden sm:inline-flex items-center px-3 py-1.5 text-xs font-semibold rounded-lg text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition">
-                                Toko Saya
+                            <a href="{{ route('buyer.shop.apply') }}" class="hidden sm:inline-flex items-center px-3 py-1.5 text-xs font-semibold rounded-lg text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition">
+                                Buka Toko
                             </a>
                         @endif
 
