@@ -36,9 +36,16 @@
                             <h3 class="text-2xl font-black text-gray-900 mt-1">{{ $product->name }}</h3>
                             <p class="text-xs text-gray-400 font-mono mt-0.5">Slug: {{ $product->slug }}</p>
                         </div>
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border {{ $product->status->badgeColor() }}">
-                            Status: {{ $product->status->label() }}
-                        </span>
+                        <div class="flex items-center flex-wrap gap-2">
+                            @if ($product->category)
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">
+                                    Kategori: {{ $product->category->name }}
+                                </span>
+                            @endif
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border {{ $product->status->badgeColor() }}">
+                                Status: {{ $product->status->label() }}
+                            </span>
+                        </div>
                     </div>
 
                     <!-- Price & Stock Highlights -->

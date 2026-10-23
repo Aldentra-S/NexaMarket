@@ -6,10 +6,16 @@
     <div class="py-10 bg-gray-50/60 min-h-[calc(100vh-18rem)]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <!-- Breadcrumbs -->
-            <nav class="flex text-xs text-gray-500 space-x-2">
+            <nav class="flex items-center flex-wrap text-xs text-gray-500 gap-2">
                 <a href="{{ url('/') }}" class="hover:text-emerald-600 transition">Beranda</a>
                 <span>&rsaquo;</span>
                 <a href="{{ route('products.index') }}" class="hover:text-emerald-600 transition">Katalog Produk</a>
+                @if ($product->category)
+                    <span>&rsaquo;</span>
+                    <a href="{{ route('products.index', ['category' => $product->category->slug]) }}" class="hover:text-purple-600 transition font-medium text-purple-700">
+                        {{ $product->category->name }}
+                    </a>
+                @endif
                 <span>&rsaquo;</span>
                 <span class="text-gray-900 font-medium truncate max-w-xs sm:max-w-md">{{ $product->name }}</span>
             </nav>
@@ -42,8 +48,15 @@
                             <!-- Product Summary & Price Box -->
                             <div class="space-y-5 flex flex-col justify-between">
                                 <div class="space-y-3">
-                                    <div class="flex items-center space-x-2 text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full w-fit">
-                                        <span>Terverifikasi di NexaMarket</span>
+                                    <div class="flex items-center flex-wrap gap-2">
+                                        <div class="flex items-center space-x-2 text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full w-fit">
+                                            <span>Terverifikasi di NexaMarket</span>
+                                        </div>
+                                        @if ($product->category)
+                                            <a href="{{ route('products.index', ['category' => $product->category->slug]) }}" class="inline-flex items-center text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 px-3 py-1 rounded-full transition">
+                                                Kategori: {{ $product->category->name }}
+                                            </a>
+                                        @endif
                                     </div>
                                     <h1 class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight leading-snug">
                                         {{ $product->name }}

@@ -110,8 +110,15 @@
                                                 <div class="text-gray-400 font-mono text-[11px] truncate max-w-sm mt-0.5">
                                                     {{ $product->slug }}
                                                 </div>
-                                                <div class="text-gray-400 text-[10px] mt-0.5">
-                                                    Diperbarui: {{ $product->updated_at->format('d M Y, H:i') }}
+                                                <div class="flex items-center space-x-2 mt-0.5">
+                                                    @if ($product->category)
+                                                        <span class="text-[10px] font-semibold text-purple-700 bg-purple-50 px-1.5 py-0.2 rounded">
+                                                            {{ $product->category->name }}
+                                                        </span>
+                                                    @endif
+                                                    <span class="text-gray-400 text-[10px]">
+                                                        Diperbarui: {{ $product->updated_at->format('d M Y, H:i') }}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>

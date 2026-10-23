@@ -204,4 +204,177 @@ class PublicProductCatalogTest extends TestCase
 
         $this->get(route('products.show', $product->slug))->assertNotFound();
     }
+
+    public function test_catalog_displays_product_thumbnails_and_categories_correctly(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+
+        $shop = Shop::factory()->approved()->create();
+        $category = \App\Models\Category::factory()->create(['name' => 'Elektronik Audio']);
+        $product = Product::factory()->published()->create([
+            'shop_id' => $shop->id,
+            'category_id' => $category->id,
+            'name' => 'Speaker Bluetooth Mini',
+        ]);
+
+        \Illuminate\Support\Facades\Storage::disk('public')->put('products/speaker.jpg', 'speaker-content');
+        $product->images()->create([
+            'file_path' => 'products/speaker.jpg',
+            'is_primary' => true,
+            'sort_order' => 0,
+        ]);
+
+        $response = $this->get(route('products.index'));
+
+        $response->assertOk();
+        $response->assertSee('Speaker Bluetooth Mini');
+        $response->assertSee('Elektronik Audio');
+        $response->assertSee('products/speaker.jpg');
+    }
+
+    public function test_category_filter_works_together_with_search_sort_and_pagination(): void
+    {
+        $shop = Shop::factory()->approved()->create();
+        $techCategory = \App\Models\Category::factory()->create(['name' => 'Teknologi Komputer', 'slug' => 'teknologi-komputer']);
+        $fashionCategory = \App\Models\Category::factory()->create(['name' => 'Fashion Pria', 'slug' => 'fashion-pria']);
+
+        // Tech products matching search "wireless"
+        $cheapTech = Product::factory()->published()->create([
+            'shop_id' => $shop->id,
+            'category_id' => $techCategory->id,
+            'name' => 'Wireless Mouse Murah',
+            'price' => 50000,
+        ]);
+        $expensiveTech = Product::factory()->published()->create([
+            'shop_id' => $shop->id,
+            'category_id' => $techCategory->id,
+            'name' => 'Wireless Keyboard Mahal',
+            'price' => 250000,
+        ]);
+
+        // Tech product NOT matching "wireless"
+        $otherTech = Product::factory()->published()->create([
+            'shop_id' => $shop->id,
+            'category_id' => $techCategory->id,
+            'name' => 'Kabel HDMI 4K',
+            'price' => 30000,
+        ]);
+
+        // Fashion product matching "wireless" (e.g. ear warmer)
+        $fashion = Product::factory()->published()->create([
+            'shop_id' => $shop->id,
+            'category_id' => $fashionCategory->id,
+            'name' => 'Wireless Smart Jacket',
+            'price' => 500000,
+        ]);
+
+        // Filter: category=teknologi-komputer AND q=Wireless AND sort=termurah
+        $response = $this->get(route('products.index', [
+            'category' => 'teknologi-komputer',
+            'q' => 'Wireless',
+            'sort' => 'termurah',
+        ]));
+
+        $response->assertOk();
+        $response->assertSeeInOrder(['Wireless Mouse Murah', 'Wireless Keyboard Mahal']);
+        $response->assertDontSee('Kabel HDMI 4K');
+        $response->assertDontSee('Wireless Smart Jacket');
+    }
+
+    public function test_category_filter_strictly_excludes_draft_and_archived_products(): void
+    {
+        $shop = Shop::factory()->approved()->create();
+        $category = \App\Models\Category::factory()->create(['slug' => 'aksesori-gadget']);
+
+        $draft = Product::factory()->draft()->create([
+            'shop_id' => $shop->id,
+            'category_id' => $category->id,
+            'name' => 'Powerbank Draft Rahasia',
+        ]);
+
+        $archived = Product::factory()->archived()->create([
+            'shop_id' => $shop->id,
+            'category_id' => $category->id,
+            'name' => 'Powerbank Usang Diarsipkan',
+        ]);
+
+        $published = Product::factory()->published()->create([
+            'shop_id' => $shop->id,
+            'category_id' => $category->id,
+            'name' => 'Powerbank Fast Charging 20000mAh',
+        ]);
+
+        $response = $this->get(route('products.index', ['category' => 'aksesori-gadget']));
+
+        $response->assertOk();
+        $response->assertSee('Powerbank Fast Charging 20000mAh');
+        $response->assertDontSee('Powerbank Draft Rahasia');
+        $response->assertDontSee('Powerbank Usang Diarsipkan');
+    }
+
+    public function test_product_detail_page_displays_complete_data_including_images_and_category(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+
+        $shop = Shop::factory()->approved()->create(['name' => 'Toko Gadget Resmi']);
+        $category = \App\Models\Category::factory()->create(['name' => 'Fotografi & Kamera', 'slug' => 'fotografi-kamera']);
+        $product = Product::factory()->published()->create([
+            'shop_id' => $shop->id,
+            'category_id' => $category->id,
+            'name' => 'Lensa Kamera Mirrorless 50mm',
+            'slug' => 'lensa-kamera-mirrorless-50mm',
+            'description' => 'Lensa aperture f/1.8 dengan bokeh halus dan autofokus cepat.',
+            'price' => 2450000,
+            'stock' => 8,
+        ]);
+
+        \Illuminate\Support\Facades\Storage::disk('public')->put('products/lens-main.jpg', 'lens1');
+        \Illuminate\Support\Facades\Storage::disk('public')->put('products/lens-side.jpg', 'lens2');
+
+        $product->images()->create([
+            'file_path' => 'products/lens-main.jpg',
+            'is_primary' => true,
+            'sort_order' => 0,
+        ]);
+        $product->images()->create([
+            'file_path' => 'products/lens-side.jpg',
+            'is_primary' => false,
+            'sort_order' => 1,
+        ]);
+
+        $response = $this->get(route('products.show', $product->slug));
+
+        $response->assertOk();
+        $response->assertSee('Lensa Kamera Mirrorless 50mm');
+        $response->assertSee('Fotografi & Kamera');
+        $response->assertSee('Toko Gadget Resmi');
+        $response->assertSee('2.450.000');
+        $response->assertSee('8 unit');
+        $response->assertSee('Lensa aperture f/1.8 dengan bokeh halus');
+        $response->assertSee('products/lens-main.jpg');
+        $response->assertSee('products/lens-side.jpg');
+    }
+
+    public function test_legacy_products_without_images_or_category_display_without_errors(): void
+    {
+        $shop = Shop::factory()->approved()->create(['name' => 'Toko Tradisional']);
+        $legacyProduct = Product::factory()->published()->create([
+            'shop_id' => $shop->id,
+            'category_id' => null,
+            'name' => 'Produk Klasik Tanpa Foto Kategori',
+            'slug' => 'produk-klasik-tanpa-foto-kategori',
+        ]);
+
+        // Catalog Index
+        $indexResponse = $this->get(route('products.index'));
+        $indexResponse->assertOk();
+        $indexResponse->assertSee('Produk Klasik Tanpa Foto Kategori');
+        $indexResponse->assertSee('placeholder-product.svg');
+
+        // Catalog Show
+        $showResponse = $this->get(route('products.show', $legacyProduct->slug));
+        $showResponse->assertOk();
+        $showResponse->assertSee('Produk Klasik Tanpa Foto Kategori');
+        $showResponse->assertSee('placeholder-product.svg');
+    }
 }

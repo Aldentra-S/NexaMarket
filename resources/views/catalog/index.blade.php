@@ -33,6 +33,9 @@
                         @if ($currentSort !== 'terbaru')
                             <input type="hidden" name="sort" value="{{ $currentSort }}">
                         @endif
+                        @if ($currentCategory)
+                            <input type="hidden" name="category" value="{{ $currentCategory }}">
+                        @endif
                         <button type="submit" class="px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold text-xs sm:text-sm rounded-xl transition shadow-sm">
                             Cari Produk
                         </button>
@@ -40,12 +43,44 @@
                 </div>
             </div>
 
+            <!-- Categories Filter Pills -->
+            @if (isset($categories) && $categories->isNotEmpty())
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span class="font-bold text-gray-700 uppercase tracking-wider text-[11px]">Kategori Belanja:</span>
+                        @if ($currentCategory)
+                            <a href="{{ route('products.index', array_filter(['q' => $search, 'sort' => $currentSort !== 'terbaru' ? $currentSort : null])) }}" class="text-emerald-600 hover:text-emerald-700 font-semibold text-xs">
+                                &times; Reset Kategori
+                            </a>
+                        @endif
+                    </div>
+                    <div class="flex items-center gap-2 overflow-x-auto pb-1">
+                        <a href="{{ route('products.index', array_filter(['q' => $search, 'sort' => $currentSort !== 'terbaru' ? $currentSort : null])) }}" 
+                           class="px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition {{ empty($currentCategory) ? 'bg-emerald-600 text-white shadow-xs' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50' }}">
+                            Semua Kategori
+                        </a>
+                        @foreach ($categories as $cat)
+                            <a href="{{ route('products.index', array_filter(['category' => $cat->slug, 'q' => $search, 'sort' => $currentSort !== 'terbaru' ? $currentSort : null])) }}" 
+                               class="px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition {{ (string) $currentCategory === (string) $cat->slug || (string) $currentCategory === (string) $cat->id ? 'bg-emerald-600 text-white shadow-xs' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50' }}">
+                                {{ $cat->name }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
             <!-- Filter Controls & Result Count Bar -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-gray-200">
                 <div class="text-xs text-gray-500">
-                    @if ($search)
-                        Menampilkan hasil pencarian untuk: <strong class="text-gray-900">"{{ $search }}"</strong>
-                        <a href="{{ route('products.index') }}" class="text-emerald-600 hover:underline ml-2">(Hapus filter)</a>
+                    @if ($search || $currentCategory)
+                        Menampilkan hasil
+                        @if ($currentCategory)
+                            untuk kategori: <strong class="text-gray-900">{{ $categories->firstWhere('slug', $currentCategory)?->name ?? $currentCategory }}</strong>
+                        @endif
+                        @if ($search)
+                            kata kunci: <strong class="text-gray-900">"{{ $search }}"</strong>
+                        @endif
+                        <a href="{{ route('products.index') }}" class="text-emerald-600 hover:underline ml-2">(Hapus semua filter)</a>
                     @else
                         Menampilkan produk terverifikasi dari mitra penjual aktif
                     @endif
@@ -55,15 +90,15 @@
                 <div class="flex items-center space-x-2 text-xs">
                     <span class="text-gray-500 font-medium">Urutkan:</span>
                     <div class="flex items-center bg-white border border-gray-200 rounded-xl p-0.5 shadow-xs">
-                        <a href="{{ route('products.index', array_filter(['q' => $search, 'sort' => 'terbaru'])) }}" 
+                        <a href="{{ route('products.index', array_filter(['q' => $search, 'category' => $currentCategory, 'sort' => 'terbaru'])) }}" 
                            class="px-3 py-1.5 rounded-lg font-semibold transition {{ $currentSort === 'terbaru' ? 'bg-emerald-600 text-white shadow-xs' : 'text-gray-600 hover:bg-gray-100' }}">
                             Terbaru
                         </a>
-                        <a href="{{ route('products.index', array_filter(['q' => $search, 'sort' => 'termurah'])) }}" 
+                        <a href="{{ route('products.index', array_filter(['q' => $search, 'category' => $currentCategory, 'sort' => 'termurah'])) }}" 
                            class="px-3 py-1.5 rounded-lg font-semibold transition {{ $currentSort === 'termurah' ? 'bg-emerald-600 text-white shadow-xs' : 'text-gray-600 hover:bg-gray-100' }}">
                             Harga Termurah
                         </a>
-                        <a href="{{ route('products.index', array_filter(['q' => $search, 'sort' => 'termahal'])) }}" 
+                        <a href="{{ route('products.index', array_filter(['q' => $search, 'category' => $currentCategory, 'sort' => 'termahal'])) }}" 
                            class="px-3 py-1.5 rounded-lg font-semibold transition {{ $currentSort === 'termahal' ? 'bg-emerald-600 text-white shadow-xs' : 'text-gray-600 hover:bg-gray-100' }}">
                             Harga Termahal
                         </a>
@@ -82,14 +117,21 @@
                             </a>
 
                             <div class="p-5">
-                                <!-- Shop Affiliation Badge -->
-                                <div class="flex items-center justify-between text-[11px] text-gray-500 mb-2">
-                                <span class="inline-flex items-center text-gray-600 font-medium truncate max-w-[150px]">
-                                    <svg class="w-3.5 h-3.5 mr-1 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd" />
-                                    </svg>
-                                    {{ $product->shop->name }}
-                                </span>
+                                <!-- Shop Affiliation & Category Badge -->
+                                <div class="flex items-center justify-between text-[11px] text-gray-500 mb-2 gap-1">
+                                    <span class="inline-flex items-center text-gray-600 font-medium truncate max-w-[130px]">
+                                        <svg class="w-3.5 h-3.5 mr-1 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd" />
+                                        </svg>
+                                        {{ $product->shop->name }}
+                                    </span>
+
+                                    @if ($product->category)
+                                        <span class="text-[10px] font-semibold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md truncate max-w-[120px]" title="{{ $product->category->name }}">
+                                            {{ $product->category->name }}
+                                        </span>
+                                    @endif
+                                </div>
 
                                 @if ($product->stock > 0)
                                     <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
