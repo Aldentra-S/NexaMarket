@@ -43,6 +43,23 @@
                         <x-input-error class="mt-2" :messages="$errors->get('name')" />
                     </div>
 
+                    <!-- Category Selection -->
+                    <div>
+                        <x-input-label for="category_id" :value="__('Kategori Produk')" />
+                        <select 
+                            id="category_id" 
+                            name="category_id" 
+                            class="mt-1 block w-full border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm text-xs">
+                            <option value="">-- Pilih Kategori Produk (Opsional) --</option>
+                            @foreach ($categories as $cat)
+                                <option value="{{ $cat->id }}" {{ (string) old('category_id', $product->category_id) === (string) $cat->id ? 'selected' : '' }}>
+                                    {{ $cat->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <x-input-error class="mt-2" :messages="$errors->get('category_id')" />
+                    </div>
+
                     <!-- Price & Stock Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Price -->

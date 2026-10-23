@@ -6,6 +6,7 @@ use App\Enums\ProductStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Seller\StoreProductRequest;
 use App\Http\Requests\Seller\UpdateProductRequest;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class ProductController extends Controller
         $statusFilter = $request->query('status');
         $search = $request->query('search');
 
-        $query = $shop->products()->with(['primaryImage', 'images'])->latest();
+        $query = $shop->products()->with(['primaryImage', 'images', 'category'])->latest();
 
         if ($statusFilter && in_array($statusFilter, ProductStatus::values(), true)) {
             $query->where('status', $statusFilter);
@@ -63,7 +64,11 @@ class ProductController extends Controller
     {
         Gate::authorize('create', Product::class);
 
-        return view('seller.products.create');
+        $categories = Category::active()->orderBy('name')->get();
+
+        return view('seller.products.create', [
+            'categories' => $categories,
+        ]);
     }
 
     /**
@@ -128,7 +133,7 @@ class ProductController extends Controller
     {
         Gate::authorize('view', $product);
 
-        $product->load(['shop', 'images', 'primaryImage']);
+        $product->load(['shop', 'images', 'primaryImage', 'category']);
 
         return view('seller.products.show', [
             'product' => $product,
@@ -142,10 +147,12 @@ class ProductController extends Controller
     {
         Gate::authorize('update', $product);
 
-        $product->load(['images']);
+        $product->load(['images', 'category']);
+        $categories = Category::active()->orderBy('name')->get();
 
         return view('seller.products.edit', [
             'product' => $product,
+            'categories' => $categories,
         ]);
     }
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ShopApprovalController;
 use App\Http\Controllers\Buyer\ShopOnboardingController;
 use App\Http\Controllers\ProductCatalogController;
@@ -51,6 +52,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/shops/{shop}/reject', [ShopApprovalController::class, 'reject'])->name('shops.reject');
     Route::post('/shops/{shop}/suspend', [ShopApprovalController::class, 'suspend'])->name('shops.suspend');
     Route::post('/shops/{shop}/reactivate', [ShopApprovalController::class, 'reactivate'])->name('shops.reactivate');
+
+    // Admin Category Management
+    Route::resource('categories', AdminCategoryController::class);
 });
 
 require __DIR__.'/auth.php';

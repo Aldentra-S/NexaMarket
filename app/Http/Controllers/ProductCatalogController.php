@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,16 +17,27 @@ class ProductCatalogController extends Controller
     {
         $search = $request->query('q') ?? $request->query('search');
         $sort = $request->query('sort', 'terbaru');
+        $categorySlug = $request->query('category');
 
         $query = Product::published()
             ->forActiveShop()
-            ->with(['shop', 'primaryImage', 'images']);
+            ->with(['shop', 'category', 'primaryImage', 'images']);
 
         if ($search) {
             $operator = DB::connection()->getDriverName() === 'pgsql' ? 'ilike' : 'like';
             $query->where(function ($q) use ($search, $operator) {
                 $q->where('name', $operator, "%{$search}%")
                   ->orWhere('description', $operator, "%{$search}%");
+            });
+        }
+
+        if ($categorySlug) {
+            $query->whereHas('category', function ($q) use ($categorySlug) {
+                if (is_numeric($categorySlug)) {
+                    $q->where('id', $categorySlug)->orWhere('slug', $categorySlug);
+                } else {
+                    $q->where('slug', $categorySlug);
+                }
             });
         }
 
@@ -36,9 +48,12 @@ class ProductCatalogController extends Controller
         };
 
         $products = $query->paginate(12)->withQueryString();
+        $categories = Category::active()->orderBy('name')->get();
 
         return view('catalog.index', [
             'products' => $products,
+            'categories' => $categories,
+            'currentCategory' => $categorySlug,
             'search' => $search,
             'currentSort' => $sort,
         ]);
@@ -51,7 +66,7 @@ class ProductCatalogController extends Controller
     {
         $product = Product::published()
             ->forActiveShop()
-            ->with(['shop.user', 'images', 'primaryImage'])
+            ->with(['shop.user', 'category', 'images', 'primaryImage'])
             ->where('slug', $slug)
             ->firstOrFail();
 

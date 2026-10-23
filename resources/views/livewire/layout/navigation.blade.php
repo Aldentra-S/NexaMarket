@@ -38,6 +38,9 @@ new class extends Component
                         <x-nav-link :href="route('admin.shops.index')" :active="request()->routeIs('admin.shops.*')" wire:navigate>
                             {{ __('Approval Toko') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')" wire:navigate>
+                            {{ __('Kelola Kategori') }}
+                        </x-nav-link>
                     @elseif (auth()->user()->isSeller())
                         <x-nav-link :href="route('seller.dashboard')" :active="request()->routeIs('seller.dashboard')">
                             {{ __('Seller Center') }}
@@ -109,6 +112,9 @@ new class extends Component
             @if (auth()->user()->isAdmin())
                 <x-responsive-nav-link :href="route('admin.shops.index')" :active="request()->routeIs('admin.shops.*')" wire:navigate>
                     {{ __('Approval Toko') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')" wire:navigate>
+                    {{ __('Kelola Kategori') }}
                 </x-responsive-nav-link>
             @elseif (auth()->user()->isSeller())
                 <x-responsive-nav-link :href="route('seller.dashboard')" :active="request()->routeIs('seller.dashboard')">

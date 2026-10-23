@@ -33,6 +33,7 @@ class Product extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'category_id',
         'name',
         'slug',
         'description',
@@ -71,6 +72,14 @@ class Product extends Model
     public function shop(): BelongsTo
     {
         return $this->belongsTo(Shop::class);
+    }
+
+    /**
+     * Get the category that the product belongs to.
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
     /**

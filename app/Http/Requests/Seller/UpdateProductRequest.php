@@ -27,6 +27,7 @@ class UpdateProductRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
             'name' => ['required', 'string', 'min:3', 'max:150'],
             'description' => ['required', 'string', 'min:10', 'max:5000'],
             'price' => ['required', 'numeric', 'min:100', 'max:999999999.99'],
@@ -61,6 +62,8 @@ class UpdateProductRequest extends FormRequest
             'stock.max' => 'Stok produk melebihi batas maksimum 999.999 unit.',
             'status.required' => 'Status publikasi produk wajib dipilih.',
             'status.enum' => 'Status produk yang dipilih tidak valid.',
+            'category_id.exists' => 'Kategori produk yang dipilih tidak valid.',
+            'category_id.integer' => 'ID kategori harus berupa angka valid.',
             'images.max' => 'Maksimal ' . ProductImage::MAX_PER_PRODUCT . ' gambar dapat diunggah.',
             'images.*.image' => 'Berkas harus berupa gambar valid.',
             'images.*.mimes' => 'Format gambar harus berupa JPEG, PNG, atau WebP.',
