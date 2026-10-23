@@ -4,6 +4,7 @@ namespace App\Http\Requests\Seller;
 
 use App\Enums\ProductStatus;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -32,6 +33,8 @@ class StoreProductRequest extends FormRequest
             'price' => ['required', 'numeric', 'min:100', 'max:999999999.99'],
             'stock' => ['required', 'integer', 'min:0', 'max:999999'],
             'status' => ['required', Rule::enum(ProductStatus::class)],
+            'images' => ['nullable', 'array', 'max:' . ProductImage::MAX_PER_PRODUCT],
+            'images.*' => ['image', 'mimes:jpeg,jpg,png,webp', 'max:2048'],
         ];
     }
 
@@ -59,6 +62,10 @@ class StoreProductRequest extends FormRequest
             'stock.max' => 'Stok produk melebihi batas maksimum 999.999 unit.',
             'status.required' => 'Status publikasi produk wajib dipilih.',
             'status.enum' => 'Status produk yang dipilih tidak valid.',
+            'images.max' => 'Maksimal ' . ProductImage::MAX_PER_PRODUCT . ' gambar dapat diunggah.',
+            'images.*.image' => 'Berkas harus berupa gambar valid.',
+            'images.*.mimes' => 'Format gambar harus berupa JPEG, PNG, atau WebP.',
+            'images.*.max' => 'Ukuran gambar maksimal 2MB per berkas.',
         ];
     }
 }

@@ -23,7 +23,7 @@
     <div class="py-8">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-2xl border border-gray-100">
-                <form method="POST" action="{{ route('seller.products.store') }}" class="p-6 sm:p-8 space-y-6">
+                <form method="POST" action="{{ route('seller.products.store') }}" enctype="multipart/form-data" class="p-6 sm:p-8 space-y-6">
                     @csrf
 
                     <!-- Product Name -->
@@ -104,6 +104,27 @@
                             </option>
                         </select>
                         <x-input-error class="mt-2" :messages="$errors->get('status')" />
+                    </div>
+
+                    <!-- Product Images -->
+                    <div>
+                        <x-input-label for="images" :value="__('Foto / Gambar Produk (Maksimal 5 Berkas)')" />
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-xl hover:border-emerald-400 transition bg-gray-50/50">
+                            <div class="space-y-1 text-center">
+                                <svg class="mx-auto h-10 w-10 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <div class="flex text-xs text-gray-600 justify-center">
+                                    <label for="images" class="relative cursor-pointer bg-white rounded-md font-semibold text-emerald-600 hover:text-emerald-500 focus-within:outline-none">
+                                        <span>Pilih berkas dari komputer</span>
+                                        <input id="images" name="images[]" type="file" multiple accept="image/jpeg,image/png,image/webp" class="sr-only">
+                                    </label>
+                                </div>
+                                <p class="text-[11px] text-gray-500">Mendukung JPEG, PNG, dan WebP (Maks. 2MB per gambar). Gambar pertama akan menjadi foto utama.</p>
+                            </div>
+                        </div>
+                        <x-input-error class="mt-2" :messages="$errors->get('images')" />
+                        <x-input-error class="mt-2" :messages="$errors->get('images.*')" />
                     </div>
 
                     <!-- Description -->

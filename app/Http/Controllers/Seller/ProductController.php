@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -27,7 +28,7 @@ class ProductController extends Controller
         $statusFilter = $request->query('status');
         $search = $request->query('search');
 
-        $query = $shop->products()->latest();
+        $query = $shop->products()->with(['primaryImage', 'images'])->latest();
 
         if ($statusFilter && in_array($statusFilter, ProductStatus::values(), true)) {
             $query->where('status', $statusFilter);
@@ -71,22 +72,48 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request): RedirectResponse
     {
         $shop = $request->user()->shop;
+        $uploadedPaths = [];
 
-        DB::transaction(function () use ($request, $shop) {
-            $baseSlug = Str::slug($request->validated('name'));
-            $slug = $baseSlug;
-            $count = 1;
+        try {
+            DB::transaction(function () use ($request, $shop, &$uploadedPaths) {
+                $baseSlug = Str::slug($request->validated('name'));
+                $slug = $baseSlug;
+                $count = 1;
 
-            while (Product::where('slug', $slug)->exists()) {
-                $slug = "{$baseSlug}-{$count}";
-                $count++;
+                while (Product::where('slug', $slug)->exists()) {
+                    $slug = "{$baseSlug}-{$count}";
+                    $count++;
+                }
+
+                $product = new Product($request->safe()->except('images'));
+                $product->slug = $slug;
+                $product->shop_id = $shop->id;
+                $product->save();
+
+                if ($request->hasFile('images')) {
+                    $isFirst = true;
+                    $sort = 0;
+                    foreach ($request->file('images') as $file) {
+                        $path = $file->store('products', 'public');
+                        $uploadedPaths[] = $path;
+
+                        $product->images()->create([
+                            'file_path' => $path,
+                            'is_primary' => $isFirst,
+                            'sort_order' => $sort,
+                        ]);
+
+                        $isFirst = false;
+                        $sort++;
+                    }
+                }
+            });
+        } catch (\Throwable $e) {
+            foreach ($uploadedPaths as $path) {
+                Storage::disk('public')->delete($path);
             }
-
-            $product = new Product($request->validated());
-            $product->slug = $slug;
-            $product->shop_id = $shop->id;
-            $product->save();
-        });
+            throw $e;
+        }
 
         $message = 'Produk "' . $request->validated('name') . '" berhasil ditambahkan ke toko Anda.';
         return redirect()->route('seller.products.index')
@@ -101,7 +128,7 @@ class ProductController extends Controller
     {
         Gate::authorize('view', $product);
 
-        $product->load('shop');
+        $product->load(['shop', 'images', 'primaryImage']);
 
         return view('seller.products.show', [
             'product' => $product,
@@ -115,6 +142,8 @@ class ProductController extends Controller
     {
         Gate::authorize('update', $product);
 
+        $product->load(['images']);
+
         return view('seller.products.edit', [
             'product' => $product,
         ]);
@@ -127,23 +156,51 @@ class ProductController extends Controller
     {
         Gate::authorize('update', $product);
 
-        DB::transaction(function () use ($request, $product) {
-            if ($product->name !== $request->validated('name')) {
-                $baseSlug = Str::slug($request->validated('name'));
-                $slug = $baseSlug;
-                $count = 1;
+        $uploadedPaths = [];
 
-                while (Product::where('slug', $slug)->where('id', '!=', $product->id)->exists()) {
-                    $slug = "{$baseSlug}-{$count}";
-                    $count++;
+        try {
+            DB::transaction(function () use ($request, $product, &$uploadedPaths) {
+                if ($product->name !== $request->validated('name')) {
+                    $baseSlug = Str::slug($request->validated('name'));
+                    $slug = $baseSlug;
+                    $count = 1;
+
+                    while (Product::where('slug', $slug)->where('id', '!=', $product->id)->exists()) {
+                        $slug = "{$baseSlug}-{$count}";
+                        $count++;
+                    }
+
+                    $product->slug = $slug;
                 }
 
-                $product->slug = $slug;
-            }
+                $product->fill($request->safe()->except('images'));
+                $product->save();
 
-            $product->fill($request->validated());
-            $product->save();
-        });
+                if ($request->hasFile('images')) {
+                    $hasPrimary = $product->images()->where('is_primary', true)->exists();
+                    $maxSort = (int) $product->images()->max('sort_order');
+
+                    foreach ($request->file('images') as $file) {
+                        $path = $file->store('products', 'public');
+                        $uploadedPaths[] = $path;
+                        $maxSort++;
+
+                        $product->images()->create([
+                            'file_path' => $path,
+                            'is_primary' => ! $hasPrimary,
+                            'sort_order' => $maxSort,
+                        ]);
+
+                        $hasPrimary = true;
+                    }
+                }
+            });
+        } catch (\Throwable $e) {
+            foreach ($uploadedPaths as $path) {
+                Storage::disk('public')->delete($path);
+            }
+            throw $e;
+        }
 
         $message = 'Produk "' . $product->name . '" berhasil diperbarui.';
         return redirect()->route('seller.products.index')

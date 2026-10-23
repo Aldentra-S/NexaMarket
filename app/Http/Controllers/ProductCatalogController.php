@@ -19,7 +19,7 @@ class ProductCatalogController extends Controller
 
         $query = Product::published()
             ->forActiveShop()
-            ->with('shop');
+            ->with(['shop', 'primaryImage', 'images']);
 
         if ($search) {
             $operator = DB::connection()->getDriverName() === 'pgsql' ? 'ilike' : 'like';
@@ -51,7 +51,7 @@ class ProductCatalogController extends Controller
     {
         $product = Product::published()
             ->forActiveShop()
-            ->with(['shop.user'])
+            ->with(['shop.user', 'images', 'primaryImage'])
             ->where('slug', $slug)
             ->firstOrFail();
 

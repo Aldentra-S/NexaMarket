@@ -128,6 +128,101 @@
                     </div>
                 </form>
             </div>
+
+            <!-- Product Images Management Card -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-2xl border border-gray-100">
+                <div class="p-6 sm:p-8 space-y-6">
+                    <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+                        <div>
+                            <h3 class="text-base font-bold text-gray-900">Galeri & Foto Produk</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">Kelola foto etalase produk (Maksimal 5 foto). Foto utama digunakan sebagai sampul katalog.</p>
+                        </div>
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full {{ $product->images->count() >= \App\Models\ProductImage::MAX_PER_PRODUCT ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-700' }}">
+                            {{ $product->images->count() }} / {{ \App\Models\ProductImage::MAX_PER_PRODUCT }} Foto
+                        </span>
+                    </div>
+
+                    <!-- Existing Images List -->
+                    @if ($product->images->isNotEmpty())
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                            @foreach ($product->images as $img)
+                                <div class="relative bg-gray-50 rounded-xl p-3 border {{ $img->is_primary ? 'border-emerald-400 ring-2 ring-emerald-100' : 'border-gray-200' }} flex flex-col justify-between">
+                                    <div class="aspect-square w-full rounded-lg overflow-hidden bg-white mb-3 relative flex items-center justify-center">
+                                        <img src="{{ $img->url }}" alt="Foto {{ $product->name }}" class="object-cover w-full h-full" />
+                                        @if ($img->is_primary)
+                                            <span class="absolute top-2 left-2 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs">
+                                                Foto Utama
+                                            </span>
+                                        @endif
+                                    </div>
+
+                                    <div class="space-y-2 pt-2 border-t border-gray-100">
+                                        @if (! $img->is_primary)
+                                            <form method="POST" action="{{ route('seller.products.images.primary', [$product, $img]) }}">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="w-full text-center py-1.5 px-2 bg-white hover:bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-semibold transition">
+                                                    Jadikan Foto Utama
+                                                </button>
+                                            </form>
+                                        @endif
+
+                                        <div class="flex items-center gap-2">
+                                            <!-- Replace Image Form -->
+                                            <form method="POST" action="{{ route('seller.products.images.update', [$product, $img]) }}" enctype="multipart/form-data" class="flex-1">
+                                                @csrf
+                                                @method('PUT')
+                                                <label class="block text-center cursor-pointer py-1.5 px-2 bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 rounded-lg text-[11px] font-semibold transition">
+                                                    <span>Ganti</span>
+                                                    <input type="file" name="image" accept="image/jpeg,image/png,image/webp" class="sr-only" onchange="this.form.submit()">
+                                                </label>
+                                            </form>
+
+                                            <!-- Delete Image Form -->
+                                            <form method="POST" action="{{ route('seller.products.images.destroy', [$product, $img]) }}" onsubmit="return confirm('Hapus foto ini?')" class="flex-1">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="w-full text-center py-1.5 px-2 bg-white hover:bg-red-50 text-red-600 border border-red-200 rounded-lg text-[11px] font-semibold transition">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="p-8 text-center bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                            <p class="text-xs text-gray-500">Produk ini belum memiliki foto. Unggah foto produk di bawah untuk menarik pembeli.</p>
+                        </div>
+                    @endif
+
+                    <!-- Upload Additional Images (if under limit) -->
+                    @if ($product->images->count() < \App\Models\ProductImage::MAX_PER_PRODUCT)
+                        <form method="POST" action="{{ route('seller.products.images.store', $product) }}" enctype="multipart/form-data" class="pt-4 border-t border-gray-100">
+                            @csrf
+                            <x-input-label for="upload_images" :value="__('Unggah Foto Tambahan')" />
+                            <div class="mt-2 flex flex-col sm:flex-row gap-3 items-center">
+                                <input 
+                                    id="upload_images" 
+                                    name="images[]" 
+                                    type="file" 
+                                    multiple 
+                                    accept="image/jpeg,image/png,image/webp" 
+                                    class="block w-full text-xs text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-gray-200 rounded-xl cursor-pointer" 
+                                    required 
+                                />
+                                <x-primary-button class="bg-emerald-600 hover:bg-emerald-700 shrink-0">
+                                    {{ __('Unggah Foto') }}
+                                </x-primary-button>
+                            </div>
+                            <p class="text-[11px] text-gray-400 mt-1">Mendukung JPEG, PNG, dan WebP (Maks. 2MB per berkas). Sisa kuota: {{ \App\Models\ProductImage::MAX_PER_PRODUCT - $product->images->count() }} foto.</p>
+                            <x-input-error class="mt-2" :messages="$errors->get('images')" />
+                            <x-input-error class="mt-2" :messages="$errors->get('images.*')" />
+                        </form>
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>

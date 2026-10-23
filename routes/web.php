@@ -5,6 +5,7 @@ use App\Http\Controllers\Buyer\ShopOnboardingController;
 use App\Http\Controllers\ProductCatalogController;
 use App\Http\Controllers\Seller\DashboardController as SellerDashboardController;
 use App\Http\Controllers\Seller\ProductController as SellerProductController;
+use App\Http\Controllers\Seller\ProductImageController as SellerProductImageController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
@@ -32,6 +33,13 @@ Route::middleware(['auth', 'role:buyer,seller'])->prefix('buyer')->name('buyer.'
 Route::middleware(['auth', 'role:seller', 'shop.approved'])->prefix('seller')->name('seller.')->group(function () {
     Route::get('/dashboard', [SellerDashboardController::class, 'index'])->name('dashboard');
     Route::resource('products', SellerProductController::class);
+
+    // Product Images Management
+    Route::post('products/{product}/images', [SellerProductImageController::class, 'store'])->name('products.images.store');
+    Route::put('products/{product}/images/{image}', [SellerProductImageController::class, 'update'])->name('products.images.update');
+    Route::patch('products/{product}/images/{image}/primary', [SellerProductImageController::class, 'setPrimary'])->name('products.images.primary');
+    Route::patch('products/{product}/images/reorder', [SellerProductImageController::class, 'reorder'])->name('products.images.reorder');
+    Route::delete('products/{product}/images/{image}', [SellerProductImageController::class, 'destroy'])->name('products.images.destroy');
 });
 
 // Admin Routes (Shop Approval Center & Administrative Controls)

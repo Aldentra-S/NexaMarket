@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F3F4F6"/>
+      <stop offset="100%" stop-color="#E5E7EB"/>
+    </linearGradient>
+    <linearGradient id="icon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9CA3AF"/>
+      <stop offset="100%" stop-color="#6B7280"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#bg)"/>
+  <g transform="translate(140, 130)">
+    <rect x="0" y="0" width="120" height="100" rx="14" fill="none" stroke="url(#icon)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="36" cy="32" r="12" fill="url(#icon)"/>
+    <path d="M10 84 L45 46 C50 41 58 41 63 46 L110 88" fill="none" stroke="url(#icon)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M65 65 L76 54 C81 49 89 49 94 54 L110 70" fill="none" stroke="url(#icon)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="200" y="270" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#9CA3AF" letter-spacing="1">NEXAMARKET</text>
+  <text x="200" y="292" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" fill="#B0B7C3">Gambar Belum Tersedia</text>
+</svg>

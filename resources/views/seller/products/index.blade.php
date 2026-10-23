@@ -99,16 +99,21 @@
                             @forelse ($products as $product)
                                 <tr class="hover:bg-gray-50/80 transition">
                                     <td class="px-6 py-4">
-                                        <div class="font-bold text-gray-900 text-sm hover:text-emerald-600 transition">
-                                            <a href="{{ route('seller.products.show', $product) }}">
-                                                {{ $product->name }}
-                                            </a>
-                                        </div>
-                                        <div class="text-gray-400 font-mono text-[11px] truncate max-w-sm mt-0.5">
-                                            {{ $product->slug }}
-                                        </div>
-                                        <div class="text-gray-400 text-[10px] mt-0.5">
-                                            Diperbarui: {{ $product->updated_at->format('d M Y, H:i') }}
+                                        <div class="flex items-center space-x-3.5">
+                                            <img src="{{ $product->thumbnail_url }}" alt="{{ $product->name }}" class="w-12 h-12 rounded-xl object-cover border border-gray-100 shrink-0 bg-gray-50" />
+                                            <div>
+                                                <div class="font-bold text-gray-900 text-sm hover:text-emerald-600 transition">
+                                                    <a href="{{ route('seller.products.show', $product) }}">
+                                                        {{ $product->name }}
+                                                    </a>
+                                                </div>
+                                                <div class="text-gray-400 font-mono text-[11px] truncate max-w-sm mt-0.5">
+                                                    {{ $product->slug }}
+                                                </div>
+                                                <div class="text-gray-400 text-[10px] mt-0.5">
+                                                    Diperbarui: {{ $product->updated_at->format('d M Y, H:i') }}
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">

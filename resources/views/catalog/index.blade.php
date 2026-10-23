@@ -75,9 +75,15 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @forelse ($products as $product)
                     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all duration-200 flex flex-col justify-between overflow-hidden group">
-                        <div class="p-5">
-                            <!-- Shop Affiliation Badge -->
-                            <div class="flex items-center justify-between text-[11px] text-gray-500 mb-2">
+                        <div>
+                            <!-- Product Thumbnail Image -->
+                            <a href="{{ route('products.show', $product->slug) }}" class="block aspect-square w-full bg-gray-50 overflow-hidden relative border-b border-gray-100">
+                                <img src="{{ $product->thumbnail_url }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy" />
+                            </a>
+
+                            <div class="p-5">
+                                <!-- Shop Affiliation Badge -->
+                                <div class="flex items-center justify-between text-[11px] text-gray-500 mb-2">
                                 <span class="inline-flex items-center text-gray-600 font-medium truncate max-w-[150px]">
                                     <svg class="w-3.5 h-3.5 mr-1 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd" />
@@ -108,8 +114,9 @@
                                 {{ $product->description }}
                             </p>
                         </div>
+                    </div>
 
-                        <div class="p-5 pt-0 border-t border-gray-50 mt-4">
+                    <div class="p-5 pt-0 border-t border-gray-50 mt-4">
                             <div class="flex items-baseline justify-between pt-3">
                                 <div>
                                     <span class="text-[10px] text-gray-400 uppercase tracking-wider block">Harga</span>

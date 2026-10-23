@@ -62,6 +62,38 @@
                         </div>
                     </div>
 
+                    <!-- Images Gallery Section -->
+                    <div class="pt-4 border-t border-gray-100">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Foto Produk ({{ $product->images->count() }})</h4>
+                            <a href="{{ route('seller.products.edit', $product) }}" class="text-xs text-emerald-600 hover:text-emerald-700 font-semibold">
+                                + Kelola Foto
+                            </a>
+                        </div>
+                        @if ($product->images->isNotEmpty())
+                            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                                @foreach ($product->images as $img)
+                                    <div class="relative aspect-square rounded-xl overflow-hidden bg-gray-50 border {{ $img->is_primary ? 'border-emerald-500 ring-2 ring-emerald-200' : 'border-gray-200' }}">
+                                        <img src="{{ $img->url }}" alt="{{ $product->name }}" class="w-full h-full object-cover" />
+                                        @if ($img->is_primary)
+                                            <span class="absolute bottom-1.5 left-1.5 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-xs">
+                                                Utama
+                                            </span>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl border border-gray-100 text-xs text-gray-500">
+                                <img src="{{ asset('images/placeholder-product.svg') }}" alt="Placeholder" class="w-12 h-12 rounded-lg object-cover" />
+                                <div>
+                                    <p class="font-medium text-gray-700">Belum ada foto produk</p>
+                                    <p class="text-[11px] text-gray-400">Gunakan tombol edit untuk mengunggah foto produk etalase.</p>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+
                     <!-- Description -->
                     <div class="pt-4 border-t border-gray-100">
                         <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Deskripsi Produk</h4>

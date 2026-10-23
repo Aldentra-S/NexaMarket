@@ -8,10 +8,24 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
 {
     use HasFactory;
+
+    /**
+     * Boot the model to handle deletion lifecycle for related images.
+     */
+    protected static function booted(): void
+    {
+        static::deleting(function (Product $product) {
+            foreach ($product->images as $image) {
+                $image->delete();
+            }
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -57,6 +71,43 @@ class Product extends Model
     public function shop(): BelongsTo
     {
         return $this->belongsTo(Shop::class);
+    }
+
+    /**
+     * Get all images for the product ordered by sort_order.
+     */
+    public function images(): HasMany
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    /**
+     * Get the primary image for the product.
+     */
+    public function primaryImage(): HasOne
+    {
+        return $this->hasOne(ProductImage::class)->where('is_primary', true);
+    }
+
+    /**
+     * Get the thumbnail image (primary or first available).
+     */
+    public function thumbnail(): ?ProductImage
+    {
+        return $this->primaryImage ?: $this->images->first();
+    }
+
+    /**
+     * Get the thumbnail URL with fallback to placeholder SVG.
+     */
+    public function getThumbnailUrlAttribute(): string
+    {
+        $thumb = $this->thumbnail();
+        if ($thumb && $thumb->fileExists()) {
+            return $thumb->url;
+        }
+
+        return asset('images/placeholder-product.svg');
     }
 
     /**
