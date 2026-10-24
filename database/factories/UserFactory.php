@@ -45,6 +45,16 @@ class UserFactory extends Factory
     }
 
     /**
+     * Indicate that the user is a buyer.
+     */
+    public function buyer(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => \App\Enums\UserRole::BUYER,
+        ]);
+    }
+
+    /**
      * Indicate that the user is a seller.
      */
     public function seller(): static

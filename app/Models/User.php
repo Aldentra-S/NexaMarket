@@ -73,4 +73,15 @@ class User extends Authenticatable
     {
         return $this->shop !== null && $this->shop->isApproved();
     }
+
+    public function cart(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Cart::class);
+    }
+
+    public function getOrCreateCart(): Cart
+    {
+        return $this->cart()->firstOrCreate([]);
+    }
 }
+

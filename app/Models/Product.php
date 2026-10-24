@@ -161,4 +161,13 @@ class Product extends Model
     {
         return 'Rp ' . number_format((float) $this->price, 0, ',', '.');
     }
+
+    /**
+     * Get the cart items referencing this product.
+     */
+    public function cartItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class);
+    }
 }
+
