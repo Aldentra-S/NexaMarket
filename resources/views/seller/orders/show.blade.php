@@ -43,6 +43,15 @@
                     <span>{{ session('error') }}</span>
                 </div>
             @endif
+            @if ($errors->any())
+                <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm font-medium">
+                    <ul class="list-disc list-inside space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             <!-- Warning if Unpaid -->
             @if($shopOrder->status->isPending())
@@ -154,16 +163,71 @@
                             </div>
                         </div>
 
-                        <!-- Action Controls (Placeholder for 6B / 6C) -->
+                        <!-- Action Controls (Fulfillment Workflow) -->
                         <div id="fulfillment-actions" class="pt-4 border-t border-gray-100">
                             @if($shopOrder->status->isPaid())
-                                <p class="text-xs text-emerald-700 bg-emerald-50 p-3 rounded-xl border border-emerald-100 mb-3">
-                                    Pembayaran terverifikasi! Pesanan siap diproses oleh penjual.
-                                </p>
+                                <div class="space-y-3">
+                                    <p class="text-xs text-emerald-700 bg-emerald-50 p-3 rounded-xl border border-emerald-100 leading-relaxed">
+                                        Pembayaran telah diverifikasi. Klik tombol di bawah untuk mulai menyiapkan pesanan.
+                                    </p>
+                                    <form method="POST" action="{{ route('seller.orders.status.update', $shopOrder) }}">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="processing">
+                                        <button type="submit" 
+                                                class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition transform hover:-translate-y-0.5">
+                                            Mulai Proses Pesanan &rarr;
+                                        </button>
+                                    </form>
+                                </div>
+                            @elseif($shopOrder->status->isProcessing())
+                                <div class="space-y-3">
+                                    <p class="text-xs text-indigo-700 bg-indigo-50 p-3 rounded-xl border border-indigo-100 leading-relaxed">
+                                        Pesanan sedang diproses. Bila pesanan telah selesai dikemas dan siap/sudah dikirim, tandai pesanan sebagai dikirim.
+                                    </p>
+                                    <form method="POST" action="{{ route('seller.orders.status.update', $shopOrder) }}">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="shipped">
+                                        <button type="submit" 
+                                                class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-sm transition transform hover:-translate-y-0.5">
+                                            Tandai Telah Dikirim &rarr;
+                                        </button>
+                                    </form>
+                                </div>
+                            @elseif($shopOrder->status->isShipped())
+                                <div class="space-y-3">
+                                    <p class="text-xs text-purple-700 bg-purple-50 p-3 rounded-xl border border-purple-100 leading-relaxed">
+                                        Pesanan dalam proses pengiriman. Konfirmasi penyelesaian setelah pesanan sampai atau diterima pembeli.
+                                    </p>
+                                    <form method="POST" action="{{ route('seller.orders.status.update', $shopOrder) }}">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="completed">
+                                        <button type="submit" 
+                                                class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-sm transition transform hover:-translate-y-0.5">
+                                            Selesaikan Pesanan &rarr;
+                                        </button>
+                                    </form>
+                                </div>
+                            @elseif($shopOrder->status->isCompleted())
+                                <div class="p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-900 text-xs">
+                                    <strong class="font-bold text-sm block mb-1">Pesanan Telah Selesai</strong>
+                                    <p class="text-blue-800 leading-relaxed">
+                                        Seluruh alur pemenuhan pesanan ini telah selesai dan tercatat resmi di sistem marketplace.
+                                    </p>
+                                </div>
                             @elseif($shopOrder->status->isPending())
-                                <p class="text-xs text-amber-700 bg-amber-50 p-3 rounded-xl border border-amber-100">
-                                    Menunggu Pembayaran. Aksi pemrosesan akan aktif secara otomatis setelah pembayaran pembeli diverifikasi.
-                                </p>
+                                <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs">
+                                    <strong class="font-semibold block mb-0.5">Menunggu Pembayaran</strong>
+                                    <p class="leading-relaxed">
+                                        Aksi pemrosesan akan aktif otomatis setelah pembayaran dari pembeli berhasil diverifikasi.
+                                    </p>
+                                </div>
+                            @else
+                                <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-600 text-xs">
+                                    Pesanan berstatus {{ $shopOrder->status->label() }} dan tidak memerlukan aksi pemenuhan lebih lanjut.
+                                </div>
                             @endif
                         </div>
                     </div>

@@ -84,16 +84,25 @@
                     </div>
                 </div>
 
-                <!-- Orders & Ledger Readiness Card (Phase 4-6 placeholder) -->
-                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Pesanan & Saldo Toko</h4>
-                    <p class="text-xs text-gray-600 mt-3 leading-relaxed">
-                        Pemisahan sub-order per toko, pelacakan nomor resi pengiriman, dan buku besar keuangan (ledger) otomatis.
-                    </p>
-                    <div class="mt-4 pt-3 border-t border-gray-100">
-                        <span class="inline-flex items-center text-[11px] font-semibold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-md">
-                            Siap untuk Phase 4 & 6
-                        </span>
+                <!-- Orders & Fulfillment Management Card (Phase 6 Active) -->
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Pesanan Masuk</h4>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                Aktif
+                            </span>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-3 leading-relaxed">
+                            Kelola pesanan dari pembeli untuk {{ $shop->name }}, pantau status pembayaran, dan perbarui proses pemenuhan pesanan.
+                        </p>
+                    </div>
+
+                    <div class="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between">
+                        <span class="text-xs text-gray-500 font-medium">Fulfillment</span>
+                        <a href="{{ route('seller.orders.index') }}" class="inline-flex items-center px-3.5 py-1.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition">
+                            Kelola Pesanan &rarr;
+                        </a>
                     </div>
                 </div>
             </div>

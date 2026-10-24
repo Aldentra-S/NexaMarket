@@ -48,6 +48,9 @@ new class extends Component
                         <x-nav-link :href="route('seller.products.index')" :active="request()->routeIs('seller.products.*')">
                             {{ __('Produk Saya') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('seller.orders.index')" :active="request()->routeIs('seller.orders.*')">
+                            {{ __('Pesanan Masuk') }}
+                        </x-nav-link>
                     @else
                         <x-nav-link :href="route('buyer.shop.apply')" :active="request()->routeIs('buyer.shop.*')" wire:navigate>
                             {{ __('Buka Toko') }}
@@ -132,6 +135,9 @@ new class extends Component
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('seller.products.index')" :active="request()->routeIs('seller.products.*')">
                     {{ __('Produk Saya') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('seller.orders.index')" :active="request()->routeIs('seller.orders.*')">
+                    {{ __('Pesanan Masuk') }}
                 </x-responsive-nav-link>
             @else
                 <x-responsive-nav-link :href="route('buyer.shop.apply')" :active="request()->routeIs('buyer.shop.*')" wire:navigate>

@@ -45,13 +45,21 @@
                        class="px-3.5 py-2 rounded-xl font-semibold transition {{ $currentStatus === 'paid' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100' }}">
                         Perlu Diproses
                     </a>
-                    <a href="{{ route('seller.orders.index', ['status' => 'pending']) }}" 
-                       class="px-3.5 py-2 rounded-xl font-semibold transition {{ $currentStatus === 'pending' ? 'bg-amber-600 text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100' }}">
-                        Belum Dibayar
+                    <a href="{{ route('seller.orders.index', ['status' => 'processing']) }}" 
+                       class="px-3.5 py-2 rounded-xl font-semibold transition {{ $currentStatus === 'processing' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100' }}">
+                        Sedang Diproses
+                    </a>
+                    <a href="{{ route('seller.orders.index', ['status' => 'shipped']) }}" 
+                       class="px-3.5 py-2 rounded-xl font-semibold transition {{ $currentStatus === 'shipped' ? 'bg-purple-600 text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100' }}">
+                        Sedang Dikirim
                     </a>
                     <a href="{{ route('seller.orders.index', ['status' => 'completed']) }}" 
                        class="px-3.5 py-2 rounded-xl font-semibold transition {{ $currentStatus === 'completed' ? 'bg-blue-600 text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100' }}">
                         Selesai
+                    </a>
+                    <a href="{{ route('seller.orders.index', ['status' => 'pending']) }}" 
+                       class="px-3.5 py-2 rounded-xl font-semibold transition {{ $currentStatus === 'pending' ? 'bg-amber-600 text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100' }}">
+                        Belum Dibayar
                     </a>
                     <a href="{{ route('seller.orders.index', ['status' => 'cancelled']) }}" 
                        class="px-3.5 py-2 rounded-xl font-semibold transition {{ $currentStatus === 'cancelled' ? 'bg-rose-600 text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100' }}">
