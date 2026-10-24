@@ -17,6 +17,11 @@ class AppServiceProvider extends ServiceProvider
             \App\Contracts\FirebaseTokenVerifierInterface::class,
             \App\Services\FirebaseTokenVerifier::class
         );
+
+        $this->app->bind(
+            \App\Contracts\PaymentGatewayInterface::class,
+            \App\Services\Gateways\MidtransPaymentGateway::class
+        );
     }
 
     /**

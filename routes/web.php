@@ -39,7 +39,12 @@ Route::middleware(['auth'])->prefix('orders')->name('orders.')->group(function (
     Route::get('/', [OrderController::class, 'index'])->name('index');
     Route::get('/{order}', [OrderController::class, 'show'])->name('show');
     Route::post('/{order}/payment/simulate', [PaymentController::class, 'simulate'])->name('payment.simulate');
+    Route::post('/{order}/payment/snap', [PaymentController::class, 'createSnapToken'])->name('payment.snap');
 });
+
+// Midtrans Webhook Notification Route (Public Webhook & CSRF Exempt)
+Route::post('payments/midtrans/notification', [PaymentController::class, 'handleNotification'])->name('payments.midtrans.notification');
+Route::post('api/payments/midtrans/notification', [PaymentController::class, 'handleNotification'])->name('api.payments.midtrans.notification');
 
 
 

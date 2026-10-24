@@ -142,15 +142,42 @@
                             <p class="leading-relaxed">Selesaikan pembayaran lokal untuk memverifikasi pesanan Anda ke mitra toko.</p>
                         </div>
 
+                        <!-- Midtrans Snap Sandbox Payment Button -->
+                        <div x-data="midtransPayment()" class="space-y-2">
+                            <template x-if="errorMessage">
+                                <div class="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
+                                    <span x-text="errorMessage"></span>
+                                </div>
+                            </template>
+
+                            <button type="button"
+                                    @click="payWithMidtrans"
+                                    :disabled="isLoading"
+                                    class="w-full py-3 px-4 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm transition shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed">
+                                <template x-if="isLoading">
+                                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </template>
+                                <template x-if="!isLoading">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                                    </svg>
+                                </template>
+                                <span x-text="isLoading ? 'Menyiapkan Pembayaran...' : 'Bayar via Midtrans Snap (Sandbox)'"></span>
+                            </button>
+                        </div>
+
                         <!-- Success Simulation -->
                         <form action="{{ route('orders.payment.simulate', $order) }}" method="POST">
                             @csrf
                             <input type="hidden" name="result" value="success">
-                            <button type="submit" class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition shadow-sm flex items-center justify-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs transition shadow-sm flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
-                                Bayar Sekarang (Simulasi Sukses)
+                                Simulasi Cepat Sukses (Lokal QA)
                             </button>
                         </form>
 
@@ -217,4 +244,71 @@
         </div>
     </div>
 </div>
+
+@if($order->isPending())
+    @php
+        $snapUrl = config('services.midtrans.is_production')
+            ? 'https://app.midtrans.com/snap/snap.js'
+            : 'https://app.sandbox.midtrans.com/snap/snap.js';
+        $clientKey = config('services.midtrans.client_key');
+    @endphp
+    @if($clientKey)
+        <script src="{{ $snapUrl }}" data-client-key="{{ $clientKey }}"></script>
+    @endif
+    <script>
+        function midtransPayment() {
+            return {
+                isLoading: false,
+                errorMessage: '',
+                async payWithMidtrans() {
+                    this.errorMessage = '';
+                    this.isLoading = true;
+
+                    try {
+                        const response = await fetch('{{ route('orders.payment.snap', $order) }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                'Accept': 'application/json',
+                            },
+                        });
+
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                            const errorMsg = data.errors?.order?.[0] || data.errors?.gateway?.[0] || data.message || 'Gagal memproses pembayaran Midtrans.';
+                            throw new Error(errorMsg);
+                        }
+
+                        if (window.snap && typeof window.snap.pay === 'function') {
+                            window.snap.pay(data.snap_token, {
+                                onSuccess: function() {
+                                    window.location.reload();
+                                },
+                                onPending: function() {
+                                    window.location.reload();
+                                },
+                                onError: function() {
+                                    window.location.reload();
+                                },
+                                onClose: function() {
+                                    // User closed popup without completing
+                                }
+                            });
+                        } else if (data.redirect_url) {
+                            window.location.href = data.redirect_url;
+                        } else {
+                            throw new Error('Snap.js belum siap atau Client Key Midtrans belum dikonfigurasi di .env.');
+                        }
+                    } catch (err) {
+                        this.errorMessage = err.message || 'Terjadi kesalahan gateway pembayaran.';
+                    } finally {
+                        this.isLoading = false;
+                    }
+                }
+            };
+        }
+    </script>
+@endif
 @endsection

@@ -22,6 +22,9 @@ class Payment extends Model
         'status',
         'amount',
         'payment_method',
+        'snap_token',
+        'snap_redirect_url',
+        'gateway_transaction_id',
         'payload',
         'paid_at',
     ];

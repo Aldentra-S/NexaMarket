@@ -16,6 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\EnsureUserHasRole::class,
             'shop.approved' => \App\Http\Middleware\EnsureShopIsApproved::class,
         ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'payments/midtrans/notification',
+            'api/payments/midtrans/notification',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
