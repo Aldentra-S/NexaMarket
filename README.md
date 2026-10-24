@@ -41,6 +41,12 @@ php artisan boost:install
 
 Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
 
+## Integrations
+
+- **Firebase Google Authentication**: Authenticate buyers seamlessly using Firebase Web App SDK and backend RS256 JWT validation.
+- **Midtrans Snap Payment Gateway**: Sandbox multi-vendor payment checkout with secure webhook notifications, SHA512 signature validation, row locking, and atomic stock restoration.
+- See detailed documentation in [docs/integrations/firebase-midtrans-setup.md](docs/integrations/firebase-midtrans-setup.md).
+
 ## Contributing
 
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
