@@ -27,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::policy(\App\Models\CartItem::class, \App\Policies\CartItemPolicy::class);
         Gate::policy(\App\Models\Order::class, \App\Policies\OrderPolicy::class);
+        Gate::policy(\App\Models\ShopOrder::class, \App\Policies\ShopOrderPolicy::class);
     }
 
 

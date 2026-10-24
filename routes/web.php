@@ -9,6 +9,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductCatalogController;
 use App\Http\Controllers\Seller\DashboardController as SellerDashboardController;
+use App\Http\Controllers\Seller\OrderController as SellerOrderController;
 use App\Http\Controllers\Seller\ProductController as SellerProductController;
 use App\Http\Controllers\Seller\ProductImageController as SellerProductImageController;
 use Illuminate\Support\Facades\Route;
@@ -69,6 +70,10 @@ Route::middleware(['auth', 'role:seller', 'shop.approved'])->prefix('seller')->n
     Route::patch('products/{product}/images/{image}/primary', [SellerProductImageController::class, 'setPrimary'])->name('products.images.primary');
     Route::patch('products/{product}/images/reorder', [SellerProductImageController::class, 'reorder'])->name('products.images.reorder');
     Route::delete('products/{product}/images/{image}', [SellerProductImageController::class, 'destroy'])->name('products.images.destroy');
+
+    // Order Fulfillment Management
+    Route::get('orders', [SellerOrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{shopOrder}', [SellerOrderController::class, 'show'])->name('orders.show');
 });
 
 // Admin Routes (Shop Approval Center & Administrative Controls)
