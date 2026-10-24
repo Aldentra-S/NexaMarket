@@ -115,4 +115,21 @@ class Order extends Model
     {
         return $this->status === OrderStatus::EXPIRED;
     }
+
+    /**
+     * Get all payment transaction attempts for this order.
+     */
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * Get the latest payment record for this order.
+     */
+    public function latestPayment(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Payment::class)->latestOfMany();
+    }
 }
+

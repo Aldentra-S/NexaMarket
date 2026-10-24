@@ -6,6 +6,7 @@ use App\Http\Controllers\Buyer\ShopOnboardingController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductCatalogController;
 use App\Http\Controllers\Seller\DashboardController as SellerDashboardController;
 use App\Http\Controllers\Seller\ProductController as SellerProductController;
@@ -32,11 +33,13 @@ Route::middleware(['auth'])->prefix('checkout')->name('checkout.')->group(functi
     Route::post('/', [CheckoutController::class, 'store'])->name('store');
 });
 
-// Buyer Order History Routes
+// Buyer Order History & Payment Routes
 Route::middleware(['auth'])->prefix('orders')->name('orders.')->group(function () {
     Route::get('/', [OrderController::class, 'index'])->name('index');
     Route::get('/{order}', [OrderController::class, 'show'])->name('show');
+    Route::post('/{order}/payment/simulate', [PaymentController::class, 'simulate'])->name('payment.simulate');
 });
+
 
 
 Route::view('dashboard', 'dashboard')

@@ -128,27 +128,78 @@
                 </div>
             </div>
 
-            <!-- Payment Simulation Container (Phase 5B Checkpoint B4 hook) -->
+            <!-- Payment Simulation Container (Phase 5B Checkpoint B4) -->
             <div id="payment-action-container" class="pt-4 border-t border-gray-100">
                 @if($order->isPending())
-                    <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 space-y-2">
-                        <div class="flex items-center gap-1.5 font-bold text-amber-900">
-                            <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            Menunggu Pembayaran
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 space-y-1.5">
+                            <div class="flex items-center gap-1.5 font-bold text-amber-900">
+                                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Menunggu Pembayaran
+                            </div>
+                            <p class="leading-relaxed">Selesaikan pembayaran lokal untuk memverifikasi pesanan Anda ke mitra toko.</p>
                         </div>
-                        <p>Silakan selesaikan pembayaran untuk memproses pesanan Anda ke mitra toko.</p>
+
+                        <!-- Success Simulation -->
+                        <form action="{{ route('orders.payment.simulate', $order) }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="result" value="success">
+                            <button type="submit" class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition shadow-sm flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Bayar Sekarang (Simulasi Sukses)
+                            </button>
+                        </form>
+
+                        <!-- Failure and Expired Testing Controls -->
+                        <div class="pt-2 border-t border-gray-100 space-y-2">
+                            <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block text-center">
+                                Opsi Uji Coba Skenario (QA Mock)
+                            </span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <form action="{{ route('orders.payment.simulate', $order) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="result" value="failed">
+                                    <button type="submit" class="w-full py-2 px-3 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold transition text-center">
+                                        Simulasi Gagal
+                                    </button>
+                                </form>
+                                <form action="{{ route('orders.payment.simulate', $order) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="result" value="expired">
+                                    <button type="submit" class="w-full py-2 px-3 rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 text-xs font-semibold transition text-center">
+                                        Simulasi Expired
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <p class="text-[11px] text-gray-400 text-center leading-tight">
+                            * Simulasi pembayaran lokal NexaMarket (tanpa gateway uang riil).
+                        </p>
                     </div>
                 @elseif($order->isPaid())
-                    <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-start gap-3">
+                        <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                         </svg>
                         <div>
                             <p class="font-bold text-emerald-900">Pembayaran Berhasil Diverifikasi</p>
-                            <p class="mt-0.5 text-emerald-700">Dibayar pada {{ $order->paid_at ? $order->paid_at->translatedFormat('d M Y, H:i') : '-' }}</p>
+                            <p class="mt-0.5 text-emerald-700">Lunas pada {{ $order->paid_at ? $order->paid_at->translatedFormat('d M Y, H:i') : '-' }} via Simulasi Pembayaran Lokal.</p>
                         </div>
+                    </div>
+                @elseif($order->isCancelled())
+                    <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 space-y-1">
+                        <p class="font-bold text-rose-900">Pesanan Dibatalkan</p>
+                        <p class="text-rose-700">Pembayaran tidak berhasil diselesaikan. Seluruh stok produk pesanan ini telah dipulihkan secara otomatis.</p>
+                    </div>
+                @elseif($order->isExpired())
+                    <div class="p-4 rounded-xl bg-gray-100 border border-gray-200 text-xs text-gray-700 space-y-1">
+                        <p class="font-bold text-gray-900">Pesanan Kedaluwarsa</p>
+                        <p class="text-gray-600">Batas waktu pembayaran telah habis. Seluruh stok produk pesanan ini telah dipulihkan secara otomatis.</p>
                     </div>
                 @else
                     <div class="p-4 rounded-xl bg-gray-50 border border-gray-200 text-xs text-gray-600">
@@ -156,6 +207,7 @@
                     </div>
                 @endif
             </div>
+
 
             <div class="pt-2 text-center">
                 <a href="{{ route('products.index') }}" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700">
