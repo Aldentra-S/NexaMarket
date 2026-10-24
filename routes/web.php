@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ShopApprovalController;
 use App\Http\Controllers\Buyer\ShopOnboardingController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductCatalogController;
 use App\Http\Controllers\Seller\DashboardController as SellerDashboardController;
 use App\Http\Controllers\Seller\ProductController as SellerProductController;
@@ -23,6 +25,19 @@ Route::middleware(['auth'])->prefix('cart')->name('cart.')->group(function () {
     Route::patch('/items/{item}', [CartController::class, 'update'])->name('items.update');
     Route::delete('/items/{item}', [CartController::class, 'destroy'])->name('items.destroy');
 });
+
+// Checkout Routes
+Route::middleware(['auth'])->prefix('checkout')->name('checkout.')->group(function () {
+    Route::get('/', [CheckoutController::class, 'create'])->name('create');
+    Route::post('/', [CheckoutController::class, 'store'])->name('store');
+});
+
+// Buyer Order History Routes
+Route::middleware(['auth'])->prefix('orders')->name('orders.')->group(function () {
+    Route::get('/', [OrderController::class, 'index'])->name('index');
+    Route::get('/{order}', [OrderController::class, 'show'])->name('show');
+});
+
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
