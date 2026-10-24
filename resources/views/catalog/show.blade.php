@@ -133,24 +133,63 @@
                             </div>
                         </div>
 
-                        <!-- Purchase Readiness Notification (Phase 4 Hook) -->
-                        <div class="p-6 rounded-2xl bg-emerald-50/50 border border-emerald-100 text-xs space-y-3">
-                            <div class="flex items-center space-x-2 text-emerald-800 font-bold">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <span>Kesiapan Transaksi (Phase 4)</span>
-                            </div>
-                            <p class="text-emerald-700 leading-relaxed">
-                                Fitur keranjang belanja multi-vendor, kalkulasi ongkos kirim, dan simulasi checkout pembayaran aman akan diaktifkan pada <strong>Phase 4</strong>.
-                            </p>
-                            <div class="pt-2">
-                                <a href="{{ route('products.index') }}" 
-                                   class="block text-center w-full px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-xs transition">
-                                    &larr; Lihat Produk Lainnya
+                        <!-- Purchase & Cart Action Box -->
+                        <div class="p-6 rounded-2xl bg-white border border-gray-200 shadow-xs space-y-4">
+                            <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Beli Produk</h3>
+
+                            @if ($product->isInStock())
+                                <form action="{{ route('cart.items.store') }}" method="POST" class="space-y-4">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+                                    <div>
+                                        <label for="quantity" class="block text-xs font-bold text-gray-700 mb-1">
+                                            Jumlah Pesanan (Maks. {{ $product->stock }})
+                                        </label>
+                                        <div class="flex items-center gap-2">
+                                            <input
+                                                type="number"
+                                                id="quantity"
+                                                name="quantity"
+                                                value="1"
+                                                min="1"
+                                                max="{{ $product->stock }}"
+                                                class="w-24 text-center font-bold text-sm rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500"
+                                                required
+                                            >
+                                            <span class="text-xs text-gray-500">unit</span>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2"
+                                    >
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                        </svg>
+                                        Tambah ke Keranjang
+                                    </button>
+                                </form>
+                            @else
+                                <div class="p-4 rounded-xl bg-gray-50 border border-gray-200 text-center">
+                                    <p class="text-xs font-semibold text-gray-500">Stok produk ini sedang habis.</p>
+                                    <button type="button" disabled class="mt-2 w-full py-2.5 px-4 bg-gray-200 text-gray-400 font-bold text-xs rounded-xl cursor-not-allowed">
+                                        Stok Habis
+                                    </button>
+                                </div>
+                            @endif
+
+                            <div class="pt-2 border-t border-gray-100 flex items-center justify-between text-xs">
+                                <a href="{{ route('cart.index') }}" class="font-medium text-emerald-600 hover:text-emerald-700">
+                                    Lihat Keranjang &rarr;
+                                </a>
+                                <a href="{{ route('products.index') }}" class="text-gray-400 hover:text-gray-600">
+                                    Katalog
                                 </a>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

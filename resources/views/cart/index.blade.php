@@ -4,7 +4,7 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <div class="mb-8">
         <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Keranjang Belanja</h1>
-        <p class="mt-2 text-sm text-gray-500">Kelola daftar produk yang ingin Anda beli sebelum melanjutkan ke proses checkout.</p>
+        <p class="mt-2 text-sm text-gray-500">Kelola daftar produk pilihan Anda sebelum melanjutkan ke proses pembayaran.</p>
     </div>
 
     @if(session('success'))
@@ -28,6 +28,18 @@
         </div>
     @endif
 
+    @if($hasUnavailableItems)
+        <div class="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 flex items-start gap-3">
+            <svg class="w-5 h-5 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <div class="text-sm">
+                <p class="font-bold">Perhatian: Ketersediaan Produk Berubah</p>
+                <p class="mt-0.5 text-amber-800">Beberapa produk di keranjang Anda mengalami perubahan stok atau status toko. Harap sesuaikan kuantitas atau hapus produk yang tidak tersedia.</p>
+            </div>
+        </div>
+    @endif
+
     @if($items->isEmpty())
         <div class="bg-white rounded-2xl border border-gray-100 p-12 text-center shadow-sm max-w-lg mx-auto">
             <div class="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -46,13 +58,36 @@
             <!-- Items List -->
             <div class="lg:col-span-8 space-y-4">
                 @foreach($items as $item)
-                    <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    @php
+                        $isAvailable = $item->isAvailable();
+                        $hasStockIssue = $item->product && $item->product->stock < $item->quantity;
+                        $hasStatusIssue = $item->product && ! $item->product->isPublished();
+                        $hasShopIssue = $item->product && ($item->product->shop->isSuspended() || ! $item->product->shop->isApproved());
+                    @endphp
+                    <div class="bg-white rounded-2xl border {{ $isAvailable ? 'border-gray-200' : 'border-amber-300 bg-amber-50/20' }} p-5 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div class="flex items-center gap-4">
                             <img src="{{ $item->product->thumbnail_url }}" alt="{{ $item->product->name }}" class="w-20 h-20 object-cover rounded-xl border border-gray-100 shrink-0">
                             <div>
-                                <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full inline-block mb-1">
-                                    {{ $item->product->shop->name ?? 'Toko' }}
-                                </span>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full inline-block">
+                                        {{ $item->product->shop->name ?? 'Toko' }}
+                                    </span>
+                                    @if(! $isAvailable)
+                                        @if($hasStockIssue)
+                                            <span class="text-[11px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-md inline-block">
+                                                Stok Tidak Mencukupi (Tersedia {{ $item->product->stock }} unit)
+                                            </span>
+                                        @elseif($hasStatusIssue)
+                                            <span class="text-[11px] font-bold text-rose-800 bg-rose-100 px-2 py-0.5 rounded-md inline-block">
+                                                Produk Tidak Aktif
+                                            </span>
+                                        @elseif($hasShopIssue)
+                                            <span class="text-[11px] font-bold text-rose-800 bg-rose-100 px-2 py-0.5 rounded-md inline-block">
+                                                Toko Tidak Aktif
+                                            </span>
+                                        @endif
+                                    @endif
+                                </div>
                                 <h3 class="font-bold text-gray-900 line-clamp-1 hover:text-emerald-600 transition">
                                     <a href="{{ route('products.show', $item->product->slug) }}">{{ $item->product->name }}</a>
                                 </h3>
@@ -67,8 +102,15 @@
                             <form action="{{ route('cart.items.update', $item) }}" method="POST" class="flex items-center gap-2">
                                 @csrf
                                 @method('PATCH')
-                                <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->product->stock }}" class="w-16 text-center text-sm font-semibold rounded-lg border-gray-300 focus:ring-emerald-500 focus:border-emerald-500">
-                                <button type="submit" class="text-xs font-medium text-emerald-600 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-2 py-1.5 rounded-lg transition">
+                                <input
+                                    type="number"
+                                    name="quantity"
+                                    value="{{ $item->quantity }}"
+                                    min="1"
+                                    max="{{ max(1, $item->product->stock) }}"
+                                    class="w-16 text-center text-sm font-semibold rounded-lg border-gray-300 focus:ring-emerald-500 focus:border-emerald-500"
+                                >
+                                <button type="submit" class="text-xs font-medium text-emerald-600 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1.5 rounded-lg transition">
                                     Ubah
                                 </button>
                             </form>
@@ -117,9 +159,9 @@
 
                 <div class="mt-4">
                     <button type="button" disabled class="w-full py-3.5 px-4 rounded-xl bg-gray-200 text-gray-400 font-bold text-center cursor-not-allowed">
-                        Lanjut ke Checkout (Segera Hadir)
+                        Lanjut ke Checkout (Segera Hadir di Phase 5B)
                     </button>
-                    <p class="text-xs text-center text-gray-400 mt-2">Fitur checkout akan dibuka pada Phase 5B.</p>
+                    <p class="text-xs text-center text-gray-400 mt-2">Fitur checkout pesanan akan dibuka pada Phase 5B.</p>
                 </div>
             </div>
         </div>

@@ -57,7 +57,12 @@ new class extends Component
                     <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
                         {{ __('Katalog') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.*')">
+                        {{ __('Keranjang') }}
+                    </x-nav-link>
                 </div>
+
             </div>
 
             <!-- Settings Dropdown -->
@@ -132,7 +137,12 @@ new class extends Component
             <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
                 {{ __('Katalog Produk') }}
             </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.*')">
+                {{ __('Keranjang Belanja') }}
+            </x-responsive-nav-link>
         </div>
+
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
