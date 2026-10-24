@@ -116,6 +116,11 @@ class Order extends Model
         return $this->status === OrderStatus::EXPIRED;
     }
 
+    public function isCompleted(): bool
+    {
+        return $this->status === OrderStatus::COMPLETED;
+    }
+
     /**
      * Get all payment transaction attempts for this order.
      */

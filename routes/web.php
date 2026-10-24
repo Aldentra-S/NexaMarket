@@ -74,6 +74,7 @@ Route::middleware(['auth', 'role:seller', 'shop.approved'])->prefix('seller')->n
     // Order Fulfillment Management
     Route::get('orders', [SellerOrderController::class, 'index'])->name('orders.index');
     Route::get('orders/{shopOrder}', [SellerOrderController::class, 'show'])->name('orders.show');
+    Route::patch('orders/{shopOrder}/status', [SellerOrderController::class, 'updateStatus'])->name('orders.status.update');
 });
 
 // Admin Routes (Shop Approval Center & Administrative Controls)

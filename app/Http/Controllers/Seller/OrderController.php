@@ -61,4 +61,22 @@ class OrderController extends Controller
             'shopOrder' => $shopOrder,
         ]);
     }
+
+    /**
+     * Update the fulfillment status of the specified shop order.
+     */
+    public function updateStatus(
+        \App\Http\Requests\Seller\UpdateOrderStatusRequest $request,
+        ShopOrder $shopOrder,
+        \App\Services\FulfillmentService $fulfillmentService
+    ): \Illuminate\Http\RedirectResponse {
+        Gate::authorize('update', $shopOrder);
+
+        $targetStatus = OrderStatus::from($request->validated('status'));
+
+        $fulfillmentService->updateStatus($shopOrder, $targetStatus);
+
+        return redirect()->route('seller.orders.show', $shopOrder)
+            ->with('success', "Status pesanan {$shopOrder->order_number} berhasil diperbarui menjadi {$targetStatus->label()}.");
+    }
 }
