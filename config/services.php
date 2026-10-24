@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'firebase' => [
+        'project_id' => env('VITE_FIREBASE_PROJECT_ID', env('FIREBASE_PROJECT_ID', 'nexamarket-56e7c')),
+        'credentials' => env('FIREBASE_CREDENTIALS'),
+    ],
+
 ];
