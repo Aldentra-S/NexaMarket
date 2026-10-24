@@ -83,5 +83,11 @@ class User extends Authenticatable
     {
         return $this->cart()->firstOrCreate([]);
     }
+
+    public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
 }
+
 

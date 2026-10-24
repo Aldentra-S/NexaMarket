@@ -83,4 +83,13 @@ class Shop extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    /**
+     * Get all child orders received by this shop.
+     */
+    public function shopOrders(): HasMany
+    {
+        return $this->hasMany(ShopOrder::class);
+    }
 }
+
