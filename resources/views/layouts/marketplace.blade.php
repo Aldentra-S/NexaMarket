@@ -152,6 +152,9 @@
                                     </span>
                                 </div>
                                 <div class="py-1">
+                                    <a href="{{ route('orders.index') }}" class="flex items-center px-4 py-2 text-xs text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition">
+                                        Pesanan Saya
+                                    </a>
                                     <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-2 text-xs text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition">
                                         Dashboard
                                     </a>
@@ -159,6 +162,7 @@
                                         Pengaturan Profil
                                     </a>
                                 </div>
+
                                 <div class="py-1">
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf

@@ -158,11 +158,19 @@
                 </div>
 
                 <div class="mt-4">
-                    <button type="button" disabled class="w-full py-3.5 px-4 rounded-xl bg-gray-200 text-gray-400 font-bold text-center cursor-not-allowed">
-                        Lanjut ke Checkout (Segera Hadir di Phase 5B)
-                    </button>
-                    <p class="text-xs text-center text-gray-400 mt-2">Fitur checkout pesanan akan dibuka pada Phase 5B.</p>
+                    @if($hasUnavailableItems)
+                        <button type="button" disabled class="w-full py-3.5 px-4 rounded-xl bg-gray-200 text-gray-400 font-bold text-center cursor-not-allowed">
+                            Lanjut ke Checkout
+                        </button>
+                        <p class="text-xs text-center text-amber-700 mt-2 font-medium">Harap perbaiki item yang tidak tersedia untuk melanjutkan ke checkout.</p>
+                    @else
+                        <a href="{{ route('checkout.create') }}" class="block w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-center transition shadow-sm">
+                            Lanjut ke Checkout &rarr;
+                        </a>
+                        <p class="text-xs text-center text-gray-400 mt-2">Periksa rincian per toko dan selesaikan pesanan Anda.</p>
+                    @endif
                 </div>
+
             </div>
         </div>
     @endif
