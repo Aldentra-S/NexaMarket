@@ -14,6 +14,7 @@ Route::middleware('guest')->group(function () {
         ->name('login');
 
     Route::post('auth/firebase/google', [FirebaseAuthController::class, 'handleGoogleLogin'])
+        ->middleware('throttle:10,1')
         ->name('auth.firebase.google');
 
     Volt::route('forgot-password', 'pages.auth.forgot-password')

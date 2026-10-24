@@ -53,6 +53,10 @@ class PaymentController extends Controller
     {
         Gate::authorize('view', $order);
 
+        if (app()->isProduction() || config('app.env') === 'production' || config('services.midtrans.is_production')) {
+            abort(403, 'Simulasi pembayaran lokal dinonaktifkan pada lingkungan produksi.');
+        }
+
         try {
             $payment = $paymentService->simulate($order, $request->validated('result'));
 

@@ -431,4 +431,49 @@ class MidtransPaymentIntegrationTest extends TestCase
         $this->assertSame(OrderStatus::PENDING, $order->fresh()->status);
         $this->assertFalse($order->fresh()->isPaid());
     }
+
+    public function test_delayed_settlement_webhook_does_not_resurrect_cancelled_or_expired_order(): void
+    {
+        $buyer = User::factory()->buyer()->create();
+        [$order, $product] = $this->createOrderWithProduct($buyer, price: 50000.00, quantity: 2);
+
+        $payment = Payment::create([
+            'order_id' => $order->id,
+            'payment_number' => 'PAY-MID-CANCELLED-RESURRECT',
+            'status' => PaymentStatus::PENDING,
+            'amount' => 100000.00,
+            'payment_method' => 'midtrans',
+        ]);
+
+        $this->bindFakeGateway();
+
+        $grossAmount = '100000.00';
+        $expireSig = $this->generateMidtransSignature($payment->payment_number, '200', $grossAmount);
+
+        // 1. Order expires first (stock restored back to 10)
+        $this->postJson(route('payments.midtrans.notification'), [
+            'order_id' => $payment->payment_number,
+            'status_code' => '200',
+            'gross_amount' => $grossAmount,
+            'transaction_status' => 'expire',
+            'signature_key' => $expireSig,
+        ])->assertOk();
+
+        $this->assertSame(OrderStatus::EXPIRED, $order->fresh()->status);
+        $this->assertSame(10, $product->fresh()->stock);
+
+        // 2. Delayed settlement arrives afterwards
+        $settleSig = $this->generateMidtransSignature($payment->payment_number, '200', $grossAmount);
+        $this->postJson(route('payments.midtrans.notification'), [
+            'order_id' => $payment->payment_number,
+            'status_code' => '200',
+            'gross_amount' => $grossAmount,
+            'transaction_status' => 'settlement',
+            'signature_key' => $settleSig,
+        ])->assertOk();
+
+        // Order MUST stay EXPIRED, must NOT resurrect to PAID, and stock must remain 10
+        $this->assertSame(OrderStatus::EXPIRED, $order->fresh()->status);
+        $this->assertSame(10, $product->fresh()->stock);
+    }
 }

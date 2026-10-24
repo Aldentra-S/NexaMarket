@@ -190,4 +190,34 @@ class MockPaymentSimulationTest extends TestCase
         $this->assertSame(OrderStatus::CANCELLED, $order->fresh()->status);
         $this->assertSame(10, $product->fresh()->stock);
     }
+
+    public function test_mock_payment_simulation_is_forbidden_in_production_environment(): void
+    {
+        config(['app.env' => 'production']);
+
+        $buyer = User::factory()->buyer()->create();
+        [$order] = $this->createPendingOrderWithProduct($buyer);
+
+        $response = $this->actingAs($buyer)->post(route('orders.payment.simulate', $order), [
+            'result' => 'success',
+        ]);
+
+        $response->assertForbidden();
+        $this->assertSame(OrderStatus::PENDING, $order->fresh()->status);
+    }
+
+    public function test_mock_payment_simulation_is_forbidden_when_midtrans_is_production(): void
+    {
+        config(['services.midtrans.is_production' => true]);
+
+        $buyer = User::factory()->buyer()->create();
+        [$order] = $this->createPendingOrderWithProduct($buyer);
+
+        $response = $this->actingAs($buyer)->post(route('orders.payment.simulate', $order), [
+            'result' => 'success',
+        ]);
+
+        $response->assertForbidden();
+        $this->assertSame(OrderStatus::PENDING, $order->fresh()->status);
+    }
 }

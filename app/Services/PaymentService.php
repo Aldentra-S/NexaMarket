@@ -77,7 +77,7 @@ class PaymentService
         $grossAmountPayload = (float) ($payload['gross_amount'] ?? 0);
         $expectedAmount = (float) $payment->amount;
 
-        if (abs($grossAmountPayload - $expectedAmount) > 0.01) {
+        if (abs($grossAmountPayload - $expectedAmount) > 0.01 || abs($grossAmountPayload - (float) $payment->order->total_amount) > 0.01) {
             throw ValidationException::withMessages([
                 'gross_amount' => 'Nominal transaksi pada notifikasi tidak cocok dengan data pesanan di sistem.',
             ]);
@@ -100,8 +100,21 @@ class PaymentService
             $isExpired = ($transactionStatus === 'expire');
 
             if ($isSuccess) {
-                // Idempotent: If not paid yet, mark paid
-                if (! $lockedOrder->isPaid() && ! $lockedOrder->isCompleted()) {
+                // Anti out-of-order: do NOT resurrect an already cancelled or expired order whose stock was released
+                if ($lockedOrder->isCancelled() || $lockedOrder->isExpired()) {
+                    $lockedPayment->update([
+                        'gateway_transaction_id' => $payload['transaction_id'] ?? $lockedPayment->gateway_transaction_id,
+                        'payload' => array_merge((array) $lockedPayment->payload, [
+                            'webhook' => $payload,
+                            'note' => 'Pembayaran berhasil di gateway tetapi pesanan sudah dibatalkan/kedaluwarsa sebelumnya.',
+                        ]),
+                    ]);
+
+                    return $lockedPayment;
+                }
+
+                // Idempotent: If still pending, mark paid
+                if ($lockedOrder->isPending()) {
                     $lockedOrder->update([
                         'status' => OrderStatus::PAID,
                         'paid_at' => now(),
@@ -192,6 +205,12 @@ class PaymentService
      */
     public function simulate(Order $order, string $result): Payment
     {
+        if (app()->isProduction() || config('app.env') === 'production' || config('services.midtrans.is_production')) {
+            throw ValidationException::withMessages([
+                'simulation' => 'Simulasi pembayaran lokal dinonaktifkan pada lingkungan produksi.',
+            ]);
+        }
+
         return DB::transaction(function () use ($order, $result) {
             $lockedOrder = Order::where('id', $order->id)->lockForUpdate()->first();
 

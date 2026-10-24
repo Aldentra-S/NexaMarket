@@ -169,44 +169,46 @@
                             </button>
                         </div>
 
-                        <!-- Success Simulation -->
-                        <form action="{{ route('orders.payment.simulate', $order) }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="result" value="success">
-                            <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs transition shadow-sm flex items-center justify-center gap-2">
-                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                                Simulasi Cepat Sukses (Lokal QA)
-                            </button>
-                        </form>
+                        @if(! app()->isProduction() && config('app.env') !== 'production' && ! config('services.midtrans.is_production'))
+                            <!-- Success Simulation -->
+                            <form action="{{ route('orders.payment.simulate', $order) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="result" value="success">
+                                <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs transition shadow-sm flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Simulasi Cepat Sukses (Lokal QA)
+                                </button>
+                            </form>
 
-                        <!-- Failure and Expired Testing Controls -->
-                        <div class="pt-2 border-t border-gray-100 space-y-2">
-                            <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block text-center">
-                                Opsi Uji Coba Skenario (QA Mock)
-                            </span>
-                            <div class="grid grid-cols-2 gap-2">
-                                <form action="{{ route('orders.payment.simulate', $order) }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="result" value="failed">
-                                    <button type="submit" class="w-full py-2 px-3 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold transition text-center">
-                                        Simulasi Gagal
-                                    </button>
-                                </form>
-                                <form action="{{ route('orders.payment.simulate', $order) }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="result" value="expired">
-                                    <button type="submit" class="w-full py-2 px-3 rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 text-xs font-semibold transition text-center">
-                                        Simulasi Expired
-                                    </button>
-                                </form>
+                            <!-- Failure and Expired Testing Controls -->
+                            <div class="pt-2 border-t border-gray-100 space-y-2">
+                                <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block text-center">
+                                    Opsi Uji Coba Skenario (QA Mock)
+                                </span>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <form action="{{ route('orders.payment.simulate', $order) }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="result" value="failed">
+                                        <button type="submit" class="w-full py-2 px-3 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold transition text-center">
+                                            Simulasi Gagal
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('orders.payment.simulate', $order) }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="result" value="expired">
+                                        <button type="submit" class="w-full py-2 px-3 rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 text-xs font-semibold transition text-center">
+                                            Simulasi Expired
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
 
-                        <p class="text-[11px] text-gray-400 text-center leading-tight">
-                            * Simulasi pembayaran lokal NexaMarket (tanpa gateway uang riil).
-                        </p>
+                            <p class="text-[11px] text-gray-400 text-center leading-tight">
+                                * Simulasi pembayaran lokal NexaMarket (tanpa gateway uang riil).
+                            </p>
+                        @endif
                     </div>
                 @elseif($order->isPaid())
                     <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-start gap-3">
