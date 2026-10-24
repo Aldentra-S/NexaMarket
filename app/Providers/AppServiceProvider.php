@@ -24,5 +24,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('access-admin', fn (User $user) => $user->isAdmin());
         Gate::define('access-seller', fn (User $user) => $user->isSeller());
         Gate::define('access-buyer', fn (User $user) => $user->isBuyer());
+
+        Gate::policy(\App\Models\CartItem::class, \App\Policies\CartItemPolicy::class);
     }
+
 }

@@ -40,6 +40,20 @@ class ShopFactory extends Factory
     }
 
     /**
+     * Indicate that the shop is pending.
+     */
+    public function pending(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => ShopStatus::PENDING,
+            'approved_at' => null,
+            'rejection_reason' => null,
+            'suspension_reason' => null,
+            'suspended_at' => null,
+        ]);
+    }
+
+    /**
      * Indicate that the shop is approved.
      */
     public function approved(): static

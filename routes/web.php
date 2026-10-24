@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ShopApprovalController;
 use App\Http\Controllers\Buyer\ShopOnboardingController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductCatalogController;
 use App\Http\Controllers\Seller\DashboardController as SellerDashboardController;
 use App\Http\Controllers\Seller\ProductController as SellerProductController;
@@ -15,9 +16,18 @@ Route::view('/', 'welcome');
 Route::get('/products', [ProductCatalogController::class, 'index'])->name('products.index');
 Route::get('/products/{slug}', [ProductCatalogController::class, 'show'])->name('products.show');
 
+// Shopping Cart Routes
+Route::middleware(['auth'])->prefix('cart')->name('cart.')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('index');
+    Route::post('/items', [CartController::class, 'store'])->name('items.store');
+    Route::patch('/items/{item}', [CartController::class, 'update'])->name('items.update');
+    Route::delete('/items/{item}', [CartController::class, 'destroy'])->name('items.destroy');
+});
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])
