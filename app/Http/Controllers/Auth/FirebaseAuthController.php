@@ -28,7 +28,7 @@ class FirebaseAuthController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Login Google berhasil.',
-            'redirect' => route('dashboard', absolute: false),
+            'redirect' => $user->isAdmin() ? route('admin.dashboard', absolute: false) : route('dashboard', absolute: false),
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,

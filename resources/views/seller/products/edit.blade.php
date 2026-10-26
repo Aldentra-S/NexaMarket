@@ -2,27 +2,27 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div>
-                <div class="flex items-center space-x-2 text-xs text-gray-500 mb-1">
-                    <a href="{{ route('seller.dashboard') }}" class="hover:text-emerald-600 transition">Seller Center</a>
+                <div class="flex items-center space-x-2 text-xs text-slate-500 mb-1">
+                    <a href="{{ route('seller.dashboard') }}" class="hover:text-emerald-700 transition">Seller Center</a>
                     <span>&rsaquo;</span>
-                    <a href="{{ route('seller.products.index') }}" class="hover:text-emerald-600 transition">Produk</a>
+                    <a href="{{ route('seller.products.index') }}" class="hover:text-emerald-700 transition">Produk</a>
                     <span>&rsaquo;</span>
-                    <span class="text-gray-800 font-medium">Edit Produk</span>
+                    <span class="text-slate-800 font-medium">Edit Produk</span>
                 </div>
-                <h2 class="font-bold text-xl text-gray-900 leading-tight">
+                <h2 class="font-bold text-xl text-slate-900 leading-tight">
                     {{ __('Edit Produk: ') }} {{ $product->name }}
                 </h2>
-                <p class="text-xs text-gray-500 mt-0.5">Perbarui rincian harga, stok, deskripsi, atau status visibilitas produk</p>
+                <p class="text-xs text-slate-500 mt-0.5">Perbarui rincian harga, stok, deskripsi, atau status visibilitas produk</p>
             </div>
-            <a href="{{ route('seller.products.index') }}" class="text-xs font-semibold text-gray-600 hover:text-emerald-600 transition">
+            <a href="{{ route('seller.products.index') }}" class="text-xs font-semibold text-slate-600 hover:text-emerald-700 transition">
                 &larr; Kembali ke Daftar Produk
             </a>
         </div>
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-2xl border border-gray-100">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <div class="bg-white overflow-hidden rounded-2xl border border-slate-200">
                 <form method="POST" action="{{ route('seller.products.update', $product) }}" class="p-6 sm:p-8 space-y-6">
                     @csrf
                     @method('PUT')
@@ -39,7 +39,7 @@
                             required 
                             autofocus 
                         />
-                        <p class="text-[11px] text-gray-400 mt-1 font-mono">Slug saat ini: {{ $product->slug }}</p>
+                        <p class="text-[11px] text-slate-400 mt-1">Slug saat ini: {{ $product->slug }}</p>
                         <x-input-error class="mt-2" :messages="$errors->get('name')" />
                     </div>
 
@@ -49,7 +49,7 @@
                         <select 
                             id="category_id" 
                             name="category_id" 
-                            class="mt-1 block w-full border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm text-xs">
+                            class="mt-1 block w-full border-slate-300 focus:border-emerald-700 focus:ring-emerald-700 rounded-xl text-xs sm:text-sm">
                             <option value="">-- Pilih Kategori Produk (Opsional) --</option>
                             @foreach ($categories as $cat)
                                 <option value="{{ $cat->id }}" {{ (string) old('category_id', $product->category_id) === (string) $cat->id ? 'selected' : '' }}>
@@ -66,7 +66,7 @@
                         <div>
                             <x-input-label for="price" :value="__('Harga Jual Satuan (IDR / Rp)')" />
                             <div class="relative mt-1">
-                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-xs font-bold text-gray-400 pointer-events-none">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-xs font-bold text-slate-400 pointer-events-none">
                                     Rp
                                 </span>
                                 <x-text-input 
@@ -106,7 +106,7 @@
                         <select 
                             id="status" 
                             name="status" 
-                            class="mt-1 block w-full border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm text-xs" 
+                            class="mt-1 block w-full border-slate-300 focus:border-emerald-700 focus:ring-emerald-700 rounded-xl text-xs sm:text-sm" 
                             required>
                             <option value="published" {{ old('status', $product->status->value) === 'published' ? 'selected' : '' }}>
                                 Ditayangkan (Muncul di katalog publik dan dapat dibeli)
@@ -128,18 +128,18 @@
                             id="description" 
                             name="description" 
                             rows="6" 
-                            class="mt-1 block w-full border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm text-xs leading-relaxed" 
+                            class="mt-1 block w-full border-slate-300 focus:border-emerald-700 focus:ring-emerald-700 rounded-xl text-xs sm:text-sm leading-relaxed" 
                             required 
                         >{{ old('description', $product->description) }}</textarea>
                         <x-input-error class="mt-2" :messages="$errors->get('description')" />
                     </div>
 
                     <!-- Actions -->
-                    <div class="flex items-center justify-end space-x-3 pt-6 border-t border-gray-100">
-                        <a href="{{ route('seller.products.index') }}" class="px-4 py-2 text-xs font-semibold text-gray-600 hover:text-gray-900 transition">
+                    <div class="flex items-center justify-end space-x-3 pt-6 border-t border-slate-100">
+                        <a href="{{ route('seller.products.index') }}" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 transition">
                             Batal
                         </a>
-                        <x-primary-button class="bg-emerald-600 hover:bg-emerald-700">
+                        <x-primary-button>
                             {{ __('Simpan Perubahan') }}
                         </x-primary-button>
                     </div>
@@ -147,14 +147,14 @@
             </div>
 
             <!-- Product Images Management Card -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-2xl border border-gray-100">
+            <div class="bg-white overflow-hidden rounded-2xl border border-slate-200">
                 <div class="p-6 sm:p-8 space-y-6">
-                    <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                         <div>
-                            <h3 class="text-base font-bold text-gray-900">Galeri & Foto Produk</h3>
-                            <p class="text-xs text-gray-500 mt-0.5">Kelola foto etalase produk (Maksimal 5 foto). Foto utama digunakan sebagai sampul katalog.</p>
+                            <h3 class="text-base font-bold text-slate-900">Galeri & Foto Produk</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Kelola foto etalase produk (Maksimal 5 foto). Foto utama digunakan sebagai sampul katalog.</p>
                         </div>
-                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full {{ $product->images->count() >= \App\Models\ProductImage::MAX_PER_PRODUCT ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-700' }}">
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full {{ $product->images->count() >= \App\Models\ProductImage::MAX_PER_PRODUCT ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700' }}">
                             {{ $product->images->count() }} / {{ \App\Models\ProductImage::MAX_PER_PRODUCT }} Foto
                         </span>
                     </div>
@@ -163,22 +163,22 @@
                     @if ($product->images->isNotEmpty())
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                             @foreach ($product->images as $img)
-                                <div class="relative bg-gray-50 rounded-xl p-3 border {{ $img->is_primary ? 'border-emerald-400 ring-2 ring-emerald-100' : 'border-gray-200' }} flex flex-col justify-between">
+                                <div class="relative bg-slate-50 rounded-xl p-3 border {{ $img->is_primary ? 'border-orange-500 ring-2 ring-orange-100' : 'border-slate-200' }} flex flex-col justify-between">
                                     <div class="aspect-square w-full rounded-lg overflow-hidden bg-white mb-3 relative flex items-center justify-center">
                                         <img src="{{ $img->url }}" alt="Foto {{ $product->name }}" class="object-cover w-full h-full" />
                                         @if ($img->is_primary)
-                                            <span class="absolute top-2 left-2 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs">
+                                            <span class="absolute top-2 left-2 bg-orange-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-xs">
                                                 Foto Utama
                                             </span>
                                         @endif
                                     </div>
 
-                                    <div class="space-y-2 pt-2 border-t border-gray-100">
+                                    <div class="space-y-2 pt-2 border-t border-slate-100">
                                         @if (! $img->is_primary)
                                             <form method="POST" action="{{ route('seller.products.images.primary', [$product, $img]) }}">
                                                 @csrf
                                                 @method('PATCH')
-                                                <button type="submit" class="w-full text-center py-1.5 px-2 bg-white hover:bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-semibold transition">
+                                                <button type="submit" class="w-full text-center py-1.5 px-2 bg-white hover:bg-orange-50 text-orange-700 border border-orange-200 rounded-lg text-xs font-semibold transition">
                                                     Jadikan Foto Utama
                                                 </button>
                                             </form>
@@ -189,7 +189,7 @@
                                             <form method="POST" action="{{ route('seller.products.images.update', [$product, $img]) }}" enctype="multipart/form-data" class="flex-1">
                                                 @csrf
                                                 @method('PUT')
-                                                <label class="block text-center cursor-pointer py-1.5 px-2 bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 rounded-lg text-[11px] font-semibold transition">
+                                                <label class="block text-center cursor-pointer py-1.5 px-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[11px] font-semibold transition">
                                                     <span>Ganti</span>
                                                     <input type="file" name="image" accept="image/jpeg,image/png,image/webp" class="sr-only" onchange="this.form.submit()">
                                                 </label>
@@ -199,7 +199,7 @@
                                             <form method="POST" action="{{ route('seller.products.images.destroy', [$product, $img]) }}" onsubmit="return confirm('Hapus foto ini?')" class="flex-1">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="w-full text-center py-1.5 px-2 bg-white hover:bg-red-50 text-red-600 border border-red-200 rounded-lg text-[11px] font-semibold transition">
+                                                <button type="submit" class="w-full text-center py-1.5 px-2 bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 rounded-lg text-[11px] font-semibold transition">
                                                     Hapus
                                                 </button>
                                             </form>
@@ -209,14 +209,14 @@
                             @endforeach
                         </div>
                     @else
-                        <div class="p-8 text-center bg-gray-50 rounded-xl border border-dashed border-gray-200">
-                            <p class="text-xs text-gray-500">Produk ini belum memiliki foto. Unggah foto produk di bawah untuk menarik pembeli.</p>
+                        <div class="p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                            <p class="text-xs text-slate-500">Produk ini belum memiliki foto. Unggah foto produk di bawah untuk menarik pembeli.</p>
                         </div>
                     @endif
 
                     <!-- Upload Additional Images (if under limit) -->
                     @if ($product->images->count() < \App\Models\ProductImage::MAX_PER_PRODUCT)
-                        <form method="POST" action="{{ route('seller.products.images.store', $product) }}" enctype="multipart/form-data" class="pt-4 border-t border-gray-100">
+                        <form method="POST" action="{{ route('seller.products.images.store', $product) }}" enctype="multipart/form-data" class="pt-4 border-t border-slate-100">
                             @csrf
                             <x-input-label for="upload_images" :value="__('Unggah Foto Tambahan')" />
                             <div class="mt-2 flex flex-col sm:flex-row gap-3 items-center">
@@ -226,14 +226,14 @@
                                     type="file" 
                                     multiple 
                                     accept="image/jpeg,image/png,image/webp" 
-                                    class="block w-full text-xs text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-gray-200 rounded-xl cursor-pointer" 
+                                    class="block w-full text-xs text-slate-700 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 border border-slate-200 rounded-xl cursor-pointer" 
                                     required 
                                 />
-                                <x-primary-button class="bg-emerald-600 hover:bg-emerald-700 shrink-0">
+                                <x-primary-button class="shrink-0">
                                     {{ __('Unggah Foto') }}
                                 </x-primary-button>
                             </div>
-                            <p class="text-[11px] text-gray-400 mt-1">Mendukung JPEG, PNG, dan WebP (Maks. 2MB per berkas). Sisa kuota: {{ \App\Models\ProductImage::MAX_PER_PRODUCT - $product->images->count() }} foto.</p>
+                            <p class="text-[11px] text-slate-400 mt-1">Mendukung JPEG, PNG, dan WebP (Maks. 2MB per berkas). Sisa kuota: {{ \App\Models\ProductImage::MAX_PER_PRODUCT - $product->images->count() }} foto.</p>
                             <x-input-error class="mt-2" :messages="$errors->get('images')" />
                             <x-input-error class="mt-2" :messages="$errors->get('images.*')" />
                         </form>

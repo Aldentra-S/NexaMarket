@@ -20,6 +20,11 @@ new #[Layout('layouts.guest')] class extends Component
 
         Session::regenerate();
 
+        if (\Illuminate\Support\Facades\Auth::user()?->isAdmin()) {
+            $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
+            return;
+        }
+
         $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     }
 }; ?>
@@ -48,22 +53,22 @@ new #[Layout('layouts.guest')] class extends Component
             <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
         </div>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember" class="inline-flex items-center">
-                <input wire:model="form.remember" id="remember" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+        <!-- Remember Me & Forgot Password -->
+        <div class="flex items-center justify-between mt-4">
+            <label for="remember" class="inline-flex items-center cursor-pointer">
+                <input wire:model="form.remember" id="remember" type="checkbox" class="rounded border-slate-300 text-orange-600 shadow-2xs focus:ring-orange-500" name="remember">
+                <span class="ms-2 text-xs font-medium text-slate-600">{{ __('Remember me') }}</span>
             </label>
-        </div>
 
-        <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}" wire:navigate>
+                <a class="text-xs font-semibold text-slate-600 hover:text-orange-600 transition rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500" href="{{ route('password.request') }}" wire:navigate>
                     {{ __('Forgot your password?') }}
                 </a>
             @endif
+        </div>
 
-            <x-primary-button class="ms-3">
+        <div class="mt-5">
+            <x-primary-button class="w-full justify-center py-2.5 text-xs sm:text-sm font-bold shadow-xs cursor-pointer">
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
@@ -93,7 +98,7 @@ new #[Layout('layouts.guest')] class extends Component
         <button type="button"
                 @click="signInWithGoogle"
                 :disabled="isLoading"
-                class="w-full inline-flex items-center justify-center gap-3 px-4 py-2.5 border border-gray-300 rounded-xl shadow-sm bg-white hover:bg-gray-50 text-xs font-semibold text-gray-700 transition disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer">
+                class="w-full inline-flex items-center justify-center gap-3 px-4 py-2.5 border border-slate-300 rounded-xl bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer">
             <template x-if="isLoading">
                 <svg class="animate-spin h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -110,6 +115,22 @@ new #[Layout('layouts.guest')] class extends Component
             </template>
             <span x-text="isLoading ? 'Menghubungkan ke Google...' : 'Lanjutkan dengan Google'"></span>
         </button>
+    </div>
+
+    <!-- Belum punya akun? Daftar di sini -->
+    <div class="mt-6 text-center text-xs text-slate-600">
+        <span>Belum punya akun? </span>
+        <a href="{{ route('register') }}" wire:navigate class="font-bold text-orange-600 hover:text-orange-700 hover:underline">
+            Daftar di sini
+        </a>
+    </div>
+
+    <!-- Kembali ke Beranda -->
+    <div class="mt-4 pt-4 border-t border-slate-100 text-center">
+        <a href="/" class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-orange-600 transition">
+            <span>&larr;</span>
+            <span>Kembali ke Beranda</span>
+        </a>
     </div>
 
     <script>

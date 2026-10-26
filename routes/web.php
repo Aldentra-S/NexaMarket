@@ -1,7 +1,14 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\RefundController as AdminRefundController;
+use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\ShopApprovalController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Buyer\ShopOnboardingController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
@@ -12,6 +19,8 @@ use App\Http\Controllers\Seller\DashboardController as SellerDashboardController
 use App\Http\Controllers\Seller\OrderController as SellerOrderController;
 use App\Http\Controllers\Seller\ProductController as SellerProductController;
 use App\Http\Controllers\Seller\ProductImageController as SellerProductImageController;
+use App\Http\Controllers\Seller\ReviewController as SellerReviewController;
+use App\Http\Controllers\Seller\ShopSettingsController as SellerShopSettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
@@ -48,14 +57,20 @@ Route::post('api/payments/midtrans/notification', [PaymentController::class, 'ha
 
 
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::get('dashboard', function () {
+    if (auth()->user()?->isAdmin()) {
+        return redirect()->route('admin.dashboard');
+    }
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
+Route::get('profile', function () {
+    if (auth()->user()?->isAdmin()) {
+        return redirect()->route('admin.profile');
+    }
+    return view('profile');
+})->middleware(['auth'])->name('profile');
 
 // Buyer Routes (Shop Onboarding & Shopping Area)
 Route::middleware(['auth', 'role:buyer,seller'])->prefix('buyer')->name('buyer.')->group(function () {
@@ -80,11 +95,20 @@ Route::middleware(['auth', 'role:seller', 'shop.approved'])->prefix('seller')->n
     Route::get('orders', [SellerOrderController::class, 'index'])->name('orders.index');
     Route::get('orders/{shopOrder}', [SellerOrderController::class, 'show'])->name('orders.show');
     Route::patch('orders/{shopOrder}/status', [SellerOrderController::class, 'updateStatus'])->name('orders.status.update');
+
+    // Shop Settings & Profile
+    Route::get('shop/settings', [SellerShopSettingsController::class, 'edit'])->name('shop.settings');
+    Route::put('shop/settings', [SellerShopSettingsController::class, 'update'])->name('shop.settings.update');
+
+    // Product Reviews Overview
+    Route::get('reviews', [SellerReviewController::class, 'index'])->name('reviews.index');
 });
 
 // Admin Routes (Shop Approval Center & Administrative Controls)
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [ShopApprovalController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    // Shop Approval Center
     Route::get('/shops', [ShopApprovalController::class, 'index'])->name('shops.index');
     Route::get('/shops/{shop}', [ShopApprovalController::class, 'show'])->name('shops.show');
     Route::post('/shops/{shop}/approve', [ShopApprovalController::class, 'approve'])->name('shops.approve');
@@ -92,8 +116,32 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/shops/{shop}/suspend', [ShopApprovalController::class, 'suspend'])->name('shops.suspend');
     Route::post('/shops/{shop}/reactivate', [ShopApprovalController::class, 'reactivate'])->name('shops.reactivate');
 
+    // Platform User Management
+    Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+
+    // Global Product Oversight
+    Route::get('/products', [AdminProductController::class, 'index'])->name('products.index');
+
+    // Platform Order Oversight
+    Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
+
+    // Gateway Payment Records
+    Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
+
+    // Refunds & Cancellations Oversight
+    Route::get('/refunds', [AdminRefundController::class, 'index'])->name('refunds.index');
+
     // Admin Category Management
     Route::resource('categories', AdminCategoryController::class);
+
+    // Business Intelligence & Platform Reports
+    Route::get('/reports', [AdminReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/export/csv', [AdminReportController::class, 'exportCsv'])->name('reports.export.csv');
+    Route::get('/reports/export/pdf', [AdminReportController::class, 'exportPdf'])->name('reports.export.pdf');
+
+    // Admin Profile
+    Route::view('/profile', 'profile')->name('profile');
 });
 
 require __DIR__.'/auth.php';
