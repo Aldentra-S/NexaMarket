@@ -47,7 +47,7 @@ class ProductCatalogController extends Controller
             default => $query->latest(),
         };
 
-        $products = $query->paginate(12)->withQueryString();
+        $products = $query->paginate(20)->withQueryString();
         $categories = Category::active()->orderBy('name')->get();
 
         return view('catalog.index', [
