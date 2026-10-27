@@ -47,9 +47,36 @@ class User extends Authenticatable
         return $this->role === UserRole::BUYER;
     }
 
+    /**
+     * Check if user is a seller in business terms (owns a registered shop).
+     */
     public function isSeller(): bool
     {
-        return $this->role === UserRole::SELLER;
+        return $this->hasShop();
+    }
+
+    /**
+     * Check if user owns any registered shop.
+     */
+    public function hasShop(): bool
+    {
+        return $this->shop !== null;
+    }
+
+    /**
+     * Check if user owns an approved shop.
+     */
+    public function hasApprovedShop(): bool
+    {
+        return $this->shop !== null && $this->shop->isApproved();
+    }
+
+    /**
+     * Check if user is eligible to access Seller Center operations.
+     */
+    public function canAccessSellerCenter(): bool
+    {
+        return $this->isBuyer() && $this->hasApprovedShop();
     }
 
     public function isAdmin(): bool
@@ -68,11 +95,6 @@ class User extends Authenticatable
     public function shop(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(Shop::class);
-    }
-
-    public function hasApprovedShop(): bool
-    {
-        return $this->shop !== null && $this->shop->isApproved();
     }
 
     public function cart(): \Illuminate\Database\Eloquent\Relations\HasOne

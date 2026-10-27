@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\ShopStatus;
-use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\RejectShopRequest;
 use App\Http\Requests\Admin\SuspendShopRequest;
@@ -69,15 +68,10 @@ class ShopApprovalController extends Controller
             $shop->rejection_reason = null;
             $shop->approved_at = now();
             $shop->save();
-
-            // Elevate user role to SELLER
-            $owner = $shop->user;
-            $owner->role = UserRole::SELLER;
-            $owner->save();
         });
 
         return redirect()->route('admin.shops.index')
-            ->with('status', 'Toko "' . $shop->name . '" berhasil disetujui. Pemilik toko kini resmi memiliki peran Penjual.');
+            ->with('status', 'Toko "' . $shop->name . '" berhasil disetujui. Pemilik toko kini resmi dapat mengakses Seller Center.');
     }
 
     /**
@@ -92,11 +86,6 @@ class ShopApprovalController extends Controller
             $shop->rejection_reason = $request->validated('rejection_reason');
             $shop->approved_at = null;
             $shop->save();
-
-            // If user's only shop was rejected, maintain/revert role to BUYER
-            $owner = $shop->user;
-            $owner->role = UserRole::BUYER;
-            $owner->save();
         });
 
         return redirect()->route('admin.shops.index')
@@ -115,11 +104,6 @@ class ShopApprovalController extends Controller
             $shop->suspension_reason = $request->validated('suspension_reason');
             $shop->suspended_at = now();
             $shop->save();
-
-            // Revert owner role to BUYER while shop is suspended
-            $owner = $shop->user;
-            $owner->role = UserRole::BUYER;
-            $owner->save();
         });
 
         return redirect()->route('admin.shops.index')
@@ -138,11 +122,6 @@ class ShopApprovalController extends Controller
             $shop->suspension_reason = null;
             $shop->suspended_at = null;
             $shop->save();
-
-            // Restore owner role to SELLER
-            $owner = $shop->user;
-            $owner->role = UserRole::SELLER;
-            $owner->save();
         });
 
         return redirect()->route('admin.shops.index')

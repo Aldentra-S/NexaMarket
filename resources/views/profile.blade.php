@@ -139,7 +139,7 @@
                         </a>
                     </div>
 
-                @elseif ($user->isSeller() || ($shop && $shop->isApproved()))
+                @elseif ($user->canAccessSellerCenter())
                     <!-- Status 4 & 5: Toko Aktif / Seller -->
                     <div class="p-6 rounded-2xl bg-orange-50/40 border border-orange-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                         <div class="space-y-2">

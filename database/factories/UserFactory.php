@@ -56,11 +56,13 @@ class UserFactory extends Factory
 
     /**
      * Indicate that the user is a seller.
+     * In NexaMarket architecture, a seller is a Buyer who owns a shop.
+     * The database role remains BUYER.
      */
     public function seller(): static
     {
         return $this->state(fn (array $attributes) => [
-            'role' => \App\Enums\UserRole::SELLER,
+            'role' => \App\Enums\UserRole::BUYER,
         ]);
     }
 

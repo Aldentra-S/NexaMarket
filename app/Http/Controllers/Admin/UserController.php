@@ -20,8 +20,12 @@ class UserController extends Controller
 
         $query = User::with('shop')->latest();
 
-        if ($roleFilter && in_array($roleFilter, UserRole::values(), true)) {
-            $query->where('role', $roleFilter);
+        if ($roleFilter === 'admin') {
+            $query->where('role', UserRole::ADMIN->value);
+        } elseif ($roleFilter === 'seller') {
+            $query->whereHas('shop');
+        } elseif ($roleFilter === 'buyer') {
+            $query->where('role', UserRole::BUYER->value)->whereDoesntHave('shop');
         }
 
         if (!empty($search)) {
@@ -38,8 +42,8 @@ class UserController extends Controller
             'currentRole' => $roleFilter,
             'search' => $search,
             'totalCount' => User::count(),
-            'buyerCount' => User::where('role', UserRole::BUYER->value)->count(),
-            'sellerCount' => User::where('role', UserRole::SELLER->value)->count(),
+            'buyerCount' => User::where('role', UserRole::BUYER->value)->whereDoesntHave('shop')->count(),
+            'sellerCount' => User::whereHas('shop')->count(),
             'adminCount' => User::where('role', UserRole::ADMIN->value)->count(),
         ]);
     }

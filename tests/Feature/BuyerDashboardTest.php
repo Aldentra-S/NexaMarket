@@ -210,7 +210,7 @@ class BuyerDashboardTest extends TestCase
 
     public function test_profile_displays_active_seller_center_when_user_is_seller(): void
     {
-        $seller = User::factory()->create(['role' => UserRole::SELLER]);
+        $seller = User::factory()->create(['role' => UserRole::BUYER]);
 
         $shop = new Shop([
             'name' => 'Toko Resmi Juara',

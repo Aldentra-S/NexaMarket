@@ -64,6 +64,7 @@ class AdminPlatformManagementTest extends TestCase
         $admin = $this->createAdmin();
         $buyer = User::factory()->buyer()->create(['name' => 'Budi Pembeli Santosa', 'email' => 'budi@pembeli.com']);
         $seller = User::factory()->seller()->create(['name' => 'Siti Penjual Berkah', 'email' => 'siti@penjual.com']);
+        Shop::factory()->approved()->create(['user_id' => $seller->id, 'name' => 'Toko Berkah Siti']);
 
         $response = $this->actingAs($admin)->get(route('admin.users.index'));
         $response->assertOk();
@@ -76,6 +77,12 @@ class AdminPlatformManagementTest extends TestCase
         $responseBuyer->assertOk();
         $responseBuyer->assertSee('Budi Pembeli Santosa');
         $responseBuyer->assertDontSee('Siti Penjual Berkah');
+
+        // Filter by role seller
+        $responseSeller = $this->actingAs($admin)->get(route('admin.users.index', ['role' => 'seller']));
+        $responseSeller->assertOk();
+        $responseSeller->assertSee('Siti Penjual Berkah');
+        $responseSeller->assertDontSee('Budi Pembeli Santosa');
     }
 
     public function test_admin_can_view_products_oversight_list(): void

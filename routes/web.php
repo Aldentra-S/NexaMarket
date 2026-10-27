@@ -69,14 +69,14 @@ Route::get('profile', function () {
 })->middleware(['auth'])->name('profile');
 
 // Buyer Routes (Shop Onboarding & Shopping Area)
-Route::middleware(['auth', 'role:buyer,seller'])->prefix('buyer')->name('buyer.')->group(function () {
+Route::middleware(['auth', 'role:buyer'])->prefix('buyer')->name('buyer.')->group(function () {
     Route::get('/area', fn () => response()->json(['status' => 'ok', 'message' => 'Buyer Area Access Granted']))->name('area');
     Route::get('/shop/apply', [ShopOnboardingController::class, 'create'])->name('shop.apply');
     Route::post('/shop/apply', [ShopOnboardingController::class, 'store'])->name('shop.store');
 });
 
-// Seller Routes (Protected by role seller AND approved shop)
-Route::middleware(['auth', 'role:seller', 'shop.approved'])->prefix('seller')->name('seller.')->group(function () {
+// Seller Routes (Protected by auth, role buyer, and approved shop)
+Route::middleware(['auth', 'role:buyer', 'shop.approved'])->prefix('seller')->name('seller.')->group(function () {
     Route::get('/dashboard', [SellerDashboardController::class, 'index'])->name('dashboard');
     Route::resource('products', SellerProductController::class);
 

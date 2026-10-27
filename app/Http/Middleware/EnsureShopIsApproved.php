@@ -23,9 +23,9 @@ class EnsureShopIsApproved
             return redirect()->route('login');
         }
 
-        // Must have role seller
-        if ($user->role !== UserRole::SELLER) {
-            abort(Response::HTTP_FORBIDDEN, 'Akses ditolak: Anda harus memiliki peran Penjual resmi.');
+        // Administrators are not seller store operators
+        if ($user->isAdmin()) {
+            abort(Response::HTTP_FORBIDDEN, 'Akses ditolak: Administrator tidak dapat mengelola Seller Center.');
         }
 
         // Must have a registered shop with status APPROVED

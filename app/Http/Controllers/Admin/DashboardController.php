@@ -29,8 +29,8 @@ class DashboardController extends Controller
         ];
 
         $totalUsers = User::count();
-        $buyerCount = User::where('role', UserRole::BUYER->value)->count();
-        $sellerCount = User::where('role', UserRole::SELLER->value)->count();
+        $buyerCount = User::where('role', UserRole::BUYER->value)->whereDoesntHave('shop')->count();
+        $sellerCount = User::whereHas('shop')->count();
         $adminCount = User::where('role', UserRole::ADMIN->value)->count();
 
         $totalShops = Shop::count();

@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::define('access-admin', fn (User $user) => $user->isAdmin());
-        Gate::define('access-seller', fn (User $user) => $user->isSeller());
+        Gate::define('access-seller', fn (User $user) => $user->canAccessSellerCenter());
         Gate::define('access-buyer', fn (User $user) => $user->isBuyer());
 
         Gate::policy(\App\Models\CartItem::class, \App\Policies\CartItemPolicy::class);

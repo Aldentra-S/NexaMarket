@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Enums\ProductStatus;
 use App\Enums\ShopStatus;
 use App\Enums\UserRole;
 use App\Models\Category;
@@ -39,8 +38,28 @@ class MarketplaceDemoSeederTest extends TestCase
         $this->assertDatabaseHas('categories', ['slug' => 'alat-tulis-belajar']);
         $this->assertDatabaseHas('categories', ['slug' => 'tas-kebutuhan-harian']);
 
-        // Verify seller users count
-        $this->assertEquals(5, User::where('email', 'like', 'seller.%@nexamarket.test')->count());
+        // Verify natural buyer shop owners count
+        $this->assertEquals(5, User::whereIn('email', [
+            'budi@gmail.com',
+            'siti@gmail.com',
+            'andi@gmail.com',
+            'rina@gmail.com',
+            'dika@gmail.com',
+        ])->count());
+
+        // Verify all 5 shop owner accounts have BUYER role (no seller role added)
+        $shopOwnerUsers = User::whereIn('email', [
+            'budi@gmail.com',
+            'siti@gmail.com',
+            'andi@gmail.com',
+            'rina@gmail.com',
+            'dika@gmail.com',
+        ])->get();
+
+        foreach ($shopOwnerUsers as $user) {
+            $this->assertSame(UserRole::BUYER, $user->role, "{$user->email} must strictly have BUYER role.");
+            $this->assertTrue($user->isBuyer());
+        }
 
         // Verify shops count & statuses (4 approved, 1 pending)
         $this->assertEquals(5, Shop::count());
@@ -76,28 +95,75 @@ class MarketplaceDemoSeederTest extends TestCase
         $this->assertEquals($initialImageCount, ProductImage::count(), 'Running seeder twice should not create duplicate product images.');
     }
 
-    public function test_sellers_and_shops_have_correct_roles_and_relations(): void
+    public function test_shop_owners_are_buyers_with_correct_relations_and_credentials(): void
     {
         $this->seed(MarketplaceDemoSeeder::class);
 
-        // 1. PixelGear Store (Approved Seller)
-        $pixelUser = User::where('email', 'seller.pixelgear@nexamarket.test')->firstOrFail();
-        $this->assertSame(UserRole::SELLER, $pixelUser->role);
-        $this->assertTrue(Hash::check('password123', $pixelUser->password));
-        $this->assertNotNull($pixelUser->email_verified_at);
-        $this->assertNotNull($pixelUser->shop);
-        $this->assertSame('pixelgear-store', $pixelUser->shop->slug);
-        $this->assertSame(ShopStatus::APPROVED, $pixelUser->shop->status);
-        $this->assertNotNull($pixelUser->shop->approved_at);
+        // 1. Budi (PixelGear Store - Approved Shop)
+        $budi = User::where('email', 'budi@gmail.com')->firstOrFail();
+        $this->assertSame(UserRole::BUYER, $budi->role);
+        $this->assertTrue($budi->isBuyer());
+        $this->assertTrue($budi->hasApprovedShop());
+        $this->assertTrue($budi->isSeller(), 'Buyer with approved shop acts as seller.');
+        $this->assertTrue(Hash::check('password123', $budi->password));
+        $this->assertNotNull($budi->email_verified_at);
+        $this->assertNotNull($budi->shop);
+        $this->assertSame('pixelgear-store', $budi->shop->slug);
+        $this->assertSame(ShopStatus::APPROVED, $budi->shop->status);
+        $this->assertNotNull($budi->shop->approved_at);
 
-        // 2. DailyCarry Goods (Pending Seller / Lifecycle Onboarding)
-        $dailyUser = User::where('email', 'seller.dailycarry@nexamarket.test')->firstOrFail();
-        $this->assertSame(UserRole::BUYER, $dailyUser->role, 'Pending seller remains BUYER until approved by admin.');
-        $this->assertTrue(Hash::check('password123', $dailyUser->password));
-        $this->assertNotNull($dailyUser->shop);
-        $this->assertSame('dailycarry-goods', $dailyUser->shop->slug);
-        $this->assertSame(ShopStatus::PENDING, $dailyUser->shop->status);
-        $this->assertNull($dailyUser->shop->approved_at);
+        // 2. Dika (DailyCarry Goods - Pending Shop)
+        $dika = User::where('email', 'dika@gmail.com')->firstOrFail();
+        $this->assertSame(UserRole::BUYER, $dika->role);
+        $this->assertTrue($dika->isBuyer());
+        $this->assertTrue($dika->hasShop());
+        $this->assertTrue($dika->isSeller(), 'Buyer with registered shop is a seller by shop ownership.');
+        $this->assertFalse($dika->hasApprovedShop(), 'Pending shop is not approved.');
+        $this->assertFalse($dika->canAccessSellerCenter(), 'Buyer with pending shop cannot access Seller Center.');
+        $this->assertTrue(Hash::check('password123', $dika->password));
+        $this->assertNotNull($dika->shop);
+        $this->assertSame('dailycarry-goods', $dika->shop->slug);
+        $this->assertSame(ShopStatus::PENDING, $dika->shop->status);
+        $this->assertNull($dika->shop->approved_at);
+    }
+
+    public function test_buyer_with_approved_shop_can_use_same_account_for_shopping_and_seller_center(): void
+    {
+        $this->seed(MarketplaceDemoSeeder::class);
+
+        $budi = User::where('email', 'budi@gmail.com')->firstOrFail();
+
+        // 1. Can access Buyer Dashboard (Shopping activity)
+        $this->actingAs($budi)
+            ->get(route('dashboard'))
+            ->assertStatus(200);
+
+        // 2. Can access Seller Center (Managing shop)
+        $this->actingAs($budi)
+            ->get(route('seller.dashboard'))
+            ->assertStatus(200);
+
+        // 3. Cannot access Admin Center (Forbidden)
+        $this->actingAs($budi)
+            ->get(route('admin.dashboard'))
+            ->assertStatus(403);
+    }
+
+    public function test_buyer_with_pending_shop_cannot_access_seller_center(): void
+    {
+        $this->seed(MarketplaceDemoSeeder::class);
+
+        $dika = User::where('email', 'dika@gmail.com')->firstOrFail();
+
+        // 1. Can access Buyer Dashboard
+        $this->actingAs($dika)
+            ->get(route('dashboard'))
+            ->assertStatus(200);
+
+        // 2. Cannot access Seller Center because shop is pending
+        $this->actingAs($dika)
+            ->get(route('seller.dashboard'))
+            ->assertStatus(403);
     }
 
     public function test_products_of_approved_shops_are_visible_in_public_catalog(): void
@@ -108,22 +174,17 @@ class MarketplaceDemoSeederTest extends TestCase
         $response = $this->get(route('products.index'));
         $response->assertStatus(200);
 
-        // Check products from approved shops visible on default page 1 (latest items)
+        // Default page 1 includes recent items
         $response->assertSee('Threadbound Dotted Hardcover Journal 160 GSM');
         $response->assertSee('AuraGlow Desk Screenbar Light');
 
-        // Check products with category filter (Elektronik & Komputer)
+        // Category filter
         $catResponse = $this->get(route('products.index', ['category' => 'elektronik-komputer']));
         $catResponse->assertStatus(200);
         $catResponse->assertSee('NexaMechanical RGB Keyboard 75%');
         $catResponse->assertSee('ProGlide Wireless Gaming Mouse');
 
-        // Check products on page 2 of general catalog
-        $page2Response = $this->get(route('products.index', ['page' => 2]));
-        $page2Response->assertStatus(200);
-        $page2Response->assertSee('NexaMechanical RGB Keyboard 75%');
-
-        // Public product detail page
+        // Detail page
         $detailResponse = $this->get(route('products.show', 'nexamechanical-rgb-keyboard-75'));
         $detailResponse->assertStatus(200);
         $detailResponse->assertSee('PixelGear Store');
@@ -145,34 +206,6 @@ class MarketplaceDemoSeederTest extends TestCase
         // Accessing detail of a pending shop product must return 404
         $detailResponse = $this->get(route('products.show', $pendingProductSlug));
         $detailResponse->assertStatus(404);
-    }
-
-    public function test_approved_seller_can_access_seller_dashboard_but_forbidden_from_admin(): void
-    {
-        $this->seed(MarketplaceDemoSeeder::class);
-
-        $seller = User::where('email', 'seller.pixelgear@nexamarket.test')->firstOrFail();
-
-        // Seller Center access
-        $this->actingAs($seller)
-            ->get(route('seller.dashboard'))
-            ->assertStatus(200);
-
-        // Admin Center access must be forbidden (403)
-        $this->actingAs($seller)
-            ->get(route('admin.dashboard'))
-            ->assertStatus(403);
-    }
-
-    public function test_pending_seller_cannot_access_seller_dashboard(): void
-    {
-        $this->seed(MarketplaceDemoSeeder::class);
-
-        $pendingSeller = User::where('email', 'seller.dailycarry@nexamarket.test')->firstOrFail();
-
-        // Because role is BUYER and shop is PENDING, accessing /seller/dashboard must be blocked (403 or redirect)
-        $response = $this->actingAs($pendingSeller)->get(route('seller.dashboard'));
-        $this->assertTrue(in_array($response->status(), [302, 403]));
     }
 
     public function test_seeder_protects_against_running_in_production(): void

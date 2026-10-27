@@ -37,16 +37,19 @@ class MarketplaceDemoSeeder extends Seeder
         }
 
         if ($this->command) {
-            $this->command->info('Memulai seeding data dummy Marketplace NexaMarket (Idempotent)...');
+            $this->command->info('Memulai seeding data dummy Marketplace NexaMarket (Buyer-Seller Architecture)...');
         }
 
         // 2. Seed Categories
         $categories = $this->seedCategories();
 
-        // 3. Seed Sellers & Shops
-        $shops = $this->seedSellersAndShops();
+        // 3. Seed Buyer Accounts & Shops (Role: BUYER for all shop owners)
+        $shops = $this->seedBuyersAndShops();
 
-        // 4. Seed Products and Local Image Placeholders
+        // 4. Cleanup legacy demo emails if any existed previously (safe migration)
+        $this->cleanupLegacyDemoAccounts();
+
+        // 5. Seed Products and Local Image Placeholders
         $this->seedProducts($categories, $shops);
 
         if ($this->command) {
@@ -56,7 +59,13 @@ class MarketplaceDemoSeeder extends Seeder
                 ['Entitas', 'Total di Database'],
                 [
                     ['Kategori Aktif', Category::count()],
-                    ['Akun Demo Seller', User::where('email', 'like', 'seller.%@nexamarket.test')->count()],
+                    ['Akun Buyer Pemilik Toko', User::whereIn('email', [
+                        'budi@gmail.com',
+                        'siti@gmail.com',
+                        'andi@gmail.com',
+                        'rina@gmail.com',
+                        'dika@gmail.com',
+                    ])->count()],
                     ['Toko Disetujui (Approved)', Shop::where('status', ShopStatus::APPROVED)->count()],
                     ['Toko Menunggu (Pending)', Shop::where('status', ShopStatus::PENDING)->count()],
                     ['Produk Ditayangkan (Katalog)', Product::published()->forActiveShop()->count()],
@@ -64,6 +73,23 @@ class MarketplaceDemoSeeder extends Seeder
                 ]
             );
         }
+    }
+
+    /**
+     * Safely remove legacy test pattern accounts (seller.*@nexamarket.test) if present.
+     * Real user accounts like freeze10xyz@gmail.com and admin@nexamarket.test are never touched.
+     */
+    protected function cleanupLegacyDemoAccounts(): void
+    {
+        $legacyEmails = [
+            'seller.pixelgear@nexamarket.test',
+            'seller.karsa@nexamarket.test',
+            'seller.ruangrapi@nexamarket.test',
+            'seller.bukukita@nexamarket.test',
+            'seller.dailycarry@nexamarket.test',
+        ];
+
+        User::whereIn('email', $legacyEmails)->delete();
     }
 
     /**
@@ -114,17 +140,18 @@ class MarketplaceDemoSeeder extends Seeder
     }
 
     /**
-     * Seed or update demo sellers and their respective shops.
+     * Seed or update demo Buyer accounts and their respective shops.
+     * Note: All shop owners strictly have role = UserRole::BUYER.
      *
      * @return array<string, Shop>
      */
-    protected function seedSellersAndShops(): array
+    protected function seedBuyersAndShops(): array
     {
         $sellersData = [
             'pixelgear-store' => [
-                'user_name' => 'Budi PixelGear',
-                'email' => 'seller.pixelgear@nexamarket.test',
-                'role' => UserRole::SELLER,
+                'user_name' => 'Budi Santoso',
+                'email' => 'budi@gmail.com',
+                'role' => UserRole::BUYER,
                 'shop_name' => 'PixelGear Store',
                 'shop_slug' => 'pixelgear-store',
                 'shop_description' => 'Pusat perlengkapan komputer, keyboard mekanikal, monitor, dan periferal gaming resmi dengan garansi terpercaya.',
@@ -134,9 +161,9 @@ class MarketplaceDemoSeeder extends Seeder
                 'shop_approved_at' => now()->subDays(15),
             ],
             'karsa-outfit' => [
-                'user_name' => 'Karsa Pratama',
-                'email' => 'seller.karsa@nexamarket.test',
-                'role' => UserRole::SELLER,
+                'user_name' => 'Siti Rahmawati',
+                'email' => 'siti@gmail.com',
+                'role' => UserRole::BUYER,
                 'shop_name' => 'Karsa Outfit',
                 'shop_slug' => 'karsa-outfit',
                 'shop_description' => 'Brand fashion lokal kontemporer dengan bahan katun combed premium dan desain timeless untuk gaya harian Anda.',
@@ -146,9 +173,9 @@ class MarketplaceDemoSeeder extends Seeder
                 'shop_approved_at' => now()->subDays(10),
             ],
             'ruangrapi-living' => [
-                'user_name' => 'Rapi Handoko',
-                'email' => 'seller.ruangrapi@nexamarket.test',
-                'role' => UserRole::SELLER,
+                'user_name' => 'Andi Pratama',
+                'email' => 'andi@gmail.com',
+                'role' => UserRole::BUYER,
                 'shop_name' => 'RuangRapi Living',
                 'shop_slug' => 'ruangrapi-living',
                 'shop_description' => 'Kurasi perabot minimalis, organizer meja kerja, dan dekorasi estetik untuk rumah serta ruang kerja yang produktif.',
@@ -158,9 +185,9 @@ class MarketplaceDemoSeeder extends Seeder
                 'shop_approved_at' => now()->subDays(7),
             ],
             'bukukita-stationery' => [
-                'user_name' => 'Dewi BukuKita',
-                'email' => 'seller.bukukita@nexamarket.test',
-                'role' => UserRole::SELLER,
+                'user_name' => 'Rina Wulandari',
+                'email' => 'rina@gmail.com',
+                'role' => UserRole::BUYER,
                 'shop_name' => 'BukuKita Stationery',
                 'shop_slug' => 'bukukita-stationery',
                 'shop_description' => 'Menyediakan buku catatan jilid benang, pena kaligrafi, jurnal perencana, dan perlengkapan kantor berkualitas tinggi.',
@@ -170,9 +197,9 @@ class MarketplaceDemoSeeder extends Seeder
                 'shop_approved_at' => now()->subDays(3),
             ],
             'dailycarry-goods' => [
-                'user_name' => 'Dika DailyCarry',
-                'email' => 'seller.dailycarry@nexamarket.test',
-                'role' => UserRole::BUYER, // Onboarding belum disetujui -> perannya tetap Buyer
+                'user_name' => 'Dika Saputra',
+                'email' => 'dika@gmail.com',
+                'role' => UserRole::BUYER,
                 'shop_name' => 'DailyCarry Goods',
                 'shop_slug' => 'dailycarry-goods',
                 'shop_description' => 'Produsen tas kanvas tahan air, ransel komuter ergonomis, dan dompet modular untuk aktivitas urban harian.',
@@ -186,7 +213,7 @@ class MarketplaceDemoSeeder extends Seeder
         $seededShops = [];
 
         foreach ($sellersData as $key => $data) {
-            // Idempotent user creation/update
+            // Idempotent user creation/update (Always BUYER role)
             $user = User::firstOrNew(['email' => $data['email']]);
             $user->forceFill([
                 'name' => $data['user_name'],
@@ -196,7 +223,7 @@ class MarketplaceDemoSeeder extends Seeder
                 'role' => $data['role'],
             ])->save();
 
-            // Idempotent shop creation/update
+            // Idempotent shop creation/update linked to buyer
             $shop = Shop::firstOrNew(['slug' => $data['shop_slug']]);
             $shop->forceFill([
                 'user_id' => $user->id,
@@ -227,7 +254,7 @@ class MarketplaceDemoSeeder extends Seeder
     protected function seedProducts(array $categories, array $shops): void
     {
         $productsData = [
-            // --- PixelGear Store (Approved - 5 Produk) ---
+            // --- PixelGear Store (Budi Santoso - budi@gmail.com - Approved) ---
             [
                 'shop_key' => 'pixelgear-store',
                 'category_slug' => 'elektronik-komputer',
@@ -299,7 +326,7 @@ class MarketplaceDemoSeeder extends Seeder
                 'bg_end' => '#EFF6FF',
             ],
 
-            // --- Karsa Outfit (Approved - 5 Produk) ---
+            // --- Karsa Outfit (Siti Rahmawati - siti@gmail.com - Approved) ---
             [
                 'shop_key' => 'karsa-outfit',
                 'category_slug' => 'fashion-aksesori',
@@ -371,7 +398,7 @@ class MarketplaceDemoSeeder extends Seeder
                 'bg_end' => '#FED7AA',
             ],
 
-            // --- RuangRapi Living (Approved - 5 Produk) ---
+            // --- RuangRapi Living (Andi Pratama - andi@gmail.com - Approved) ---
             [
                 'shop_key' => 'ruangrapi-living',
                 'category_slug' => 'rumah-perlengkapan-meja',
@@ -443,7 +470,7 @@ class MarketplaceDemoSeeder extends Seeder
                 'bg_end' => '#DCFCE7',
             ],
 
-            // --- BukuKita Stationery (Approved - 5 Produk) ---
+            // --- BukuKita Stationery (Rina Wulandari - rina@gmail.com - Approved) ---
             [
                 'shop_key' => 'bukukita-stationery',
                 'category_slug' => 'alat-tulis-belajar',
@@ -515,7 +542,7 @@ class MarketplaceDemoSeeder extends Seeder
                 'bg_end' => '#EDE9FE',
             ],
 
-            // --- DailyCarry Goods (PENDING - 1 Produk Pengujian Proteksi Katalog) ---
+            // --- DailyCarry Goods (Dika Saputra - dika@gmail.com - Pending Shop) ---
             [
                 'shop_key' => 'dailycarry-goods',
                 'category_slug' => 'tas-kebutuhan-harian',
@@ -593,7 +620,6 @@ class MarketplaceDemoSeeder extends Seeder
     ): void {
         $storagePath = "products/{$filename}";
 
-        // Always generate/refresh SVG file if missing
         if (! Storage::disk('public')->exists($storagePath)) {
             $iconSvg = $this->getIconSvgSnippet($imageType, $accentColor);
             $formattedPrice = 'Rp ' . number_format($price, 0, ',', '.');

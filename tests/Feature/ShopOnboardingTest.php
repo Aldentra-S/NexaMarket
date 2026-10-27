@@ -171,9 +171,11 @@ class ShopOnboardingTest extends TestCase
         $this->assertNotNull($shop->approved_at);
         $this->assertTrue($shop->isApproved());
 
-        // User role elevated to SELLER
-        $this->assertSame(UserRole::SELLER, $buyer->role);
+        // User role remains BUYER, shop is approved and Seller Center accessible
+        $this->assertSame(UserRole::BUYER, $buyer->role);
         $this->assertTrue($buyer->isSeller());
+        $this->assertTrue($buyer->hasApprovedShop());
+        $this->assertTrue($buyer->canAccessSellerCenter());
     }
 
     public function test_admin_can_reject_shop_with_required_reason(): void
@@ -245,20 +247,20 @@ class ShopOnboardingTest extends TestCase
         $buyer = User::factory()->create(['role' => UserRole::BUYER]);
         $this->actingAs($buyer)->get(route('seller.dashboard'))->assertForbidden();
 
-        // 2. User with role seller BUT shop is still pending (role alone is not enough!)
-        $prematureSeller = User::factory()->create(['role' => UserRole::SELLER]);
+        // 2. Buyer with shop still pending (cannot access Seller Center)
+        $buyerWithPendingShop = User::factory()->create(['role' => UserRole::BUYER]);
         Shop::factory()->create([
-            'user_id' => $prematureSeller->id,
+            'user_id' => $buyerWithPendingShop->id,
             'status' => ShopStatus::PENDING,
         ]);
-        $this->actingAs($prematureSeller)->get(route('seller.dashboard'))->assertForbidden();
+        $this->actingAs($buyerWithPendingShop)->get(route('seller.dashboard'))->assertForbidden();
 
-        // 3. User with role seller BUT shop is rejected
-        $rejectedSeller = User::factory()->create(['role' => UserRole::SELLER]);
+        // 3. Buyer with rejected shop (cannot access Seller Center)
+        $buyerWithRejectedShop = User::factory()->create(['role' => UserRole::BUYER]);
         Shop::factory()->rejected()->create([
-            'user_id' => $rejectedSeller->id,
+            'user_id' => $buyerWithRejectedShop->id,
         ]);
-        $this->actingAs($rejectedSeller)->get(route('seller.dashboard'))->assertForbidden();
+        $this->actingAs($buyerWithRejectedShop)->get(route('seller.dashboard'))->assertForbidden();
     }
 
     public function test_seller_with_approved_shop_can_access_seller_dashboard(): void
@@ -402,9 +404,11 @@ class ShopOnboardingTest extends TestCase
         $this->assertTrue($shop->isApproved());
         $this->assertFalse($shop->isSuspended());
 
-        // Role restored to SELLER
-        $this->assertSame(UserRole::SELLER, $buyer->role);
+        // Role remains BUYER, shop is restored to approved
+        $this->assertSame(UserRole::BUYER, $buyer->role);
         $this->assertTrue($buyer->isSeller());
+        $this->assertTrue($buyer->hasApprovedShop());
+        $this->assertTrue($buyer->canAccessSellerCenter());
     }
 
     public function test_buyer_with_suspended_shop_views_suspended_card_and_cannot_reapply(): void
