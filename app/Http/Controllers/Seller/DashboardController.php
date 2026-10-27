@@ -31,12 +31,40 @@ class DashboardController extends Controller
         ];
 
         $totalOrders = $shop ? $shop->shopOrders()->count() : 0;
+        $newOrdersCount = $shop ? $shop->shopOrders()->whereIn('status', [OrderStatus::PAID->value, OrderStatus::PENDING->value])->count() : 0;
         $processingOrdersCount = $shop ? $shop->shopOrders()->whereIn('status', [OrderStatus::PAID->value, OrderStatus::PROCESSING->value])->count() : 0;
+        $shippedOrdersCount = $shop ? $shop->shopOrders()->where('status', OrderStatus::SHIPPED->value)->count() : 0;
         $completedOrdersCount = $shop ? $shop->shopOrders()->where('status', OrderStatus::COMPLETED->value)->count() : 0;
 
         $totalRevenue = $shop
             ? (float) $shop->shopOrders()->whereIn('status', $paidStatuses)->sum('subtotal')
             : 0.0;
+
+        // 7-day sales trend based on real database transactions
+        $salesTrend = collect(range(6, 0))->map(function ($daysAgo) use ($shop, $paidStatuses) {
+            $date = now()->subDays($daysAgo);
+            $dayStart = $date->copy()->startOfDay();
+            $dayEnd = $date->copy()->endOfDay();
+
+            $dayRevenue = $shop
+                ? (float) $shop->shopOrders()
+                    ->whereIn('status', $paidStatuses)
+                    ->whereBetween('created_at', [$dayStart, $dayEnd])
+                    ->sum('subtotal')
+                : 0.0;
+
+            $dayOrders = $shop
+                ? $shop->shopOrders()
+                    ->whereBetween('created_at', [$dayStart, $dayEnd])
+                    ->count()
+                : 0;
+
+            return [
+                'date' => $date->translatedFormat('d M'),
+                'revenue' => $dayRevenue,
+                'orders' => $dayOrders,
+            ];
+        });
 
         $totalSoldUnits = $shop
             ? (int) \App\Models\OrderItem::whereHas('shopOrder', function ($q) use ($shop, $paidStatuses) {
@@ -46,9 +74,9 @@ class DashboardController extends Controller
 
         $recentOrders = $shop
             ? $shop->shopOrders()
-                ->with(['order.user', 'items'])
-                ->latest()
-                ->take(5)
+                ->with(['order.user', 'items.product.primaryImage'])
+                ->latest('id')
+                ->take(6)
                 ->get()
             : collect();
 
@@ -69,9 +97,12 @@ class DashboardController extends Controller
             'draftProducts' => $draftProducts,
             'lowStockProducts' => $lowStockProducts,
             'totalOrders' => $totalOrders,
+            'newOrdersCount' => $newOrdersCount,
             'processingOrdersCount' => $processingOrdersCount,
+            'shippedOrdersCount' => $shippedOrdersCount,
             'completedOrdersCount' => $completedOrdersCount,
             'totalRevenue' => $totalRevenue,
+            'salesTrend' => $salesTrend,
             'totalSoldUnits' => $totalSoldUnits,
             'recentOrders' => $recentOrders,
             'criticalStockList' => $criticalStockList,

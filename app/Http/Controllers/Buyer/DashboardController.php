@@ -48,6 +48,12 @@ class DashboardController extends Controller
         $cartCount = $user->cart?->totalQuantity() ?? 0;
         $shop = $user->shop;
 
+        $featuredProducts = \App\Models\Product::where('status', \App\Enums\ProductStatus::PUBLISHED->value)
+            ->with(['shop', 'category', 'primaryImage'])
+            ->latest('id')
+            ->take(5)
+            ->get();
+
         return view('dashboard', [
             'totalOrdersCount' => $totalOrdersCount,
             'pendingOrdersCount' => $pendingOrdersCount,
@@ -56,6 +62,7 @@ class DashboardController extends Controller
             'recentOrders' => $recentOrders,
             'cartCount' => $cartCount,
             'shop' => $shop,
+            'featuredProducts' => $featuredProducts,
         ]);
     }
 }

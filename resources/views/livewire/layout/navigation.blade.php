@@ -31,10 +31,6 @@ new class extends Component
                         <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-800 border border-slate-300">
                             Admin Center
                         </span>
-                    @elseif (auth()->user()->isSeller())
-                        <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-orange-50 text-orange-700 border border-orange-200">
-                            Seller Center
-                        </span>
                     @else
                         <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
                             Member Area
@@ -42,7 +38,7 @@ new class extends Component
                     @endif
                 </div>
 
-                <!-- Navigation Links -->
+                <!-- Navigation Links (Member Area) -->
                 <div class="hidden space-x-6 sm:-my-px sm:ms-8 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
@@ -54,22 +50,6 @@ new class extends Component
                                 <span>Admin Center</span>
                                 <span class="text-orange-400">&rarr;</span>
                             </span>
-                        </x-nav-link>
-                    @elseif (auth()->user()->isSeller())
-                        <x-nav-link :href="route('seller.dashboard')" :active="request()->routeIs('seller.dashboard')">
-                            {{ __('Seller Center') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('seller.products.index')" :active="request()->routeIs('seller.products.*')">
-                            {{ __('Produk Saya') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('seller.orders.index')" :active="request()->routeIs('seller.orders.*')">
-                            {{ __('Pesanan Masuk') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('seller.reviews.index')" :active="request()->routeIs('seller.reviews.*')">
-                            {{ __('Ulasan') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('seller.shop.settings')" :active="request()->routeIs('seller.shop.settings')">
-                            {{ __('Pengaturan Toko') }}
                         </x-nav-link>
                     @endif
 
@@ -96,7 +76,7 @@ new class extends Component
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="56">
+                <x-dropdown align="right" width="60">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center gap-2 px-3 py-1.5 border border-slate-200 text-xs font-semibold rounded-xl text-slate-700 bg-white hover:bg-slate-50 focus:outline-none transition">
                             <div class="w-6 h-6 rounded-md bg-orange-600 text-white font-bold flex items-center justify-center text-[10px]">
@@ -117,6 +97,44 @@ new class extends Component
                                 {{ auth()->user()->role->label() }}
                             </span>
                         </div>
+
+                        <!-- Seller Center / Shop Action -->
+                        @if (auth()->user()->canAccessSellerCenter())
+                            <div class="p-1.5 border-b border-slate-100">
+                                <a href="{{ route('seller.dashboard') }}" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-orange-600 bg-orange-50/70 hover:bg-orange-100 border border-orange-200/60 transition group">
+                                    <span class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        </svg>
+                                        <span>Kelola Toko</span>
+                                    </span>
+                                    <span class="text-orange-400 group-hover:translate-x-0.5 transition">&rarr;</span>
+                                </a>
+                            </div>
+                        @elseif (!auth()->user()->hasShop())
+                            <x-dropdown-link :href="route('buyer.shop.apply')">
+                                <span class="flex items-center gap-2 text-slate-700 font-medium">
+                                    <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                    <span>Buka Toko Sekarang</span>
+                                </span>
+                            </x-dropdown-link>
+                        @elseif (auth()->user()->shop?->isPending())
+                            <x-dropdown-link :href="route('buyer.shop.apply')">
+                                <span class="flex items-center justify-between w-full">
+                                    <span class="text-slate-700">Status Toko</span>
+                                    <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">Menunggu</span>
+                                </span>
+                            </x-dropdown-link>
+                        @elseif (auth()->user()->shop?->isRejected())
+                            <x-dropdown-link :href="route('buyer.shop.apply')">
+                                <span class="flex items-center justify-between w-full text-rose-600">
+                                    <span>Perbaiki Toko</span>
+                                    <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-800">Revisi</span>
+                                </span>
+                            </x-dropdown-link>
+                        @endif
 
                         <x-dropdown-link :href="route('orders.index')">
                             {{ __('Pesanan Saya') }}
@@ -200,21 +218,21 @@ new class extends Component
                 <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
                     <span class="font-bold text-orange-600">{{ __('Masuk Admin Center') }} &rarr;</span>
                 </x-responsive-nav-link>
-            @elseif (auth()->user()->isSeller())
-                <x-responsive-nav-link :href="route('seller.dashboard')" :active="request()->routeIs('seller.dashboard')">
-                    {{ __('Seller Center') }}
+            @elseif (auth()->user()->canAccessSellerCenter())
+                <x-responsive-nav-link :href="route('seller.dashboard')">
+                    <span class="font-bold text-orange-600">{{ __('Kelola Toko (Seller Center)') }} &rarr;</span>
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('seller.products.index')" :active="request()->routeIs('seller.products.*')">
-                    {{ __('Produk Saya') }}
+            @elseif (!auth()->user()->hasShop())
+                <x-responsive-nav-link :href="route('buyer.shop.apply')">
+                    <span>{{ __('Buka Toko Sekarang') }}</span>
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('seller.orders.index')" :active="request()->routeIs('seller.orders.*')">
-                    {{ __('Pesanan Masuk') }}
+            @elseif (auth()->user()->shop?->isPending())
+                <x-responsive-nav-link :href="route('buyer.shop.apply')">
+                    <span>{{ __('Status Toko (Menunggu Review)') }}</span>
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('seller.reviews.index')" :active="request()->routeIs('seller.reviews.*')">
-                    {{ __('Ulasan Toko') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('seller.shop.settings')" :active="request()->routeIs('seller.shop.settings*')">
-                    {{ __('Pengaturan Toko') }}
+            @elseif (auth()->user()->shop?->isRejected())
+                <x-responsive-nav-link :href="route('buyer.shop.apply')">
+                    <span class="text-rose-600 font-semibold">{{ __('Perbaiki Toko (Perlu Revisi)') }}</span>
                 </x-responsive-nav-link>
             @endif
 
