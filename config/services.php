@@ -46,6 +46,9 @@ return [
         'is_production' => (bool) env('MIDTRANS_IS_PRODUCTION', false),
         'is_sanitized' => (bool) env('MIDTRANS_IS_SANITIZED', true),
         'is_3ds' => (bool) env('MIDTRANS_IS_3DS', true),
+        'finish_redirect_url' => env('MIDTRANS_FINISH_REDIRECT_URL'),
+        'unfinish_redirect_url' => env('MIDTRANS_UNFINISH_REDIRECT_URL'),
+        'error_redirect_url' => env('MIDTRANS_ERROR_REDIRECT_URL'),
     ],
 
 ];

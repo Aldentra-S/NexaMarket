@@ -135,16 +135,53 @@
                     <!-- Payment Simulation Container (Phase 5B Checkpoint B4) -->
                     <div id="payment-action-container" class="pt-2">
                         @if($order->isPending())
+                            @php
+                                $isReturningFromGateway = request()->has('transaction_status') 
+                                    || request()->has('status_code') 
+                                    || request()->query('status') === 'verifying'
+                                    || request()->query('status') === 'pending';
+                                $pendingPayment = $order->payments->where('payment_method', 'midtrans')->where('status', \App\Enums\PaymentStatus::PENDING)->first();
+                            @endphp
+
                             <div class="space-y-4">
-                                <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 space-y-1">
-                                    <div class="flex items-center gap-1.5 font-bold text-amber-900">
-                                        <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                        Menunggu Pembayaran
+                                @if($isReturningFromGateway)
+                                    <!-- Waiting for Verification Banner (When returning from Midtrans) -->
+                                    <div class="p-4 rounded-2xl bg-amber-50 border border-amber-300 text-xs text-amber-900 space-y-2">
+                                        <div class="flex items-center gap-2 font-bold text-amber-900 text-sm">
+                                            <svg class="w-5 h-5 text-amber-600 animate-pulse shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <span>Menunggu Verifikasi Pembayaran</span>
+                                        </div>
+                                        <p class="leading-relaxed text-amber-800">
+                                            Transaksi pembayaran Anda telah diterima oleh gateway dan sedang menunggu konfirmasi verifikasi tepercaya sistem. Status pesanan akan diperbarui secara otomatis setelah notifikasi resmi terverifikasi.
+                                        </p>
+                                        @if($pendingPayment)
+                                            <div class="pt-1.5 border-t border-amber-200/80 text-[11px] text-amber-700 flex items-center justify-between">
+                                                <span>No. Referensi: <strong class="font-mono text-amber-900">{{ $pendingPayment->payment_number }}</strong></span>
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-200/60 text-amber-900">Diproses</span>
+                                            </div>
+                                        @endif
+                                        <div class="pt-1">
+                                            <a href="{{ route('orders.show', $order) }}?status=verifying" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs transition shadow-2xs">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                                </svg>
+                                                <span>Periksa Status Pembayaran</span>
+                                            </a>
+                                        </div>
                                     </div>
-                                    <p class="leading-relaxed text-amber-800">Selesaikan pembayaran untuk memverifikasi pesanan Anda ke mitra toko.</p>
-                                </div>
+                                @else
+                                    <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 space-y-1">
+                                        <div class="flex items-center gap-1.5 font-bold text-amber-900">
+                                            <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            Menunggu Pembayaran
+                                        </div>
+                                        <p class="leading-relaxed text-amber-800">Selesaikan pembayaran untuk memverifikasi pesanan Anda ke mitra toko.</p>
+                                    </div>
+                                @endif
 
                                 <!-- Midtrans Snap Sandbox Payment Button -->
                                 <div x-data="midtransPayment()" class="space-y-2">
@@ -221,7 +258,11 @@
                                 </svg>
                                 <div>
                                     <p class="font-bold text-emerald-900">Pembayaran Berhasil Diverifikasi</p>
-                                    <p class="mt-0.5 text-emerald-800">Lunas pada {{ $order->paid_at ? $order->paid_at->translatedFormat('d M Y, H:i') : '-' }} via Simulasi Pembayaran Lokal.</p>
+                                    @php
+                                        $successfulPayment = $order->payments->firstWhere('status', \App\Enums\PaymentStatus::SUCCESS);
+                                        $methodLabel = $successfulPayment?->payment_method === 'midtrans' ? 'Midtrans Snap' : 'Simulasi Pembayaran Lokal';
+                                    @endphp
+                                    <p class="mt-0.5 text-emerald-800">Lunas pada {{ $order->paid_at ? $order->paid_at->translatedFormat('d M Y, H:i') : '-' }} via {{ $methodLabel }}.</p>
                                 </div>
                             </div>
                         @elseif($order->isCancelled())
@@ -289,14 +330,14 @@
 
                             if (window.snap && typeof window.snap.pay === 'function') {
                                 window.snap.pay(data.snap_token, {
-                                    onSuccess: function() {
-                                        window.location.reload();
+                                    onSuccess: function(result) {
+                                        window.location.href = '{{ route('orders.show', $order) }}?status=verifying';
                                     },
-                                    onPending: function() {
-                                        window.location.reload();
+                                    onPending: function(result) {
+                                        window.location.href = '{{ route('orders.show', $order) }}?status=verifying';
                                     },
-                                    onError: function() {
-                                        window.location.reload();
+                                    onError: function(result) {
+                                        window.location.href = '{{ route('orders.show', $order) }}?status=error';
                                     },
                                     onClose: function() {
                                         // User closed popup without completing

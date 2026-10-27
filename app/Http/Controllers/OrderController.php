@@ -50,11 +50,18 @@ class OrderController extends Controller
     /**
      * Display the specified order details.
      */
-    public function show(Request $request, Order $order): View
+    public function show(Request $request, Order $order, \App\Services\PaymentService $paymentService): View
     {
         Gate::authorize('view', $order);
 
-        $order->load(['shopOrders.items.product', 'shopOrders.shop']);
+        // If order is pending and user returns from gateway with parameters or status check is requested,
+        // attempt authoritative reconciliation via gateway API.
+        if ($order->isPending() && ($request->has('order_id') || $request->has('transaction_status') || $request->has('status_code') || $request->query('status') === 'verifying')) {
+            $paymentService->reconcileStatusFromGateway($order);
+            $order->refresh();
+        }
+
+        $order->load(['shopOrders.items.product', 'shopOrders.shop', 'payments']);
 
         return view('orders.show', [
             'order' => $order,

@@ -77,6 +77,11 @@ class MidtransPaymentIntegrationTest extends TestCase
 
                 return hash_equals($expected, $signature);
             }
+
+            public function checkTransactionStatus(string $paymentNumber): ?array
+            {
+                return null;
+            }
         };
 
         $this->app->instance(PaymentGatewayInterface::class, $fake);
@@ -475,5 +480,100 @@ class MidtransPaymentIntegrationTest extends TestCase
         // Order MUST stay EXPIRED, must NOT resurrect to PAID, and stock must remain 10
         $this->assertSame(OrderStatus::EXPIRED, $order->fresh()->status);
         $this->assertSame(10, $product->fresh()->stock);
+    }
+
+    public function test_returning_from_gateway_displays_verification_waiting_state_without_premature_paid_status(): void
+    {
+        $buyer = User::factory()->buyer()->create();
+        [$order] = $this->createOrderWithProduct($buyer);
+
+        Payment::create([
+            'order_id' => $order->id,
+            'payment_number' => 'PAY-MID-VERIFY-001',
+            'status' => PaymentStatus::PENDING,
+            'amount' => $order->total_amount,
+            'payment_method' => 'midtrans',
+            'snap_token' => 'SNAP-VERIFY-TOKEN',
+        ]);
+
+        $this->bindFakeGateway();
+
+        // User returns from Midtrans after completing payment
+        $response = $this->actingAs($buyer)->get(route('orders.show', $order) . '?order_id=PAY-MID-VERIFY-001&status_code=200&transaction_status=settlement');
+
+        $response->assertOk();
+        $response->assertSee('Menunggu Verifikasi Pembayaran');
+        $response->assertSee('PAY-MID-VERIFY-001');
+        // Must NOT prematurely mark as paid without trusted verification
+        $this->assertSame(OrderStatus::PENDING, $order->fresh()->status);
+    }
+
+    public function test_gateway_status_reconciliation_verifies_payment_when_authoritatively_confirmed(): void
+    {
+        $buyer = User::factory()->buyer()->create();
+        [$order, $product, $shopOrder] = $this->createOrderWithProduct($buyer, price: 80000.00, quantity: 1);
+
+        $payment = Payment::create([
+            'order_id' => $order->id,
+            'payment_number' => 'PAY-MID-RECONCILE-001',
+            'status' => PaymentStatus::PENDING,
+            'amount' => 80000.00,
+            'payment_method' => 'midtrans',
+            'snap_token' => 'SNAP-RECONCILE-TOKEN',
+        ]);
+
+        $serverKey = 'test-server-key';
+        config(['services.midtrans.server_key' => $serverKey]);
+        $sig = $this->generateMidtransSignature($payment->payment_number, '200', '80000.00', $serverKey);
+
+        $fakeWithReconcile = new class('SNAP-RECONCILE-TOKEN', $serverKey, $payment->payment_number, $sig) implements PaymentGatewayInterface {
+            public function __construct(
+                private ?string $mockToken,
+                private ?string $serverKey,
+                private string $expectedOrderNumber,
+                private string $expectedSig
+            ) {}
+
+            public function createTransaction(Order $order): Payment
+            {
+                return Payment::where('order_id', $order->id)->firstOrFail();
+            }
+
+            public function verifyNotification(array $payload): bool
+            {
+                $orderId = $payload['order_id'] ?? '';
+                $statusCode = $payload['status_code'] ?? '';
+                $grossAmount = $payload['gross_amount'] ?? '';
+                $signature = $payload['signature_key'] ?? '';
+
+                $expected = hash('sha512', $orderId . $statusCode . $grossAmount . $this->serverKey);
+
+                return hash_equals($expected, $signature);
+            }
+
+            public function checkTransactionStatus(string $paymentNumber): ?array
+            {
+                return [
+                    'order_id' => $this->expectedOrderNumber,
+                    'status_code' => '200',
+                    'gross_amount' => '80000.00',
+                    'transaction_status' => 'settlement',
+                    'transaction_id' => 'midtrans-auto-reconciled-123',
+                    'signature_key' => $this->expectedSig,
+                ];
+            }
+        };
+
+        $this->app->instance(PaymentGatewayInterface::class, $fakeWithReconcile);
+
+        // When user returns and reconcile check runs against gateway
+        $response = $this->actingAs($buyer)->get(route('orders.show', $order) . '?order_id=' . $payment->payment_number . '&status_code=200&transaction_status=settlement');
+
+        $response->assertOk();
+        $this->assertSame(OrderStatus::PAID, $order->fresh()->status);
+        $this->assertSame(OrderStatus::PAID, $shopOrder->fresh()->status);
+        $this->assertSame(PaymentStatus::SUCCESS, $payment->fresh()->status);
+        $response->assertSee('Pembayaran Berhasil Diverifikasi');
+        $response->assertSee('Midtrans Snap');
     }
 }

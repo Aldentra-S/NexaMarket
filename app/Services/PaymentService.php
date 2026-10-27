@@ -47,6 +47,40 @@ class PaymentService
     }
 
     /**
+     * Reconcile pending order payment status directly with the payment gateway.
+     */
+    public function reconcileStatusFromGateway(Order $order): ?Payment
+    {
+        if (! $this->gateway) {
+            return null;
+        }
+
+        $payment = $order->payments()
+            ->where('payment_method', 'midtrans')
+            ->where('status', PaymentStatus::PENDING)
+            ->whereNotNull('payment_number')
+            ->latest()
+            ->first();
+
+        if (! $payment) {
+            return null;
+        }
+
+        if (method_exists($this->gateway, 'checkTransactionStatus')) {
+            $payload = $this->gateway->checkTransactionStatus($payment->payment_number);
+            if ($payload && is_array($payload) && ! empty($payload['transaction_status'])) {
+                try {
+                    return $this->processNotification($payload);
+                } catch (ValidationException $e) {
+                    \Illuminate\Support\Facades\Log::warning("Reconciliation verification failed for order #{$order->id}: " . $e->getMessage());
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Process incoming Midtrans webhook notification with signature validation,
      * status transitions, idempotency, anti-regression, and atomic stock restoration.
      *

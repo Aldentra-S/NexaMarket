@@ -23,4 +23,12 @@ interface PaymentGatewayInterface
      * @return bool
      */
     public function verifyNotification(array $payload): bool;
+
+    /**
+     * Query gateway transaction status directly for real-time reconciliation.
+     *
+     * @param string $paymentNumber
+     * @return array<string, mixed>|null
+     */
+    public function checkTransactionStatus(string $paymentNumber): ?array;
 }

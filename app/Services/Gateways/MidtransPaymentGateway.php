@@ -7,8 +7,10 @@ use App\Enums\PaymentStatus;
 use App\Models\Order;
 use App\Models\Payment;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Midtrans\Config as MidtransConfig;
 use Midtrans\Snap as MidtransSnap;
+use Midtrans\Transaction as MidtransTransaction;
 
 class MidtransPaymentGateway implements PaymentGatewayInterface
 {
@@ -23,6 +25,69 @@ class MidtransPaymentGateway implements PaymentGatewayInterface
         MidtransConfig::$isProduction = (bool) config('services.midtrans.is_production', false);
         MidtransConfig::$isSanitized = (bool) config('services.midtrans.is_sanitized', true);
         MidtransConfig::$is3ds = (bool) config('services.midtrans.is_3ds', true);
+    }
+
+    /**
+     * Build Midtrans Snap transaction parameters including trusted return callbacks.
+     *
+     * @param Order $order
+     * @param string $paymentNumber
+     * @param int $grossAmount
+     * @param array $itemDetails
+     * @return array<string, mixed>
+     */
+    public function buildTransactionParams(Order $order, string $paymentNumber, int $grossAmount, array $itemDetails): array
+    {
+        // Resolve dynamic redirect return URLs to ensure user returns to NexaMarket instead of example.com
+        $finishUrl = config('services.midtrans.finish_redirect_url');
+        if (empty($finishUrl)) {
+            $finishUrl = route('orders.show', $order);
+        } elseif (str_contains($finishUrl, '{order}')) {
+            $finishUrl = str_replace(['{order}', '{order_id}'], [(string) $order->id, (string) $order->id], $finishUrl);
+        }
+
+        $unfinishUrl = config('services.midtrans.unfinish_redirect_url');
+        if (empty($unfinishUrl)) {
+            $unfinishUrl = route('orders.show', $order);
+        } elseif (str_contains($unfinishUrl, '{order}')) {
+            $unfinishUrl = str_replace(['{order}', '{order_id}'], [(string) $order->id, (string) $order->id], $unfinishUrl);
+        }
+
+        $errorUrl = config('services.midtrans.error_redirect_url');
+        if (empty($errorUrl)) {
+            $errorUrl = route('orders.show', $order);
+        } elseif (str_contains($errorUrl, '{order}')) {
+            $errorUrl = str_replace(['{order}', '{order_id}'], [(string) $order->id, (string) $order->id], $errorUrl);
+        }
+
+        return [
+            'transaction_details' => [
+                'order_id' => $paymentNumber,
+                'gross_amount' => $grossAmount,
+            ],
+            'customer_details' => [
+                'first_name' => $order->user->name ?? 'Pelanggan',
+                'email' => $order->user->email ?? 'customer@nexamarket.com',
+            ],
+            'item_details' => $itemDetails,
+            'callbacks' => [
+                'finish' => $finishUrl,
+                'unfinish' => $unfinishUrl,
+                'error' => $errorUrl,
+            ],
+        ];
+    }
+
+    /**
+     * Request a Snap token from the Midtrans API (can be overridden in tests).
+     *
+     * @param array<string, mixed> $params
+     * @return object|array
+     * @throws Exception
+     */
+    protected function requestSnapTransaction(array $params): object|array
+    {
+        return MidtransSnap::createTransaction($params);
     }
 
     /**
@@ -60,20 +125,10 @@ class MidtransPaymentGateway implements PaymentGatewayInterface
             }
         }
 
-        $params = [
-            'transaction_details' => [
-                'order_id' => $paymentNumber,
-                'gross_amount' => $grossAmount,
-            ],
-            'customer_details' => [
-                'first_name' => $order->user->name ?? 'Pelanggan',
-                'email' => $order->user->email ?? 'customer@example.com',
-            ],
-            'item_details' => $itemDetails,
-        ];
+        $params = $this->buildTransactionParams($order, $paymentNumber, $grossAmount, $itemDetails);
 
         try {
-            $snapTransaction = MidtransSnap::createTransaction($params);
+            $snapTransaction = $this->requestSnapTransaction($params);
             $token = is_object($snapTransaction) ? $snapTransaction->token : $snapTransaction['token'];
             $redirectUrl = is_object($snapTransaction) ? $snapTransaction->redirect_url : $snapTransaction['redirect_url'];
         } catch (Exception $e) {
@@ -94,6 +149,7 @@ class MidtransPaymentGateway implements PaymentGatewayInterface
                     'order_id' => $paymentNumber,
                     'gross_amount' => $grossAmount,
                 ],
+                'callbacks' => $params['callbacks'],
             ],
         ]);
     }
@@ -116,5 +172,25 @@ class MidtransPaymentGateway implements PaymentGatewayInterface
         $expected = hash('sha512', $orderId . $statusCode . $grossAmount . $serverKey);
 
         return hash_equals($expected, $signature);
+    }
+
+    /**
+     * Query Midtrans Status API directly for authoritative real-time transaction reconciliation.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function checkTransactionStatus(string $paymentNumber): ?array
+    {
+        $this->configureMidtrans();
+
+        try {
+            $response = MidtransTransaction::status($paymentNumber);
+
+            return json_decode(json_encode($response), true);
+        } catch (Exception $e) {
+            Log::info("Midtrans transaction status inquiry failed for {$paymentNumber}: " . $e->getMessage());
+
+            return null;
+        }
     }
 }
