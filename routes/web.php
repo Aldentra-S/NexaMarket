@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\RefundController as AdminRefundController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\ShopApprovalController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Buyer\DashboardController as BuyerDashboardController;
 use App\Http\Controllers\Buyer\ShopOnboardingController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
@@ -55,14 +56,9 @@ Route::middleware(['auth'])->prefix('orders')->name('orders.')->group(function (
 Route::post('payments/midtrans/notification', [PaymentController::class, 'handleNotification'])->name('payments.midtrans.notification');
 Route::post('api/payments/midtrans/notification', [PaymentController::class, 'handleNotification'])->name('api.payments.midtrans.notification');
 
-
-
-Route::get('dashboard', function () {
-    if (auth()->user()?->isAdmin()) {
-        return redirect()->route('admin.dashboard');
-    }
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('dashboard', [BuyerDashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 
 Route::get('profile', function () {

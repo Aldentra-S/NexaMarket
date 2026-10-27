@@ -71,10 +71,6 @@ new class extends Component
                         <x-nav-link :href="route('seller.shop.settings')" :active="request()->routeIs('seller.shop.settings')">
                             {{ __('Pengaturan Toko') }}
                         </x-nav-link>
-                    @else
-                        <x-nav-link :href="route('buyer.shop.apply')" :active="request()->routeIs('buyer.shop.*')" wire:navigate>
-                            {{ __('Buka Toko') }}
-                        </x-nav-link>
                     @endif
 
                     <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
@@ -90,6 +86,10 @@ new class extends Component
                                 </span>
                             @endif
                         </span>
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')">
+                        {{ __('Pesanan Saya') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -216,10 +216,6 @@ new class extends Component
                 <x-responsive-nav-link :href="route('seller.shop.settings')" :active="request()->routeIs('seller.shop.settings*')">
                     {{ __('Pengaturan Toko') }}
                 </x-responsive-nav-link>
-            @else
-                <x-responsive-nav-link :href="route('buyer.shop.apply')" :active="request()->routeIs('buyer.shop.*')" wire:navigate>
-                    {{ __('Buka Toko') }}
-                </x-responsive-nav-link>
             @endif
 
             <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
@@ -228,6 +224,10 @@ new class extends Component
 
             <x-responsive-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.*')">
                 {{ __('Keranjang Belanja') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')">
+                {{ __('Pesanan Saya') }}
             </x-responsive-nav-link>
         </div>
 

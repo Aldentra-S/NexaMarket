@@ -18,6 +18,25 @@
                 </div>
             </div>
 
+            <!-- Status Filter Tabs -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-semibold">
+                <a href="{{ route('orders.index') }}" class="px-3.5 py-2 rounded-xl border transition whitespace-nowrap {{ empty($currentStatus) ? 'bg-orange-600 text-white border-orange-600 shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:border-orange-300' }}">
+                    Semua Pesanan
+                </a>
+                <a href="{{ route('orders.index', ['status' => 'pending']) }}" class="px-3.5 py-2 rounded-xl border transition whitespace-nowrap {{ ($currentStatus ?? '') === 'pending' ? 'bg-orange-600 text-white border-orange-600 shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:border-orange-300' }}">
+                    Menunggu Pembayaran
+                </a>
+                <a href="{{ route('orders.index', ['status' => 'shipping']) }}" class="px-3.5 py-2 rounded-xl border transition whitespace-nowrap {{ in_array(($currentStatus ?? ''), ['shipping', 'processing']) ? 'bg-orange-600 text-white border-orange-600 shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:border-orange-300' }}">
+                    Dalam Pengiriman
+                </a>
+                <a href="{{ route('orders.index', ['status' => 'completed']) }}" class="px-3.5 py-2 rounded-xl border transition whitespace-nowrap {{ ($currentStatus ?? '') === 'completed' ? 'bg-orange-600 text-white border-orange-600 shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:border-orange-300' }}">
+                    Pesanan Selesai
+                </a>
+                <a href="{{ route('orders.index', ['status' => 'cancelled']) }}" class="px-3.5 py-2 rounded-xl border transition whitespace-nowrap {{ ($currentStatus ?? '') === 'cancelled' ? 'bg-orange-600 text-white border-orange-600 shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:border-orange-300' }}">
+                    Dibatalkan / Kedaluwarsa
+                </a>
+            </div>
+
             @if(session('success'))
                 <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-semibold flex items-center gap-2">
                     <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -35,11 +54,20 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-base sm:text-lg font-bold text-slate-900">Belum Ada Pesanan</h3>
-                        <p class="text-xs sm:text-sm text-slate-500 mt-1">Anda belum pernah melakukan checkout pesanan. Temukan produk pilihan Anda sekarang.</p>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900">
+                            {{ !empty($currentStatus) ? 'Tidak Ada Pesanan Ditemukan' : 'Belum Ada Pesanan' }}
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                            {{ !empty($currentStatus) ? 'Tidak ada pesanan aktif pada kategori status ini.' : 'Anda belum pernah melakukan checkout pesanan. Temukan produk pilihan Anda sekarang.' }}
+                        </p>
                     </div>
-                    <div class="pt-2">
-                        <a href="{{ route('products.index') }}" class="inline-flex items-center px-6 py-3 rounded-xl bg-orange-600 text-white font-bold text-xs hover:bg-orange-700 transition">
+                    <div class="pt-2 flex items-center justify-center gap-3">
+                        @if(!empty($currentStatus))
+                            <a href="{{ route('orders.index') }}" class="inline-flex items-center px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs hover:border-orange-300 transition">
+                                Lihat Semua Pesanan
+                            </a>
+                        @endif
+                        <a href="{{ route('products.index') }}" class="inline-flex items-center px-5 py-2.5 rounded-xl bg-orange-600 text-white font-bold text-xs hover:bg-orange-700 transition">
                             Mulai Belanja
                         </a>
                     </div>
