@@ -9,7 +9,6 @@
             $activeCategory = $categories->firstWhere('slug', $currentCategory) 
                 ?? $categories->firstWhere('id', $currentCategory);
         }
-        $categoryLabel = $activeCategory ? $activeCategory->name : 'Kategori';
     @endphp
 
     <div class="py-6 sm:py-8 bg-slate-50 min-h-[calc(100vh-18rem)]">
@@ -27,78 +26,8 @@
                     </p>
                 </div>
 
-                <!-- Right Controls: Category Dropdown, Count & Sort Pills -->
+                <!-- Right Controls: Count & Sort Pills -->
                 <div class="flex flex-wrap items-center gap-3 sm:gap-4">
-                    <!-- Category Dropdown / Popover -->
-                    <div class="relative" x-data="{ catDropdownOpen: false }" @click.outside="catDropdownOpen = false" @keydown.escape.window="catDropdownOpen = false">
-                        <button
-                            type="button"
-                            @click="catDropdownOpen = !catDropdownOpen"
-                            :aria-expanded="catDropdownOpen.toString()"
-                            aria-haspopup="true"
-                            class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-slate-200/90 hover:border-orange-500 text-xs font-bold text-slate-700 shadow-2xs transition focus:outline-none focus:ring-2 focus:ring-orange-500/20 {{ $activeCategory ? 'border-orange-500 text-orange-600 bg-orange-50/40' : '' }}"
-                        >
-                            <span>{{ $categoryLabel }}</span>
-                            <svg class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200" :class="{ 'rotate-180': catDropdownOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-
-                        <!-- Popover Menu -->
-                        <div
-                            x-show="catDropdownOpen"
-                            x-transition:enter="transition ease-out duration-150"
-                            x-transition:enter-start="opacity-0 scale-95 translate-y-1"
-                            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                            x-transition:leave="transition ease-in duration-100"
-                            x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-                            x-transition:leave-end="opacity-0 scale-95 translate-y-1"
-                            class="absolute left-0 sm:left-auto sm:right-0 mt-2 w-72 sm:w-80 bg-white rounded-2xl border border-slate-200/90 shadow-elevated p-2 z-50 divide-y divide-slate-100"
-                            style="display: none;"
-                        >
-                            <div class="px-3 py-2 flex items-center justify-between">
-                                <span class="text-xs font-bold text-slate-900">Pilih Kategori</span>
-                                <button
-                                    type="button"
-                                    @click="catDropdownOpen = false"
-                                    class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition"
-                                    aria-label="Tutup menu kategori"
-                                >
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                                </button>
-                            </div>
-
-                            <div class="py-1.5 max-h-72 overflow-y-auto space-y-0.5 pr-1 scrollbar-thin">
-                                <!-- Option: Semua Kategori -->
-                                <a
-                                    href="{{ route('products.index', array_filter(['q' => $search, 'sort' => $currentSort !== 'terbaru' ? $currentSort : null])) }}"
-                                    class="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition {{ empty($currentCategory) ? 'bg-orange-50 text-orange-700 font-bold' : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900' }}"
-                                >
-                                    <span>Semua Kategori</span>
-                                    @if(empty($currentCategory))
-                                        <svg class="w-4 h-4 text-orange-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                    @endif
-                                </a>
-
-                                <!-- Option: Dynamic Categories from DB -->
-                                @foreach ($categories as $cat)
-                                    @php
-                                        $isCatActive = (string) $currentCategory === (string) $cat->slug || (string) $currentCategory === (string) $cat->id;
-                                    @endphp
-                                    <a
-                                        href="{{ route('products.index', array_filter(['category' => $cat->slug, 'q' => $search, 'sort' => $currentSort !== 'terbaru' ? $currentSort : null])) }}"
-                                        class="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition {{ $isCatActive ? 'bg-orange-50 text-orange-700 font-bold' : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900' }}"
-                                    >
-                                        <span class="truncate">{{ $cat->name }}</span>
-                                        @if($isCatActive)
-                                            <svg class="w-4 h-4 text-orange-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                        @endif
-                                    </a>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Products Count -->
                     <span class="text-xs sm:text-sm text-slate-500 whitespace-nowrap">
                         Menampilkan <strong class="font-bold text-slate-900">{{ $products->total() }}</strong> produk

@@ -254,10 +254,12 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-11">
                 <div class="flex items-center gap-6">
                     <!-- Categories Dropdown Trigger -->
-                    <div class="relative" x-data="{ catOpen: false }" @click.outside="catOpen = false">
+                    <div class="relative" x-data="{ catOpen: false }" @click.outside="catOpen = false" @keydown.escape.window="catOpen = false">
                         <button
                             type="button"
                             @click="catOpen = !catOpen"
+                            :aria-expanded="catOpen.toString()"
+                            aria-haspopup="true"
                             class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-orange-50 text-orange-700 hover:bg-orange-100 transition font-bold"
                         >
                             <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -278,24 +280,26 @@
                             x-transition:leave="transition ease-out duration-100"
                             x-transition:leave-start="opacity-100 scale-100"
                             x-transition:leave-end="opacity-0 scale-95"
-                            class="absolute left-0 mt-2 w-64 bg-white rounded-2xl border border-slate-200 shadow-2xs py-2 z-50"
+                            class="absolute left-0 mt-2 w-64 bg-white rounded-2xl border border-slate-200 shadow-2xs py-2 z-50 divide-y divide-slate-100"
                             style="display: none;"
                         >
-                            @php
-                                $headerCategories = \App\Models\Category::active()->orderBy('name')->take(8)->get();
-                            @endphp
-                            @foreach($headerCategories as $hCat)
-                                <a
-                                    href="{{ route('products.index', ['category' => $hCat->slug]) }}"
-                                    class="flex items-center justify-between px-4 py-2.5 text-xs text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition font-medium"
-                                >
-                                    <span>{{ $hCat->name }}</span>
-                                    <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                    </svg>
-                                </a>
-                            @endforeach
-                            <div class="pt-1.5 mt-1.5 border-t border-slate-100 px-4">
+                            <div class="max-h-72 overflow-y-auto space-y-0.5 pr-1 scrollbar-thin">
+                                @php
+                                    $headerCategories = \App\Models\Category::active()->orderBy('name')->get();
+                                @endphp
+                                @foreach($headerCategories as $hCat)
+                                    <a
+                                        href="{{ route('products.index', ['category' => $hCat->slug]) }}"
+                                        class="flex items-center justify-between px-4 py-2 text-xs text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition font-medium"
+                                    >
+                                        <span>{{ $hCat->name }}</span>
+                                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </a>
+                                @endforeach
+                            </div>
+                            <div class="pt-1.5 mt-1.5 px-4">
                                 <a href="{{ route('products.index') }}" class="text-[11px] font-bold text-orange-600 hover:text-orange-700 block py-1">
                                     Lihat Semua Kategori &rarr;
                                 </a>
