@@ -327,21 +327,19 @@
                                 </svg>
                                 <span>Seller Center</span>
                             </a>
-                        @elseif(auth()->user()->isAdmin())
-                            <a href="{{ route('admin.dashboard') }}" class="hover:text-slate-900 font-bold transition">
-                                <span>Admin Dashboard</span>
-                            </a>
-                        @else
+                            <span class="text-slate-200">|</span>
+                        @elseif(!auth()->user()->isAdmin())
                             <a href="{{ route('buyer.shop.apply') }}" class="hover:text-orange-600 transition font-medium flex items-center gap-1">
                                 <span>Buka Toko Mitra</span>
                             </a>
+                            <span class="text-slate-200">|</span>
                         @endif
                     @else
                         <a href="{{ route('buyer.shop.apply') }}" class="hover:text-orange-600 transition font-medium flex items-center gap-1">
                             <span>Buka Toko Mitra Gratis</span>
                         </a>
+                        <span class="text-slate-200">|</span>
                     @endauth
-                    <span class="text-slate-200">|</span>
                     <span class="flex items-center gap-1.5 text-slate-500 font-medium">
                         <svg class="w-3.5 h-3.5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>

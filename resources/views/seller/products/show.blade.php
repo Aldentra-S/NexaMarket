@@ -2,13 +2,6 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div>
-                <div class="flex items-center space-x-2 text-xs text-slate-500 mb-1">
-                    <a href="{{ route('seller.dashboard') }}" class="hover:text-emerald-700 transition">Seller Center</a>
-                    <span>&rsaquo;</span>
-                    <a href="{{ route('seller.products.index') }}" class="hover:text-emerald-700 transition">Produk</a>
-                    <span>&rsaquo;</span>
-                    <span class="text-slate-800 font-medium">Detail Produk</span>
-                </div>
                 <h2 class="font-bold text-xl text-slate-900 leading-tight">
                     {{ $product->name }}
                 </h2>

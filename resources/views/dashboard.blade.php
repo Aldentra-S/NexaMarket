@@ -460,54 +460,6 @@
                 </div>
             </div>
 
-            <!-- 5. Bottom Store Card (Matching Member Area Mockup) -->
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 border border-orange-100 flex items-center justify-center shrink-0">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                    </div>
-                    <div>
-                        @if ($shop && $shop->isApproved())
-                            <h4 class="text-sm font-bold text-slate-900">Kelola Operasional Toko: {{ $shop->name }}</h4>
-                            <p class="text-xs text-slate-500 mt-0.5">Pantau pesanan masuk, atur inventaris barang, dan cek performa penjualan di Seller Center.</p>
-                        @elseif (!$shop)
-                            <h4 class="text-sm font-bold text-slate-900">Mulai Berjualan di NexaMarket</h4>
-                            <p class="text-xs text-slate-500 mt-0.5">Buka toko Anda sekarang dan mulai memasarkan produk unggulan ke jutaan pelanggan setia.</p>
-                        @elseif ($shop->isPending())
-                            <h4 class="text-sm font-bold text-slate-900">Status Toko: Menunggu Persetujuan Admin</h4>
-                            <p class="text-xs text-slate-500 mt-0.5">Pengajuan toko Anda sedang ditinjau. Anda akan dapat mengelola Seller Center setelah toko disetujui.</p>
-                        @elseif ($shop->isRejected())
-                            <h4 class="text-sm font-bold text-rose-600">Status Toko: Perlu Perbaikan</h4>
-                            <p class="text-xs text-slate-500 mt-0.5">Pengajuan toko memerlukan perbaikan dokumen atau data. Silakan periksa dan ajukan kembali.</p>
-                        @else
-                            <h4 class="text-sm font-bold text-slate-700">Status Toko: Ditangguhkan</h4>
-                            <p class="text-xs text-slate-500 mt-0.5">Toko Anda sedang dalam penangguhan operasional oleh Administrator.</p>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="shrink-0 w-full sm:w-auto">
-                    @if ($shop && $shop->isApproved())
-                        <a href="{{ route('seller.dashboard') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white hover:bg-orange-50 border border-orange-300 text-orange-600 font-bold text-xs rounded-xl shadow-2xs transition">
-                            <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                            </svg>
-                            <span>Kelola Toko</span>
-                        </a>
-                    @elseif (!$shop)
-                        <a href="{{ route('buyer.shop.apply') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-xl shadow-xs transition">
-                            <span>Buka Toko</span>
-                        </a>
-                    @else
-                        <a href="{{ route('buyer.shop.apply') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold text-xs rounded-xl shadow-2xs transition">
-                            <span>Lihat Status Pengajuan</span>
-                        </a>
-                    @endif
-                </div>
-            </div>
-
         </div>
     </div>
 </x-app-layout>

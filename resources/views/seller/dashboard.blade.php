@@ -5,14 +5,7 @@
             <!-- 1. Header & Quick Actions -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-orange-50 text-orange-700 border border-orange-200">
-                            Seller Center
-                        </span>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                            Toko Terverifikasi (Approved)
-                        </span>
-                    </div>
+                    <span class="sr-only">Toko Terverifikasi (Approved)</span>
                     <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-tight">
                         Selamat datang, {{ auth()->user()->name }}
                     </h1>

@@ -24,33 +24,16 @@
             </span>
         </div>
 
-        <!-- Store Identification Badge (Desktop) -->
-        <div class="hidden lg:flex items-center gap-2">
-            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-orange-50/70 border border-orange-200/70 text-xs font-bold text-orange-800">
-                <svg class="w-4 h-4 text-orange-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                </svg>
-                <span class="truncate max-w-[200px]">{{ auth()->user()->shop?->name ?? 'Toko Saya' }}</span>
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+        <!-- Store Identification (Plain Text on Desktop) -->
+        <div class="hidden lg:flex items-center">
+            <span class="text-xs font-semibold text-slate-700 truncate max-w-[200px]">
+                {{ auth()->user()->shop?->name ?? 'Toko Saya' }}
             </span>
-
-            <a href="{{ route('seller.shop.settings') }}" class="text-[11px] font-semibold text-slate-400 hover:text-slate-600 px-2 py-1 transition">
-                Atur Toko
-            </a>
         </div>
     </div>
 
-    <!-- Right: Return to Member Area & User Profile Dropdown -->
+    <!-- Right: User Profile Dropdown -->
     <div class="flex items-center gap-3 sm:gap-4">
-        <!-- Return to Member Area Quick Link -->
-        <a 
-            href="{{ route('dashboard') }}" 
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-sky-700 bg-sky-50 border border-sky-200/80 rounded-xl hover:bg-sky-100 transition shadow-2xs"
-            title="Beralih ke Dashboard Belanja Pembeli"
-        >
-            <span>Member Area</span>
-            <span class="text-sky-500">&rarr;</span>
-        </a>
 
         <!-- Settings Dropdown (Identical to Member Area) -->
         <x-dropdown align="right" width="60">

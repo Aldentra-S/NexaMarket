@@ -2,13 +2,6 @@
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <div class="flex items-center space-x-2 text-xs text-slate-500 mb-1">
-                    <a href="{{ route('seller.dashboard') }}" class="hover:text-emerald-700 transition">Seller Center</a>
-                    <span>&rsaquo;</span>
-                    <a href="{{ route('seller.orders.index') }}" class="hover:text-emerald-700 transition">Pesanan Toko</a>
-                    <span>&rsaquo;</span>
-                    <span class="text-slate-800 font-medium">{{ $shopOrder->order_number }}</span>
-                </div>
                 <div class="flex items-center gap-3">
                     <h2 class="font-bold text-xl text-slate-900 leading-tight">
                         Detail Pemenuhan Pesanan

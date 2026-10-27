@@ -2,19 +2,11 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div>
-                <div class="flex items-center space-x-2 text-xs text-slate-500 mb-1">
-                    <a href="{{ route('seller.dashboard') }}" class="hover:text-emerald-700 transition">Seller Center</a>
-                    <span>&rsaquo;</span>
-                    <span class="text-slate-800 font-medium">Pengaturan Toko</span>
-                </div>
                 <h2 class="font-bold text-xl text-slate-900 leading-tight">
                     {{ __('Pengaturan & Profil Toko') }}
                 </h2>
                 <p class="text-xs text-slate-500 mt-0.5">Perbarui identitas toko, deskripsi etalase, kontak resmi, dan alamat pengiriman barang</p>
             </div>
-            <a href="{{ route('seller.dashboard') }}" class="text-xs font-semibold text-slate-600 hover:text-emerald-700 transition">
-                &larr; Kembali ke Dashboard
-            </a>
         </div>
     </x-slot>
 

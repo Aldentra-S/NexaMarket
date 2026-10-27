@@ -4,9 +4,6 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Pendaftaran Toko (Seller Onboarding)') }}
             </h2>
-            <a href="{{ route('dashboard') }}" class="text-xs font-semibold text-gray-600 hover:text-orange-600 transition">
-                &larr; Kembali ke Dashboard
-            </a>
         </div>
     </x-slot>
 

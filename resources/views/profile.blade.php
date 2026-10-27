@@ -9,11 +9,6 @@
                     Pengaturan Profil Akun &bull; Kelola data identitas akun, status kemitraan toko, dan kredensial keamanan akun Anda.
                 </p>
             </div>
-            <div class="flex items-center gap-2">
-                <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-white hover:border-orange-300 transition">
-                    <span>&larr;</span> Kembali ke Dashboard
-                </a>
-            </div>
         </div>
     </x-slot>
 
@@ -112,34 +107,15 @@
                 </div>
             </div>
 
-            <!-- 2. Bagian Kemitraan Toko / Mulai Berjualan (Sesuai Status Nyata Pengguna) -->
+            <!-- 2. Bagian Kemitraan Toko / Mulai Berjualan (Khusus Akun Non-Admin) -->
+            @unless ($user->isAdmin())
             <div id="buka-toko" class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 scroll-mt-6">
                 <div class="pb-4 border-b border-slate-100 mb-6">
                     <h3 class="text-base sm:text-lg font-bold text-slate-900">Kemitraan Toko & Penjual</h3>
                     <p class="text-xs text-slate-500 mt-0.5">Kelola status dan operasional toko multi-vendor Anda di NexaMarket</p>
                 </div>
 
-                @if ($user->isAdmin())
-                    <!-- Status 6: Admin -->
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                        <div class="space-y-1">
-                            <div class="flex items-center gap-2">
-                                <span class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center text-xs font-bold">
-                                    ADM
-                                </span>
-                                <h4 class="text-sm font-bold text-slate-900">Akses Platform Administrator</h4>
-                            </div>
-                            <p class="text-xs text-slate-600 leading-relaxed max-w-xl">
-                                Akun Anda memiliki wewenang penuh pada Admin Center untuk mengelola verifikasi toko mitra, moderasi produk, sengketa pesanan, dan laporan bisnis.
-                            </p>
-                        </div>
-                        <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition">
-                            <span>Masuk Admin Center</span>
-                            <span>&rarr;</span>
-                        </a>
-                    </div>
-
-                @elseif ($user->canAccessSellerCenter())
+                @if ($user->canAccessSellerCenter())
                     <!-- Status 4 & 5: Toko Aktif / Seller -->
                     <div class="p-6 rounded-2xl bg-orange-50/40 border border-orange-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                         <div class="space-y-2">
@@ -320,6 +296,7 @@
                     </div>
                 @endif
             </div>
+            @endunless
 
             <!-- 3. Formulir Pengaturan Akun (Livewire Forms) -->
             <div id="edit-profil" class="space-y-6 scroll-mt-6">

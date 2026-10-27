@@ -2,20 +2,10 @@
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <div class="flex items-center space-x-2 text-xs text-slate-500 mb-1">
-                    <a href="{{ route('seller.dashboard') }}" class="hover:text-emerald-700 transition">Seller Center</a>
-                    <span>&rsaquo;</span>
-                    <span class="text-slate-800 font-medium">Pesanan Toko</span>
-                </div>
                 <h2 class="font-bold text-xl text-slate-900 leading-tight">
                     {{ __('Daftar Pesanan Toko') }}
                 </h2>
                 <p class="text-xs text-slate-500 mt-0.5">Pantau pesanan masuk untuk {{ $shop->name }}, periksa status pembayaran, dan kelola proses pemenuhan</p>
-            </div>
-            <div>
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                    {{ $shop->name }}
-                </span>
             </div>
         </div>
     </x-slot>

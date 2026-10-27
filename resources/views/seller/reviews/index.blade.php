@@ -2,20 +2,10 @@
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <div class="flex items-center space-x-2 text-xs text-slate-500 mb-1">
-                    <a href="{{ route('seller.dashboard') }}" class="hover:text-emerald-700 transition">Seller Center</a>
-                    <span>&rsaquo;</span>
-                    <span class="text-slate-800 font-medium">Ulasan Produk</span>
-                </div>
                 <h2 class="font-bold text-xl text-slate-900 leading-tight">
                     {{ __('Ulasan & Penilaian Produk') }}
                 </h2>
                 <p class="text-xs text-slate-500 mt-0.5">Pantau kepuasan pembeli dan umpan balik ulasan untuk produk-produk toko {{ $shop->name }}</p>
-            </div>
-            <div class="flex items-center space-x-2">
-                <a href="{{ route('seller.dashboard') }}" class="text-xs font-semibold text-slate-600 hover:text-emerald-700 transition">
-                    &larr; Kembali ke Dashboard
-                </a>
             </div>
         </div>
     </x-slot>
@@ -33,10 +23,6 @@
                         <p class="text-xs text-slate-500">
                             Ulasan dan bintang rating dari pembeli terverifikasi akan langsung ditampilkan di etalase katalog publik setelah pesanan selesai.
                         </p>
-                    </div>
-                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-600 shrink-0">
-                        <div>Total Produk Dimonitor: <strong class="text-slate-900">{{ $products->total() }} produk</strong></div>
-                        <div class="mt-0.5 text-slate-500">Sistem Penilaian: Rating 1 - 5 Bintang</div>
                     </div>
                 </div>
             </div>
