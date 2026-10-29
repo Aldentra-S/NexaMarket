@@ -83,19 +83,21 @@
                                 {{ $product->name }}
                             </h1>
 
-                            <!-- Rating & Reviews Bar (Inspired by Image 2 & 3) -->
-                            <div class="flex items-center gap-3 text-xs text-slate-500">
-                                <div class="flex items-center text-amber-500 font-bold">
-                                    <svg class="w-4 h-4 fill-current mr-1" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                    </svg>
-                                    <span>4.8</span>
+                            <!-- Rating & Reviews Bar (Rendered Only When Authentic Data Exists) -->
+                            @if (!empty($product->rating) && (float) $product->rating > 0)
+                                <div class="flex items-center gap-3 text-xs text-slate-500">
+                                    <div class="flex items-center text-amber-500 font-bold">
+                                        <svg class="w-4 h-4 fill-current mr-1" viewBox="0 0 20 20" aria-hidden="true">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                        <span>{{ number_format((float) $product->rating, 1) }}</span>
+                                    </div>
+                                    @if (!empty($product->reviews_count) && $product->reviews_count > 0)
+                                        <span class="text-slate-300">&bull;</span>
+                                        <span class="font-medium text-slate-600">{{ $product->reviews_count }} Ulasan</span>
+                                    @endif
                                 </div>
-                                <span class="text-slate-300">&bull;</span>
-                                <span class="font-medium text-slate-600">120+ Ulasan Puas</span>
-                                <span class="text-slate-300">&bull;</span>
-                                <span class="font-medium text-emerald-700">100% Produk Asli</span>
-                            </div>
+                            @endif
 
                             <!-- Price Container (Matching Mobile Visual Style) -->
                             <div class="bg-orange-50/60 border border-orange-200/80 rounded-2xl p-5 space-y-3">

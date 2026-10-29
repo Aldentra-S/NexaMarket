@@ -24,6 +24,9 @@
 </head>
 <body class="font-sans antialiased bg-slate-50 text-slate-900 min-h-full flex flex-col" x-data="{ mobileMenuOpen: false, logoutModalOpen: false }" @keydown.escape.window="mobileMenuOpen = false; logoutModalOpen = false">
     <!-- Main Marketplace Header -->
+    @php
+        $headerCategories = \App\Models\Category::active()->orderBy('name')->get();
+    @endphp
     <header @keydown.escape.window="mobileMenuOpen = false" class="sticky top-0 z-40 bg-white border-b border-slate-200/80 shadow-2xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-50">
             <div class="flex items-center justify-between h-20 gap-4 lg:gap-8">
@@ -284,9 +287,6 @@
                             style="display: none;"
                         >
                             <div class="max-h-72 overflow-y-auto space-y-0.5 pr-1 scrollbar-thin">
-                                @php
-                                    $headerCategories = \App\Models\Category::active()->orderBy('name')->get();
-                                @endphp
                                 @foreach($headerCategories as $hCat)
                                     <a
                                         href="{{ route('products.index', ['category' => $hCat->slug]) }}"
@@ -411,6 +411,32 @@
                     </span>
                     <span class="text-slate-400">&rarr;</span>
                 </a>
+
+                <!-- Mobile Drawer Categories Accordion -->
+                <div x-data="{ mobileCatOpen: false }" class="rounded-xl overflow-hidden">
+                    <button
+                        type="button"
+                        @click="mobileCatOpen = !mobileCatOpen"
+                        :aria-expanded="mobileCatOpen.toString()"
+                        class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-800 hover:bg-orange-50 hover:text-orange-600 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                    >
+                        <span class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+                            <span>Kategori Produk</span>
+                        </span>
+                        <svg class="w-3.5 h-3.5 text-slate-400 transition-transform" :class="{ 'rotate-180': mobileCatOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div x-show="mobileCatOpen" style="display: none;" class="pl-7 pr-3 py-1 space-y-1 max-h-48 overflow-y-auto scrollbar-thin bg-slate-50/70 rounded-xl my-1 border border-slate-100">
+                        <a href="{{ route('products.index') }}" class="block py-1.5 text-xs text-orange-600 font-bold hover:underline">
+                            Semua Kategori &rarr;
+                        </a>
+                        @foreach($headerCategories as $mCat)
+                            <a href="{{ route('products.index', ['category' => $mCat->slug]) }}" class="block py-1.5 text-xs text-slate-600 hover:text-orange-600 transition font-medium">
+                                {{ $mCat->name }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
 
                 <a href="{{ route('cart.index') }}" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-800 hover:bg-orange-50 hover:text-orange-600 transition">
                     <span class="flex items-center gap-2">

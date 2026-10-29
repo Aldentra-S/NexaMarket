@@ -377,4 +377,67 @@ class PublicProductCatalogTest extends TestCase
         $showResponse->assertSee('Produk Klasik Tanpa Foto Kategori');
         $showResponse->assertSee('placeholder-product.svg');
     }
+
+    public function test_catalog_implements_responsive_grid_and_action_clarity(): void
+    {
+        $shop = Shop::factory()->approved()->create();
+        $category = \App\Models\Category::factory()->create(['name' => 'Aksesoris Meja', 'slug' => 'aksesoris-meja']);
+        $product = Product::factory()->published()->create([
+            'shop_id' => $shop->id,
+            'category_id' => $category->id,
+            'name' => 'Lampu Meja LED Fleksibel',
+            'stock' => 10,
+        ]);
+
+        $response = $this->get(route('products.index'));
+
+        $response->assertOk();
+        // Responsive grid configuration: 2 cols on mobile, 3 on tablet, 4 on desktop
+        $response->assertSee('grid-cols-2 md:grid-cols-3 lg:grid-cols-4', false);
+        // Action label changed from misleading "Tambah ke Keranjang" link to explicit "Lihat Detail"
+        $response->assertSee('Lihat Detail');
+        // Category pill on card is clickable
+        $response->assertSee(route('products.index', ['category' => 'aksesoris-meja']));
+        // Non-functional fake wishlist button is removed
+        $response->assertDontSee('Simpan ke Favorit');
+    }
+
+    public function test_catalog_active_filters_have_accessible_dismiss_labels(): void
+    {
+        $shop = Shop::factory()->approved()->create();
+        $category = \App\Models\Category::factory()->create(['name' => 'Elektronik Rumah', 'slug' => 'elektronik-rumah']);
+        Product::factory()->published()->create([
+            'shop_id' => $shop->id,
+            'category_id' => $category->id,
+            'name' => 'Kipas Angin Meja',
+        ]);
+
+        $response = $this->get(route('products.index', [
+            'category' => 'elektronik-rumah',
+            'q' => 'Kipas',
+        ]));
+
+        $response->assertOk();
+        // Accessible dismiss labels with aria-label
+        $response->assertSee('aria-label="Hapus filter kategori Elektronik Rumah"', false);
+        $response->assertSee('aria-label="Hapus filter pencarian Kipas"', false);
+    }
+
+    public function test_product_detail_page_does_not_display_fake_ratings_or_fabricated_claims(): void
+    {
+        $shop = Shop::factory()->approved()->create();
+        $product = Product::factory()->published()->create([
+            'shop_id' => $shop->id,
+            'name' => 'Mousepad Gaming Speed',
+            'slug' => 'mousepad-gaming-speed',
+            'stock' => 20,
+        ]);
+
+        $response = $this->get(route('products.show', $product->slug));
+
+        $response->assertOk();
+        // Fabricated claims and hardcoded fake reviews must not appear
+        $response->assertDontSee('120+ Ulasan Puas');
+        $response->assertDontSee('100% Produk Asli');
+    }
 }
