@@ -160,4 +160,17 @@ class SellerOrderUiTest extends TestCase
         $responsePaid->assertDontSee('Belum Ada Pesanan');
         $responsePaid->assertSee('Perlu Diproses');
     }
+
+    public function test_order_show_renders_product_thumbnail_correctly(): void
+    {
+        [$seller, $shop] = $this->createSellerWithShop();
+        $shopOrder = $this->createOrderForShop($shop, OrderStatus::PAID);
+        $item = $shopOrder->items->first();
+
+        $response = $this->actingAs($seller)->get(route('seller.orders.show', $shopOrder));
+
+        $response->assertOk();
+        $response->assertSee($item->product->thumbnail_url, false);
+        $response->assertSee($item->product_name);
+    }
 }

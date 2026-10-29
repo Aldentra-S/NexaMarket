@@ -49,21 +49,42 @@
                 <!-- Status Filter Tabs -->
                 <div class="flex flex-wrap items-center gap-1.5 text-xs">
                     <a href="{{ route('admin.products.index', ['search' => $search, 'category_id' => $currentCategory]) }}" 
-                       class="px-3 py-1.5 rounded-xl font-semibold transition {{ empty($currentStatus) ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
+                       class="px-3 py-1.5 rounded-xl font-semibold transition {{ empty($currentStatus) ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
                         Semua ({{ $totalCount }})
                     </a>
-                    <a href="{{ route('admin.products.index', ['status' => 'published', 'search' => $search, 'category_id' => $currentCategory]) }}" 
-                       class="px-3 py-1.5 rounded-xl font-semibold transition {{ $currentStatus === 'published' ? 'bg-emerald-800 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
-                        Ditayangkan ({{ $publishedCount }})
-                    </a>
-                    <a href="{{ route('admin.products.index', ['status' => 'draft', 'search' => $search, 'category_id' => $currentCategory]) }}" 
-                       class="px-3 py-1.5 rounded-xl font-semibold transition {{ $currentStatus === 'draft' ? 'bg-amber-700 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
-                        Draf ({{ $draftCount }})
-                    </a>
-                    <a href="{{ route('admin.products.index', ['status' => 'archived', 'search' => $search, 'category_id' => $currentCategory]) }}" 
-                       class="px-3 py-1.5 rounded-xl font-semibold transition {{ $currentStatus === 'archived' ? 'bg-slate-700 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
-                        Diarsipkan ({{ $archivedCount }})
-                    </a>
+                    @if ($currentStatus === 'published')
+                        <a href="{{ route('admin.products.index', ['status' => 'published', 'search' => $search, 'category_id' => $currentCategory]) }}" 
+                           class="px-3 py-1.5 rounded-xl font-semibold transition bg-emerald-800 text-white">
+                            Ditayangkan ({{ $publishedCount }})
+                        </a>
+                    @else
+                        <a href="{{ route('admin.products.index', ['status' => 'published', 'search' => $search, 'category_id' => $currentCategory]) }}" 
+                           class="px-3 py-1.5 rounded-xl font-semibold transition bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900">
+                            Ditayangkan ({{ $publishedCount }})
+                        </a>
+                    @endif
+                    @if ($currentStatus === 'draft')
+                        <a href="{{ route('admin.products.index', ['status' => 'draft', 'search' => $search, 'category_id' => $currentCategory]) }}" 
+                           class="px-3 py-1.5 rounded-xl font-semibold transition bg-amber-700 text-white">
+                            Draf ({{ $draftCount }})
+                        </a>
+                    @else
+                        <a href="{{ route('admin.products.index', ['status' => 'draft', 'search' => $search, 'category_id' => $currentCategory]) }}" 
+                           class="px-3 py-1.5 rounded-xl font-semibold transition bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900">
+                            Draf ({{ $draftCount }})
+                        </a>
+                    @endif
+                    @if ($currentStatus === 'archived')
+                        <a href="{{ route('admin.products.index', ['status' => 'archived', 'search' => $search, 'category_id' => $currentCategory]) }}" 
+                           class="px-3 py-1.5 rounded-xl font-semibold transition bg-slate-700 text-white">
+                            Diarsipkan ({{ $archivedCount }})
+                        </a>
+                    @else
+                        <a href="{{ route('admin.products.index', ['status' => 'archived', 'search' => $search, 'category_id' => $currentCategory]) }}" 
+                           class="px-3 py-1.5 rounded-xl font-semibold transition bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900">
+                            Diarsipkan ({{ $archivedCount }})
+                        </a>
+                    @endif
                 </div>
             </div>
 
@@ -88,8 +109,8 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center gap-3">
                                             <div class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center overflow-hidden shrink-0">
-                                                @if($product->primaryImage)
-                                                    <img src="{{ Storage::url($product->primaryImage->image_path) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                                                @if($product->thumbnail_url)
+                                                    <img src="{{ $product->thumbnail_url }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
                                                 @else
                                                     <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />

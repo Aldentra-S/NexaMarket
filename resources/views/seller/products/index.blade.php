@@ -33,19 +33,19 @@
                 <!-- Status Filter Tabs -->
                 <div class="flex flex-wrap items-center gap-1.5 text-xs">
                     <a href="{{ route('seller.products.index', array_filter(['search' => $search])) }}" 
-                       class="px-3.5 py-2 rounded-xl font-semibold transition {{ empty($currentFilter) ? 'bg-orange-600 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ empty($currentFilter) ? 'bg-orange-600 text-white shadow-2xs' : 'bg-slate-50 text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                         Semua ({{ $totalCount }})
                     </a>
                     <a href="{{ route('seller.products.index', array_filter(['status' => 'published', 'search' => $search])) }}" 
-                       class="px-3.5 py-2 rounded-xl font-semibold transition {{ $currentFilter === 'published' ? 'bg-orange-600 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ $currentFilter === 'published' ? 'bg-orange-600 text-white shadow-2xs' : 'bg-slate-50 text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                         Ditayangkan ({{ $publishedCount }})
                     </a>
                     <a href="{{ route('seller.products.index', array_filter(['status' => 'draft', 'search' => $search])) }}" 
-                       class="px-3.5 py-2 rounded-xl font-semibold transition {{ $currentFilter === 'draft' ? 'bg-amber-700 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ $currentFilter === 'draft' ? 'bg-amber-700 text-white shadow-2xs' : 'bg-slate-50 text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                         Draf ({{ $draftCount }})
                     </a>
                     <a href="{{ route('seller.products.index', array_filter(['status' => 'archived', 'search' => $search])) }}" 
-                       class="px-3.5 py-2 rounded-xl font-semibold transition {{ $currentFilter === 'archived' ? 'bg-slate-800 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ $currentFilter === 'archived' ? 'bg-slate-800 text-white shadow-2xs' : 'bg-slate-50 text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                         Diarsipkan ({{ $archivedCount }})
                     </a>
                 </div>
@@ -60,12 +60,12 @@
                                name="search" 
                                value="{{ $search }}" 
                                placeholder="Cari nama atau deskripsi..." 
-                               class="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700 transition outline-none" />
+                               class="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition outline-none" />
                         <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
-                    <button type="submit" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition">
+                    <button type="submit" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                         Cari
                     </button>
                     @if ($search)
@@ -97,8 +97,8 @@
                                         <div class="flex items-center space-x-3.5">
                                             <img src="{{ $product->thumbnail_url }}" alt="{{ $product->name }}" class="w-12 h-12 rounded-xl object-cover border border-slate-200 shrink-0 bg-slate-50" />
                                             <div>
-                                                <div class="font-bold text-slate-900 text-sm hover:text-emerald-700 transition">
-                                                    <a href="{{ route('seller.products.show', $product) }}">
+                                                <div class="font-bold text-slate-900 text-sm hover:text-orange-600 transition">
+                                                    <a href="{{ route('seller.products.show', $product) }}" class="focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded">
                                                         {{ $product->name }}
                                                     </a>
                                                 </div>
@@ -152,7 +152,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-right font-medium">
                                         <div class="inline-flex items-center space-x-2">
                                             <a href="{{ route('seller.products.show', $product) }}" 
-                                               class="p-1.5 text-slate-500 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition" 
+                                               class="p-1.5 text-slate-500 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500" 
                                                title="Lihat Rincian">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -160,7 +160,7 @@
                                                 </svg>
                                             </a>
                                             <a href="{{ route('seller.products.edit', $product) }}" 
-                                               class="p-1.5 text-slate-500 hover:text-emerald-700 hover:bg-slate-100 rounded-lg transition" 
+                                               class="p-1.5 text-slate-500 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500" 
                                                title="Edit Produk & Stok">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -171,7 +171,7 @@
                                             <div x-data="{ openDeleteModal: false }">
                                                 <button type="button" 
                                                         @click="openDeleteModal = true" 
-                                                        class="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition" 
+                                                        class="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500" 
                                                         title="Hapus Produk">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

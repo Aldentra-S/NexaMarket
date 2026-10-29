@@ -7,7 +7,7 @@
                 </h2>
                 <p class="text-xs text-slate-500 mt-0.5">Perbarui rincian harga, stok, deskripsi, atau status visibilitas produk</p>
             </div>
-            <a href="{{ route('seller.products.index') }}" class="text-xs font-semibold text-slate-600 hover:text-emerald-700 transition">
+            <a href="{{ route('seller.products.index') }}" class="text-xs font-semibold text-slate-600 hover:text-orange-600 transition">
                 &larr; Kembali ke Daftar Produk
             </a>
         </div>
@@ -42,7 +42,7 @@
                         <select 
                             id="category_id" 
                             name="category_id" 
-                            class="mt-1 block w-full border-slate-300 focus:border-emerald-700 focus:ring-emerald-700 rounded-xl text-xs sm:text-sm">
+                            class="mt-1 block w-full border-slate-300 focus:border-orange-500 focus:ring-orange-500 rounded-xl text-xs sm:text-sm">
                             <option value="">-- Pilih Kategori Produk (Opsional) --</option>
                             @foreach ($categories as $cat)
                                 <option value="{{ $cat->id }}" {{ (string) old('category_id', $product->category_id) === (string) $cat->id ? 'selected' : '' }}>
@@ -99,7 +99,7 @@
                         <select 
                             id="status" 
                             name="status" 
-                            class="mt-1 block w-full border-slate-300 focus:border-emerald-700 focus:ring-emerald-700 rounded-xl text-xs sm:text-sm" 
+                            class="mt-1 block w-full border-slate-300 focus:border-orange-500 focus:ring-orange-500 rounded-xl text-xs sm:text-sm" 
                             required>
                             <option value="published" {{ old('status', $product->status->value) === 'published' ? 'selected' : '' }}>
                                 Ditayangkan (Muncul di katalog publik dan dapat dibeli)
@@ -121,7 +121,7 @@
                             id="description" 
                             name="description" 
                             rows="6" 
-                            class="mt-1 block w-full border-slate-300 focus:border-emerald-700 focus:ring-emerald-700 rounded-xl text-xs sm:text-sm leading-relaxed" 
+                            class="mt-1 block w-full border-slate-300 focus:border-orange-500 focus:ring-orange-500 rounded-xl text-xs sm:text-sm leading-relaxed" 
                             required 
                         >{{ old('description', $product->description) }}</textarea>
                         <x-input-error class="mt-2" :messages="$errors->get('description')" />

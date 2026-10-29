@@ -76,8 +76,8 @@
                                 <div class="p-6 flex items-start justify-between gap-4">
                                     <div class="flex items-start gap-4">
                                         <div class="w-14 h-14 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center overflow-hidden shrink-0">
-                                            @if($item->product && $item->product->primaryImage)
-                                                <img src="{{ Storage::url($item->product->primaryImage->image_path) }}" 
+                                            @if($item->product?->thumbnail_url)
+                                                <img src="{{ $item->product->thumbnail_url }}" 
                                                      alt="{{ $item->product_name }}" 
                                                      class="w-full h-full object-cover">
                                             @else
@@ -105,7 +105,7 @@
                         <!-- Subtotal Footer -->
                         <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
                             <span class="text-xs font-semibold text-slate-600">Subtotal Pesanan Toko</span>
-                            <span class="text-lg font-bold text-emerald-700">{{ $shopOrder->formattedSubtotal() }}</span>
+                            <span class="text-lg font-bold text-orange-600">{{ $shopOrder->formattedSubtotal() }}</span>
                         </div>
                     </div>
 

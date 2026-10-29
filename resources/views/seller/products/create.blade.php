@@ -7,7 +7,7 @@
                 </h2>
                 <p class="text-xs text-slate-500 mt-0.5">Lengkapi informasi produk untuk mulai menawarkan barang di pasar</p>
             </div>
-            <a href="{{ route('seller.products.index') }}" class="text-xs font-semibold text-slate-600 hover:text-emerald-700 transition">
+            <a href="{{ route('seller.products.index') }}" class="text-xs font-semibold text-slate-600 hover:text-orange-600 transition">
                 &larr; Kembali ke Daftar Produk
             </a>
         </div>
@@ -42,7 +42,7 @@
                         <select 
                             id="category_id" 
                             name="category_id" 
-                            class="mt-1 block w-full border-slate-300 focus:border-emerald-700 focus:ring-emerald-700 rounded-xl text-xs sm:text-sm">
+                            class="mt-1 block w-full border-slate-300 focus:border-orange-500 focus:ring-orange-500 rounded-xl text-xs sm:text-sm">
                             <option value="">-- Pilih Kategori Produk (Opsional) --</option>
                             @foreach ($categories as $cat)
                                 <option value="{{ $cat->id }}" {{ (string) old('category_id') === (string) $cat->id ? 'selected' : '' }}>
@@ -102,7 +102,7 @@
                         <select 
                             id="status" 
                             name="status" 
-                            class="mt-1 block w-full border-slate-300 focus:border-emerald-700 focus:ring-emerald-700 rounded-xl text-xs sm:text-sm" 
+                            class="mt-1 block w-full border-slate-300 focus:border-orange-500 focus:ring-orange-500 rounded-xl text-xs sm:text-sm" 
                             required>
                             <option value="published" {{ old('status') === 'published' || old('status') === null ? 'selected' : '' }}>
                                 Ditayangkan (Langsung muncul di katalog publik dan dapat dibeli)
@@ -120,13 +120,13 @@
                     <!-- Product Images -->
                     <div>
                         <x-input-label for="images" :value="__('Foto / Gambar Produk (Maksimal 5 Berkas)')" />
-                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-300 border-dashed rounded-xl hover:border-emerald-500 transition bg-slate-50/50">
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-300 border-dashed rounded-xl hover:border-orange-500 transition bg-slate-50/50">
                             <div class="space-y-1 text-center">
                                 <svg class="mx-auto h-10 w-10 text-slate-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                                     <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                                 <div class="flex text-xs text-slate-600 justify-center">
-                                    <label for="images" class="relative cursor-pointer bg-white rounded-md font-semibold text-emerald-700 hover:text-emerald-800 focus-within:outline-none">
+                                    <label for="images" class="relative cursor-pointer bg-white rounded-md font-semibold text-orange-600 hover:text-orange-700 focus-within:outline-none">
                                         <span>Pilih berkas dari komputer</span>
                                         <input id="images" name="images[]" type="file" multiple accept="image/jpeg,image/png,image/webp" class="sr-only">
                                     </label>
@@ -145,7 +145,7 @@
                             id="description" 
                             name="description" 
                             rows="6" 
-                            class="mt-1 block w-full border-slate-300 focus:border-emerald-700 focus:ring-emerald-700 rounded-xl text-xs sm:text-sm leading-relaxed" 
+                            class="mt-1 block w-full border-slate-300 focus:border-orange-500 focus:ring-orange-500 rounded-xl text-xs sm:text-sm leading-relaxed" 
                             required 
                             placeholder="Jelaskan spesifikasi, material, ukuran, keunggulan, dan panduan penggunaan produk..."
                         >{{ old('description') }}</textarea>

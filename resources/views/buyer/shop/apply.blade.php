@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-slate-800 leading-tight">
                 {{ __('Pendaftaran Toko (Seller Onboarding)') }}
             </h2>
         </div>
@@ -25,25 +25,25 @@
                                 ⏳
                             </span>
                             <div>
-                                <h3 class="text-lg font-bold text-gray-900">Pengajuan Toko Sedang Ditinjau</h3>
-                                <p class="text-xs text-gray-500">Dikirim pada {{ $shop->created_at->format('d M Y, H:i') }} WIB</p>
+                                <h3 class="text-lg font-bold text-slate-900">Pengajuan Toko Sedang Ditinjau</h3>
+                                <p class="text-xs text-slate-500">Dikirim pada {{ $shop->created_at->format('d M Y, H:i') }} WIB</p>
                             </div>
                         </div>
 
-                        <p class="text-sm text-gray-600 leading-relaxed">
+                        <p class="text-sm text-slate-600 leading-relaxed">
                             Terima kasih telah mendaftar sebagai mitra penjual di NexaMarket. Tim Administrator kami sedang memverifikasi rincian toko Anda. Anda akan mendapatkan notifikasi status persetujuan sesegera mungkin.
                         </p>
 
-                        <div class="mt-6 p-4 rounded-xl bg-gray-50 border border-gray-100 text-xs space-y-2">
-                            <div><strong class="text-gray-700">Nama Toko:</strong> <span class="font-semibold text-gray-900">{{ $shop->name }}</span></div>
-                            <div><strong class="text-gray-700">Deskripsi:</strong> <span class="text-gray-800">{{ $shop->description }}</span></div>
+                        <div class="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-100 text-xs space-y-2">
+                            <div><strong class="text-slate-700">Nama Toko:</strong> <span class="font-semibold text-slate-900">{{ $shop->name }}</span></div>
+                            <div><strong class="text-slate-700">Deskripsi:</strong> <span class="text-slate-800">{{ $shop->description }}</span></div>
                             @if ($shop->phone)
-                                <div><strong class="text-gray-700">Nomor Kontak:</strong> <span class="text-gray-800">{{ $shop->phone }}</span></div>
+                                <div><strong class="text-slate-700">Nomor Kontak:</strong> <span class="text-slate-800">{{ $shop->phone }}</span></div>
                             @endif
                             @if ($shop->address)
-                                <div><strong class="text-gray-700">Alamat Usaha:</strong> <span class="text-gray-800">{{ $shop->address }}</span></div>
+                                <div><strong class="text-slate-700">Alamat Usaha:</strong> <span class="text-slate-800">{{ $shop->address }}</span></div>
                             @endif
-                            <div><strong class="text-gray-700">Status Saat Ini:</strong> 
+                            <div><strong class="text-slate-700">Status Saat Ini:</strong> 
                                 <span class="px-2 py-0.5 rounded text-[11px] font-semibold border {{ $shop->status->badgeColor() }}">
                                     {{ $shop->status->label() }}
                                 </span>
@@ -62,38 +62,38 @@
                                 </svg>
                             </span>
                             <div>
-                                <h3 class="text-lg font-bold text-gray-900">Toko Anda Sedang Ditangguhkan</h3>
-                                <p class="text-xs text-gray-500">
+                                <h3 class="text-lg font-bold text-slate-900">Toko Anda Sedang Ditangguhkan</h3>
+                                <p class="text-xs text-slate-500">
                                     Ditangguhkan pada {{ $shop->suspended_at?->format('d M Y, H:i') ?? $shop->updated_at->format('d M Y, H:i') }} WIB
                                 </p>
                             </div>
                         </div>
 
-                        <div class="p-4 rounded-xl bg-gray-50 border border-gray-200 text-xs text-gray-700 space-y-2 mb-6">
-                            <p class="font-bold text-gray-900 text-sm">Alasan Penangguhan Resmi oleh Administrator:</p>
-                            <p class="italic text-gray-800 bg-white p-3 rounded-lg border border-gray-100 text-xs font-medium">
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 space-y-2 mb-6">
+                            <p class="font-bold text-slate-900 text-sm">Alasan Penangguhan Resmi oleh Administrator:</p>
+                            <p class="italic text-slate-800 bg-white p-3 rounded-lg border border-slate-100 text-xs font-medium">
                                 "{{ $shop->suspension_reason ?: 'Toko ditangguhkan sementara untuk evaluasi kepatuhan operasional.' }}"
                             </p>
-                            <p class="text-gray-500 text-[11px] leading-relaxed pt-1">
+                            <p class="text-slate-500 text-[11px] leading-relaxed pt-1">
                                 Selama status penangguhan aktif, operasional toko dinonaktifkan sementara dan akses ke Seller Center dibatasi. Anda tidak dapat mengajukan toko baru selama penangguhan berlangsung.
                             </p>
                         </div>
 
-                        <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 text-xs space-y-2">
-                            <div><strong class="text-gray-700">Nama Toko:</strong> <span class="font-semibold text-gray-900">{{ $shop->name }}</span></div>
-                            <div><strong class="text-gray-700">Domain Slug:</strong> <span class="text-gray-800 font-medium">{{ $shop->slug }}</span></div>
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 text-xs space-y-2">
+                            <div><strong class="text-slate-700">Nama Toko:</strong> <span class="font-semibold text-slate-900">{{ $shop->name }}</span></div>
+                            <div><strong class="text-slate-700">Domain Slug:</strong> <span class="text-slate-800 font-medium">{{ $shop->slug }}</span></div>
                             @if ($shop->phone)
-                                <div><strong class="text-gray-700">Kontak Terdaftar:</strong> <span class="text-gray-800">{{ $shop->phone }}</span></div>
+                                <div><strong class="text-slate-700">Kontak Terdaftar:</strong> <span class="text-slate-800">{{ $shop->phone }}</span></div>
                             @endif
-                            <div><strong class="text-gray-700">Status Saat Ini:</strong> 
+                            <div><strong class="text-slate-700">Status Saat Ini:</strong> 
                                 <span class="px-2 py-0.5 rounded text-[11px] font-semibold border {{ $shop->status->badgeColor() }}">
                                     {{ $shop->status->label() }}
                                 </span>
                             </div>
                         </div>
 
-                        <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
-                            <p class="text-xs text-gray-500">
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                            <p class="text-xs text-slate-500">
                                 Butuh informasi lebih lanjut mengenai status ini?
                             </p>
                             <span class="text-xs font-bold text-orange-600">
@@ -120,10 +120,10 @@
                         @endif
 
                         <div class="mb-6">
-                            <h3 class="text-lg font-bold text-gray-900">
+                            <h3 class="text-lg font-bold text-slate-900">
                                 {{ $shop && $shop->isRejected() ? 'Perbaiki & Ajukan Ulang Toko' : 'Formulir Pendaftaran Toko Baru' }}
                             </h3>
-                            <p class="text-xs text-gray-500 mt-1">
+                            <p class="text-xs text-slate-500 mt-1">
                                 Mulai jualan di NexaMarket dengan mengisi informasi toko Anda secara akurat.
                             </p>
                         </div>
@@ -188,7 +188,14 @@
                                 <x-input-error class="mt-2" :messages="$errors->get('address')" />
                             </div>
 
-                            <div class="flex items-center justify-end pt-4 border-t border-gray-100">
+                            <div class="flex items-center justify-end pt-4 border-t border-slate-100">
+                                <x-primary-button>
+                                    {{ $shop && $shop->isRejected() ? __('Kirim Ulang Pengajuan') : __('Ajukan Toko Sekarang') }}
+                                </x-primary-button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                                 <x-primary-button>
                                     {{ $shop && $shop->isRejected() ? __('Kirim Ulang Pengajuan') : __('Ajukan Toko Sekarang') }}
                                 </x-primary-button>

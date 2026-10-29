@@ -108,6 +108,7 @@ class AdminPlatformManagementTest extends TestCase
         $response->assertSee('Kemeja Katun Premium');
         $response->assertSee('Rp 150.000');
         $response->assertSee('Kategori Pakaian');
+        $response->assertSee($product->thumbnail_url, false);
     }
 
     public function test_admin_can_view_orders_and_order_details(): void
@@ -157,6 +158,7 @@ class AdminPlatformManagementTest extends TestCase
         $responseShow->assertSee('ORD-ADM-TEST-01');
         $responseShow->assertSee('Sepatu Sneakers Kulit');
         $responseShow->assertSee('Tolong kirim rapi.');
+        $responseShow->assertSee($product->thumbnail_url, false);
     }
 
     public function test_admin_can_view_payments_and_refunds(): void

@@ -63,7 +63,7 @@
                             id="description" 
                             name="description" 
                             rows="4" 
-                            class="mt-1 block w-full border-slate-300 focus:border-emerald-700 focus:ring-emerald-700 rounded-xl text-xs sm:text-sm text-slate-900 leading-relaxed" 
+                            class="mt-1 block w-full border-slate-300 focus:border-orange-500 focus:ring-orange-500 rounded-xl text-xs sm:text-sm text-slate-900 leading-relaxed" 
                             required
                         >{{ old('description', $shop->description) }}</textarea>
                         <p class="text-[11px] text-slate-400 mt-1">Jelaskan jenis produk yang Anda tawarkan, komitmen pelayanan, dan keunggulan toko Anda.</p>

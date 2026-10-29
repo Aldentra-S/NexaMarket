@@ -58,7 +58,7 @@
                                             <div class="flex items-center space-x-3.5">
                                                 <img src="{{ $prod->thumbnail_url }}" alt="{{ $prod->name }}" class="w-10 h-10 rounded-xl object-cover border border-slate-200 shrink-0 bg-slate-50" />
                                                 <div>
-                                                    <a href="{{ route('seller.products.show', $prod) }}" class="font-bold text-slate-900 hover:text-emerald-700 transition">
+                                                    <a href="{{ route('seller.products.show', $prod) }}" class="font-bold text-slate-900 hover:text-orange-600 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded">
                                                         {{ $prod->name }}
                                                     </a>
                                                     <div class="text-[11px] text-slate-500 mt-0.5">
@@ -85,7 +85,7 @@
                                             @endif
                                         </td>
                                         <td class="py-4 px-6 text-right">
-                                            <a href="{{ route('products.show', $prod->slug) }}" target="_blank" class="text-xs font-semibold text-emerald-700 hover:text-emerald-800">
+                                            <a href="{{ route('products.show', $prod->slug) }}" target="_blank" class="text-xs font-semibold text-orange-600 hover:text-orange-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded">
                                                 Lihat di Etalase &rarr;
                                             </a>
                                         </td>

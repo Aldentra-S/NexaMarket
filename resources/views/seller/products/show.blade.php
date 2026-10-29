@@ -8,10 +8,10 @@
                 <p class="text-xs text-slate-500 mt-0.5">Rincian produk pada etalase toko Anda</p>
             </div>
             <div class="flex items-center space-x-2">
-                <a href="{{ route('seller.products.index') }}" class="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition">
+                <a href="{{ route('seller.products.index') }}" class="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-lg">
                     &larr; Daftar Produk
                 </a>
-                <a href="{{ route('seller.products.edit', $product) }}" class="inline-flex items-center px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold rounded-xl transition">
+                <a href="{{ route('seller.products.edit', $product) }}" class="inline-flex items-center px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold rounded-xl transition shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                     Edit Produk
                 </a>
             </div>
@@ -25,7 +25,7 @@
                 <div class="p-6 sm:p-8 space-y-6">
                     <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                         <div>
-                            <span class="text-xs font-semibold text-emerald-800">Produk Resmi Toko</span>
+                            <span class="text-xs font-semibold text-orange-700">Produk Resmi Toko</span>
                             <h3 class="text-2xl font-bold text-slate-900 mt-1">{{ $product->name }}</h3>
                             <p class="text-xs text-slate-500 mt-0.5">Slug: {{ $product->slug }}</p>
                         </div>
@@ -45,7 +45,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-100">
                         <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
                             <span class="text-[11px] font-semibold text-slate-500">Harga Jual Satuan</span>
-                            <div class="text-xl font-bold text-emerald-700 mt-1">{{ $product->formattedPrice() }}</div>
+                            <div class="text-xl font-bold text-orange-600 mt-1">{{ $product->formattedPrice() }}</div>
                         </div>
 
                         <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
@@ -66,17 +66,17 @@
                     <div class="pt-4 border-t border-slate-100">
                         <div class="flex items-center justify-between mb-3">
                             <h4 class="text-xs font-bold text-slate-700">Foto Produk ({{ $product->images->count() }})</h4>
-                            <a href="{{ route('seller.products.edit', $product) }}" class="text-xs text-emerald-700 hover:text-emerald-800 font-semibold">
+                            <a href="{{ route('seller.products.edit', $product) }}" class="text-xs text-orange-600 hover:text-orange-700 font-semibold">
                                 + Kelola Foto
                             </a>
                         </div>
                         @if ($product->images->isNotEmpty())
                             <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
                                 @foreach ($product->images as $img)
-                                    <div class="relative aspect-square rounded-xl overflow-hidden bg-slate-50 border {{ $img->is_primary ? 'border-emerald-600 ring-2 ring-emerald-200' : 'border-slate-200' }}">
+                                    <div class="relative aspect-square rounded-xl overflow-hidden bg-slate-50 border {{ $img->is_primary ? 'border-orange-500 ring-2 ring-orange-200' : 'border-slate-200' }}">
                                         <img src="{{ $img->url }}" alt="{{ $product->name }}" class="w-full h-full object-cover" />
                                         @if ($img->is_primary)
-                                            <span class="absolute bottom-1.5 left-1.5 bg-emerald-700 text-white text-[10px] font-semibold px-1.5 py-0.5 rounded">
+                                            <span class="absolute bottom-1.5 left-1.5 bg-orange-600 text-white text-[10px] font-semibold px-1.5 py-0.5 rounded shadow-xs">
                                                 Foto Utama
                                             </span>
                                         @endif

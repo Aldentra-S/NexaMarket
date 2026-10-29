@@ -263,7 +263,7 @@
                             @click="catOpen = !catOpen"
                             :aria-expanded="catOpen.toString()"
                             aria-haspopup="true"
-                            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-orange-50 text-orange-700 hover:bg-orange-100 transition font-bold"
+                            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-orange-50 text-orange-700 hover:bg-orange-100 transition font-bold focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
                         >
                             <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
