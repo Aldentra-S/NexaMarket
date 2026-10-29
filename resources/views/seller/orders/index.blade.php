@@ -28,31 +28,31 @@
             <div class="bg-white p-4 rounded-2xl border border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div class="flex flex-wrap items-center gap-1.5 text-xs">
                     <a href="{{ route('seller.orders.index') }}" 
-                       class="px-3.5 py-2 rounded-xl font-semibold transition {{ empty($currentStatus) ? 'bg-orange-600 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ empty($currentStatus) ? 'bg-orange-600 text-white' : 'bg-slate-50 text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                         Semua Status
                     </a>
                     <a href="{{ route('seller.orders.index', ['status' => 'paid']) }}" 
-                       class="px-3.5 py-2 rounded-xl font-semibold transition {{ $currentStatus === 'paid' ? 'bg-orange-600 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ $currentStatus === 'paid' ? 'bg-orange-600 text-white' : 'bg-slate-50 text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                         Perlu Diproses
                     </a>
                     <a href="{{ route('seller.orders.index', ['status' => 'processing']) }}" 
-                       class="px-3.5 py-2 rounded-xl font-semibold transition {{ $currentStatus === 'processing' ? 'bg-sky-700 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ $currentStatus === 'processing' ? 'bg-sky-700 text-white' : 'bg-slate-50 text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                         Sedang Diproses
                     </a>
                     <a href="{{ route('seller.orders.index', ['status' => 'shipped']) }}" 
-                       class="px-3.5 py-2 rounded-xl font-semibold transition {{ $currentStatus === 'shipped' ? 'bg-slate-800 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ $currentStatus === 'shipped' ? 'bg-slate-800 text-white' : 'bg-slate-50 text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                         Sedang Dikirim
                     </a>
                     <a href="{{ route('seller.orders.index', ['status' => 'completed']) }}" 
-                       class="px-3.5 py-2 rounded-xl font-semibold transition {{ $currentStatus === 'completed' ? 'bg-emerald-800 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ $currentStatus === 'completed' ? 'bg-emerald-800 text-white' : 'bg-slate-50 text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                         Selesai
                     </a>
                     <a href="{{ route('seller.orders.index', ['status' => 'pending']) }}" 
-                       class="px-3.5 py-2 rounded-xl font-semibold transition {{ $currentStatus === 'pending' ? 'bg-amber-700 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ $currentStatus === 'pending' ? 'bg-amber-700 text-white' : 'bg-slate-50 text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                         Belum Dibayar
                     </a>
                     <a href="{{ route('seller.orders.index', ['status' => 'cancelled']) }}" 
-                       class="px-3.5 py-2 rounded-xl font-semibold transition {{ $currentStatus === 'cancelled' ? 'bg-rose-700 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ $currentStatus === 'cancelled' ? 'bg-rose-700 text-white' : 'bg-slate-50 text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                         Dibatalkan
                     </a>
                 </div>
@@ -109,7 +109,7 @@
                                         </td>
                                         <td class="py-4 px-6 text-center">
                                             <a href="{{ route('seller.orders.show', $shopOrder) }}" 
-                                               class="inline-flex items-center px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition">
+                                               class="inline-flex items-center px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2">
                                                 Kelola &rarr;
                                             </a>
                                         </td>
@@ -132,7 +132,15 @@
                             </svg>
                         </div>
                         <h4 class="text-sm font-semibold text-slate-800">Belum Ada Pesanan</h4>
-                        <p class="text-xs text-slate-500 mt-1">Belum ada pesanan yang sesuai dengan filter yang dipilih saat ini.</p>
+                        <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">Belum ada pesanan yang sesuai dengan filter yang dipilih saat ini. Tingkatkan transaksi toko Anda dengan mengelola produk atau melihat katalog publik.</p>
+                        <div class="mt-4 flex flex-wrap items-center justify-center gap-2.5">
+                            <a href="{{ route('seller.products.index') }}" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold transition shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2">
+                                <span>Kelola Produk Toko</span>
+                            </a>
+                            <a href="{{ route('products.index') }}" target="_blank" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2">
+                                <span>Lihat Katalog Publik</span>
+                            </a>
+                        </div>
                     </div>
                 @endif
             </div>

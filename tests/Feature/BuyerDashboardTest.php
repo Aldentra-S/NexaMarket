@@ -231,4 +231,49 @@ class BuyerDashboardTest extends TestCase
         $response->assertSee(route('seller.dashboard'));
         $response->assertDontSee('Daftar Menjadi Penjual');
     }
+
+    public function test_buyer_dashboard_displays_zero_pending_orders_without_fallback_twelve_or_fake_label(): void
+    {
+        $buyer = User::factory()->create(['role' => UserRole::BUYER]);
+
+        $response = $this->actingAs($buyer)->get(route('dashboard'));
+
+        $response->assertOk();
+        $response->assertSee('Menunggu Pembayaran');
+        $response->assertDontSee('Produk Favorit');
+        $response->assertDontSee('Produk tersimpan');
+        $response->assertViewHas('pendingOrdersCount', 0);
+    }
+
+    public function test_buyer_dashboard_featured_products_do_not_contain_fake_ratings_or_arbitrary_loop_badges(): void
+    {
+        $buyer = User::factory()->create(['role' => UserRole::BUYER]);
+
+        $seller = User::factory()->create(['role' => UserRole::BUYER]);
+        $shop = Shop::factory()->approved()->create(['user_id' => $seller->id]);
+        $category = \App\Models\Category::create([
+            'name' => 'Kategori Pilihan',
+            'slug' => 'kategori-pilihan',
+            'is_active' => true,
+        ]);
+
+        \App\Models\Product::factory()->create([
+            'shop_id' => $shop->id,
+            'category_id' => $category->id,
+            'name' => 'Laptop Ultra Spesial',
+            'slug' => 'laptop-ultra-spesial',
+            'price' => 15000000,
+            'status' => \App\Enums\ProductStatus::PUBLISHED,
+        ]);
+
+        $response = $this->actingAs($buyer)->get(route('dashboard'));
+
+        $response->assertOk();
+        $response->assertSee('Laptop Ultra Spesial');
+        $response->assertSee('Kategori Pilihan');
+        $response->assertDontSee('Official Store');
+        $response->assertDontSee('Best Seller');
+        $response->assertDontSee('Diskon');
+        $response->assertDontSee('Trending');
+    }
 }

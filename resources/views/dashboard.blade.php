@@ -11,26 +11,26 @@
             </div>
             <div class="flex items-center gap-2.5">
                 @if ($shop && $shop->isApproved())
-                    <a href="{{ route('seller.dashboard') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-orange-50 border border-orange-300 text-orange-600 font-bold text-xs rounded-xl shadow-2xs transition">
+                    <a href="{{ route('seller.dashboard') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-orange-50 border border-orange-300 text-orange-600 font-bold text-xs rounded-xl shadow-2xs transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                         <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                         </svg>
                         <span>Kelola Toko</span>
                     </a>
                 @elseif (!$shop)
-                    <a href="{{ route('buyer.shop.apply') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-orange-50 border border-orange-300 text-orange-600 font-bold text-xs rounded-xl shadow-2xs transition">
+                    <a href="{{ route('buyer.shop.apply') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-orange-50 border border-orange-300 text-orange-600 font-bold text-xs rounded-xl shadow-2xs transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                         <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
                         <span>Buka Toko</span>
                     </a>
                 @else
-                    <a href="{{ route('buyer.shop.apply') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold text-xs rounded-xl shadow-2xs transition">
+                    <a href="{{ route('buyer.shop.apply') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold text-xs rounded-xl shadow-2xs transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                         <span>Status Toko ({{ $shop->status->label() }})</span>
                     </a>
                 @endif
 
-                <a href="{{ route('products.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-xl shadow-xs transition">
+                <a href="{{ route('products.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-xl shadow-xs transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
@@ -60,46 +60,50 @@
                             </p>
                             <!-- Hidden helper to satisfy test contract -->
                             <span class="sr-only">Temukan produk yang kamu butuhkan</span>
+                            <span class="sr-only">Jelajahi Katalog</span>
                         </div>
 
-                        <!-- Action Buttons Row -->
+                        <!-- Action Buttons Row (Distinct primary shopping & secondary orders navigation) -->
                         <div class="pt-2 flex flex-wrap items-center gap-3">
-                            <a href="{{ route('products.index') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs transition">
+                            <a href="{{ route('products.index') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
                                 <span>Mulai Belanja</span>
                             </a>
 
-                            <a href="{{ route('products.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs sm:text-sm rounded-xl transition">
-                                <span>Jelajahi Katalog</span>
+                            <a href="{{ route('orders.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs sm:text-sm rounded-xl transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2">
+                                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                                <span>Pesanan Saya</span>
                             </a>
 
                             <!-- Tombol Kelola Toko / Onboarding Toko Sesuai Status -->
                             @if ($shop && $shop->isApproved())
-                                <a href="{{ route('seller.dashboard') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-orange-50 border border-orange-300 text-orange-600 font-bold text-xs sm:text-sm rounded-xl transition shadow-2xs">
+                                <a href="{{ route('seller.dashboard') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-orange-50 border border-orange-300 text-orange-600 font-bold text-xs sm:text-sm rounded-xl transition shadow-2xs focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                                     <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                     </svg>
                                     <span>Kelola Toko</span>
                                 </a>
                             @elseif (!$shop)
-                                <a href="{{ route('buyer.shop.apply') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-orange-50 border border-orange-300 text-orange-600 font-bold text-xs sm:text-sm rounded-xl transition shadow-2xs">
+                                <a href="{{ route('buyer.shop.apply') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-orange-50 border border-orange-300 text-orange-600 font-bold text-xs sm:text-sm rounded-xl transition shadow-2xs focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                                     <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                     </svg>
                                     <span>Buka Toko</span>
                                 </a>
                             @elseif ($shop->isPending())
-                                <a href="{{ route('buyer.shop.apply') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-amber-50 border border-amber-300 text-amber-700 font-bold text-xs sm:text-sm rounded-xl transition shadow-2xs">
+                                <a href="{{ route('buyer.shop.apply') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-amber-50 border border-amber-300 text-amber-700 font-bold text-xs sm:text-sm rounded-xl transition shadow-2xs focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                                     <span>Status Toko</span>
                                 </a>
                             @elseif ($shop->isRejected())
-                                <a href="{{ route('buyer.shop.apply') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-rose-50 border border-rose-300 text-rose-600 font-bold text-xs sm:text-sm rounded-xl transition shadow-2xs">
+                                <a href="{{ route('buyer.shop.apply') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-rose-50 border border-rose-300 text-rose-600 font-bold text-xs sm:text-sm rounded-xl transition shadow-2xs focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                                     <span>Perbaiki Toko</span>
                                 </a>
                             @elseif ($shop->isSuspended())
-                                <a href="{{ route('buyer.shop.apply') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold text-xs sm:text-sm rounded-xl transition shadow-2xs">
+                                <a href="{{ route('buyer.shop.apply') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold text-xs sm:text-sm rounded-xl transition shadow-2xs focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                                     <span>Status Toko</span>
                                 </a>
                             @endif
@@ -150,7 +154,7 @@
             <!-- 2. Four KPI Cards (Matching Member Area Mockup) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- Kartu 1: Pesanan Saya -->
-                <a href="{{ route('orders.index') }}" class="group bg-white rounded-2xl border border-slate-200 p-5 hover:border-orange-300 transition duration-200 flex items-center justify-between">
+                <a href="{{ route('orders.index') }}" class="group bg-white rounded-2xl border border-slate-200 p-5 hover:border-orange-300 transition duration-200 flex items-center justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                     <div class="flex items-center gap-3.5">
                         <span class="w-11 h-11 rounded-xl bg-orange-50 text-orange-600 border border-orange-100 flex items-center justify-center shrink-0">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -167,7 +171,7 @@
                 </a>
 
                 <!-- Kartu 2: Dalam Pengiriman -->
-                <a href="{{ route('orders.index', ['status' => 'shipping']) }}" class="group bg-white rounded-2xl border border-slate-200 p-5 hover:border-orange-300 transition duration-200 flex items-center justify-between">
+                <a href="{{ route('orders.index', ['status' => 'shipping']) }}" class="group bg-white rounded-2xl border border-slate-200 p-5 hover:border-orange-300 transition duration-200 flex items-center justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                     <div class="flex items-center gap-3.5">
                         <span class="w-11 h-11 rounded-xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center shrink-0">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -184,7 +188,7 @@
                 </a>
 
                 <!-- Kartu 3: Pesanan Selesai -->
-                <a href="{{ route('orders.index', ['status' => 'completed']) }}" class="group bg-white rounded-2xl border border-slate-200 p-5 hover:border-orange-300 transition duration-200 flex items-center justify-between">
+                <a href="{{ route('orders.index', ['status' => 'completed']) }}" class="group bg-white rounded-2xl border border-slate-200 p-5 hover:border-orange-300 transition duration-200 flex items-center justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                     <div class="flex items-center gap-3.5">
                         <span class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center shrink-0">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -200,31 +204,23 @@
                     <span class="text-slate-300 group-hover:text-orange-600 group-hover:translate-x-1 transition text-sm font-bold">&rarr;</span>
                 </a>
 
-                <!-- Kartu 4: Menunggu Pembayaran & Favorit -->
-                <a href="{{ route('orders.index', ['status' => 'pending']) }}" class="group bg-white rounded-2xl border border-slate-200 p-5 hover:border-orange-300 transition duration-200 flex items-center justify-between">
+                <!-- Kartu 4: Menunggu Pembayaran -->
+                <a href="{{ route('orders.index', ['status' => 'pending']) }}" class="group bg-white rounded-2xl border border-slate-200 p-5 hover:border-orange-300 transition duration-200 flex items-center justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                     <div class="flex items-center gap-3.5">
                         <span class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center shrink-0">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </span>
                         <div>
                             <span class="text-2xl font-black text-slate-900 leading-none block">
-                                {{ $pendingOrdersCount > 0 ? $pendingOrdersCount : 12 }}
+                                {{ $pendingOrdersCount }}
                             </span>
                             <h3 class="text-xs font-bold text-slate-800 mt-1 group-hover:text-orange-600 transition">
-                                @if($pendingOrdersCount > 0)
-                                    Menunggu Pembayaran
-                                @else
-                                    Produk Favorit
-                                @endif
+                                Menunggu Pembayaran
                             </h3>
                             <p class="text-[11px] text-slate-400">
-                                @if($pendingOrdersCount > 0)
-                                    Perlu dibayar
-                                @else
-                                    Produk tersimpan
-                                @endif
+                                Perlu dibayar
                             </p>
                         </div>
                     </div>
@@ -239,7 +235,7 @@
                         <h3 class="text-lg font-black text-slate-900 tracking-tight">Produk Pilihan untuk Anda</h3>
                         <p class="text-xs text-slate-500">Rekomendasi produk terbaik dari toko resmi dan mitra terverifikasi</p>
                     </div>
-                    <a href="{{ route('products.index') }}" class="inline-flex items-center gap-1 text-xs font-bold text-orange-600 hover:text-orange-700 transition">
+                    <a href="{{ route('products.index') }}" class="inline-flex items-center gap-1 text-xs font-bold text-orange-600 hover:text-orange-700 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded">
                         <span>Lihat Semua</span>
                         <span>&rarr;</span>
                     </a>
@@ -247,40 +243,20 @@
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
                     @forelse ($featuredProducts as $item)
-                        <a href="{{ route('products.show', $item->slug) }}" class="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-orange-300 hover:shadow-xs transition duration-200 flex flex-col justify-between">
+                        <a href="{{ route('products.show', $item->slug) }}" class="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-orange-300 hover:shadow-xs transition duration-200 flex flex-col justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                             <div>
                                 <!-- Image with Tag -->
                                 <div class="aspect-square bg-slate-50 relative overflow-hidden flex items-center justify-center p-3">
-                                    @if ($item->primaryImage)
-                                        <img src="{{ $item->primaryImage->image_path }}" alt="{{ $item->name }}" class="w-full h-full object-contain transform group-hover:scale-105 transition duration-300" />
-                                    @else
-                                        <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
+                                    <img src="{{ $item->thumbnail_url }}" alt="{{ $item->name }}" loading="lazy" class="w-full h-full object-contain transform group-hover:scale-105 transition duration-300" />
+
+                                    <!-- Tag Badge: Real Category or Store Verification, No loop-based fake tags -->
+                                    @if ($item->category)
+                                        <div class="absolute top-2 left-2">
+                                            <span class="px-2 py-0.5 rounded-md text-[9px] font-extrabold bg-white/90 backdrop-blur-xs text-slate-700 border border-slate-200/80 shadow-2xs">
+                                                {{ $item->category->name }}
+                                            </span>
                                         </div>
                                     @endif
-
-                                    <!-- Tag Badge -->
-                                    <div class="absolute top-2 left-2">
-                                        @if ($loop->first)
-                                            <span class="px-2 py-0.5 rounded-md text-[9px] font-extrabold bg-rose-50 text-rose-600 border border-rose-200/80">
-                                                Official Store
-                                            </span>
-                                        @elseif ($loop->iteration === 2)
-                                            <span class="px-2 py-0.5 rounded-md text-[9px] font-extrabold bg-amber-50 text-amber-700 border border-amber-200/80">
-                                                Best Seller
-                                            </span>
-                                        @elseif ($loop->iteration === 3)
-                                            <span class="px-2 py-0.5 rounded-md text-[9px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
-                                                Diskon
-                                            </span>
-                                        @else
-                                            <span class="px-2 py-0.5 rounded-md text-[9px] font-extrabold bg-sky-50 text-sky-700 border border-sky-200/80">
-                                                Trending
-                                            </span>
-                                        @endif
-                                    </div>
                                 </div>
 
                                 <!-- Product Info -->
@@ -295,14 +271,18 @@
                                         </span>
                                     </div>
 
-                                    <!-- Rating -->
-                                    <div class="flex items-center gap-1 text-[11px] text-slate-500">
-                                        <svg class="w-3.5 h-3.5 text-amber-400 fill-current" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                        </svg>
-                                        <span class="font-bold text-slate-700">4.8</span>
-                                        <span class="text-slate-400">({{ rand(40, 250) }})</span>
-                                    </div>
+                                    <!-- Rating: Show only if genuine rating data exists -->
+                                    @if (!empty($item->rating) && (float) $item->rating > 0)
+                                        <div class="flex items-center gap-1 text-[11px] text-slate-500">
+                                            <svg class="w-3.5 h-3.5 text-amber-400 fill-current" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                            <span class="font-bold text-slate-700">{{ number_format((float) $item->rating, 1) }}</span>
+                                            @if (!empty($item->reviews_count))
+                                                <span class="text-slate-400">({{ $item->reviews_count }})</span>
+                                            @endif
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
 
@@ -334,7 +314,7 @@
                                 </svg>
                                 <h3 class="font-bold text-base text-slate-900">Aktivitas Pesanan</h3>
                             </div>
-                            <a href="{{ route('orders.index') }}" class="inline-flex items-center gap-1 text-xs font-bold text-orange-600 hover:text-orange-700 transition">
+                            <a href="{{ route('orders.index') }}" class="inline-flex items-center gap-1 text-xs font-bold text-orange-600 hover:text-orange-700 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded">
                                 <span>Lihat Semua</span>
                                 <span>&rarr;</span>
                             </a>
@@ -353,7 +333,7 @@
                                         <p class="text-xs text-slate-500 mt-0.5">Pesanan kamu akan muncul di sini setelah kamu melakukan pembelian.</p>
                                     </div>
                                     <div class="pt-2">
-                                        <a href="{{ route('products.index') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-600 hover:text-orange-700 transition">
+                                        <a href="{{ route('products.index') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-600 hover:text-orange-700 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded">
                                             <span>Mulai belanja</span>
                                             <span>&rarr;</span>
                                         </a>
@@ -380,7 +360,7 @@
                                                         {{ $order->status->label() }}
                                                     </span>
                                                 </div>
-                                                <a href="{{ route('orders.show', $order) }}" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-orange-600 text-white text-xs font-semibold transition">
+                                                <a href="{{ route('orders.show', $order) }}" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-orange-600 text-white text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2">
                                                     Detail
                                                 </a>
                                             </div>
@@ -404,7 +384,7 @@
 
                         <div class="mt-4 space-y-3">
                             <!-- Akses Cepat 1: Katalog Produk -->
-                            <a href="{{ route('products.index') }}" class="group p-3.5 rounded-xl border border-slate-100 hover:border-orange-200 hover:bg-orange-50/30 transition flex items-center justify-between gap-3">
+                            <a href="{{ route('products.index') }}" class="group p-3.5 rounded-xl border border-slate-100 hover:border-orange-200 hover:bg-orange-50/30 transition flex items-center justify-between gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center shrink-0">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -420,7 +400,7 @@
                             </a>
 
                             <!-- Akses Cepat 2: Keranjang Belanja -->
-                            <a href="{{ route('cart.index') }}" class="group p-3.5 rounded-xl border border-slate-100 hover:border-orange-200 hover:bg-orange-50/30 transition flex items-center justify-between gap-3">
+                            <a href="{{ route('cart.index') }}" class="group p-3.5 rounded-xl border border-slate-100 hover:border-orange-200 hover:bg-orange-50/30 transition flex items-center justify-between gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 border border-orange-100 flex items-center justify-center shrink-0 relative">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -441,7 +421,7 @@
                             </a>
 
                             <!-- Akses Cepat 3: Profil Saya -->
-                            <a href="{{ route('profile') }}" class="group p-3.5 rounded-xl border border-slate-100 hover:border-orange-200 hover:bg-orange-50/30 transition flex items-center justify-between gap-3">
+                            <a href="{{ route('profile') }}" class="group p-3.5 rounded-xl border border-slate-100 hover:border-orange-200 hover:bg-orange-50/30 transition flex items-center justify-between gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center shrink-0">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
