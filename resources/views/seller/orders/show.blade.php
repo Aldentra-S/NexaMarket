@@ -183,7 +183,7 @@
                                         @method('PATCH')
                                         <input type="hidden" name="status" value="shipped">
                                         <button type="submit" 
-                                                class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-sky-700 hover:bg-sky-800 text-white text-xs font-semibold rounded-xl transition">
+                                                class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white text-xs font-bold rounded-xl transition shadow-xs">
                                             Tandai Telah Dikirim &rarr;
                                         </button>
                                     </form>

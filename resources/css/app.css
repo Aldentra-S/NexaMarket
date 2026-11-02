@@ -13,26 +13,126 @@
         -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Custom slender scrollbar */
+    body {
+        background-color: #F8E8E4;
+        background-image: linear-gradient(
+            115deg,
+            #F8E8E4 0%,
+            #F7F1EF 25%,
+            #F5F6F8 52%,
+            #EDF5F5 76%,
+            #E2F4EF 100%
+        );
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: #172033;
+    }
+
+    ::selection {
+        background-color: #F26A4B;
+        color: #ffffff;
+    }
+
+    html.dark body,
+    body.dark {
+        background-color: #0B0F19;
+        background-image: linear-gradient(
+            115deg,
+            #170F14 0%,
+            #13101A 25%,
+            #0B0F19 52%,
+            #0A141A 76%,
+            #071719 100%
+        );
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: #F8FAFC;
+    }
+
+    /* Slender modern scrollbar */
     ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+        width: 7px;
+        height: 7px;
     }
     ::-webkit-scrollbar-track {
-        background: #f1f5f9;
+        background: #F1F4F8;
+    }
+    .dark ::-webkit-scrollbar-track {
+        background: #0B0F19;
     }
     ::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 4px;
+        background: #CBD5E1;
+        border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+        background: #27354F;
     }
     ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8;
+        background: #94A3B8;
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+        background: #3B4D6E;
     }
 }
 
 @layer utilities {
+    /* Full-Surface Pastel Gradient Canvas */
+    .bg-pastel-canvas {
+        background-color: #F8E8E4;
+        background-image: linear-gradient(
+            115deg,
+            #F8E8E4 0%,
+            #F7F1EF 25%,
+            #F5F6F8 52%,
+            #EDF5F5 76%,
+            #E2F4EF 100%
+        );
+    }
+
+    .dark .bg-pastel-canvas {
+        background-color: #0B0F19;
+        background-image: linear-gradient(
+            115deg,
+            #170F14 0%,
+            #13101A 25%,
+            #0B0F19 52%,
+            #0A141A 76%,
+            #071719 100%
+        );
+    }
+
     /* Focus visible standard for accessibility */
     .focus-ring {
-        @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2;
+        @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F26A4B] focus-visible:ring-offset-2;
+    }
+
+    /* Hero Premium Warm Coral Multi-Layer Gradient */
+    .hero-premium-surface {
+        background-color: #E95735;
+        background-image: linear-gradient(125deg, #E95735 0%, #F26A4B 38%, #FF8068 72%, #FFA694 100%);
+    }
+
+    .dark .hero-premium-surface {
+        background-color: #832B16;
+        background-image: linear-gradient(125deg, #461206 0%, #832B16 38%, #C74020 72%, #E95735 100%);
+    }
+
+    /* Ambient card surfaces */
+    .surface-card {
+        @apply bg-white dark:bg-slate-900 border border-[#E8EAF0] dark:border-slate-800 rounded-2xl shadow-card transition-shadow;
+    }
+
+    .surface-card-hover {
+        @apply bg-white dark:bg-slate-900 border border-[#E8EAF0] dark:border-slate-800 rounded-2xl shadow-card hover:shadow-card-hover hover:border-coral-300 dark:hover:border-coral-800 transition-all;
+    }
+
+    .surface-card-subtle {
+        @apply bg-[#F7F8FA] dark:bg-slate-900/60 border border-[#E8EAF0] dark:border-slate-800/80 rounded-2xl;
+    }
+
+    .surface-elevated {
+        @apply bg-white dark:bg-slate-900 border border-[#E8EAF0] dark:border-slate-800 rounded-3xl shadow-elevated;
     }
 }

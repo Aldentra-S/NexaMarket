@@ -11,60 +11,60 @@
         <!-- 4 KPI Headline Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- 1. Total Pengguna -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center shrink-0">
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-[#E8EAF0] dark:border-slate-800 shadow-soft flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 border border-sky-100 dark:border-sky-800/60 flex items-center justify-center shrink-0">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                 </div>
                 <div class="min-w-0 flex-1">
-                    <p class="text-xs font-semibold text-slate-500">Total Pengguna Terdaftar</p>
-                    <p class="text-2xl font-black text-slate-900 tracking-tight mt-0.5">
+                    <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Total Pengguna Terdaftar</p>
+                    <p class="text-2xl font-black text-slate-900 dark:text-white tracking-tight mt-0.5">
                         {{ number_format($totalUsers, 0, ',', '.') }}
                     </p>
                 </div>
             </div>
 
             <!-- 2. Toko Aktif -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center shrink-0">
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-[#E8EAF0] dark:border-slate-800 shadow-soft flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800/60 flex items-center justify-center shrink-0">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                 </div>
                 <div class="min-w-0 flex-1">
-                    <p class="text-xs font-semibold text-slate-500">Toko Aktif</p>
-                    <p class="text-2xl font-black text-slate-900 tracking-tight mt-0.5">
+                    <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Toko Aktif</p>
+                    <p class="text-2xl font-black text-slate-900 dark:text-white tracking-tight mt-0.5">
                         {{ number_format($approvedShopsCount, 0, ',', '.') }}
                     </p>
                 </div>
             </div>
 
             <!-- 3. Total Produk -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center shrink-0">
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-[#E8EAF0] dark:border-slate-800 shadow-soft flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-800/60 flex items-center justify-center shrink-0">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                     </svg>
                 </div>
                 <div class="min-w-0 flex-1">
-                    <p class="text-xs font-semibold text-slate-500">Total Produk</p>
-                    <p class="text-2xl font-black text-slate-900 tracking-tight mt-0.5">
+                    <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Total Produk</p>
+                    <p class="text-2xl font-black text-slate-900 dark:text-white tracking-tight mt-0.5">
                         {{ number_format($totalProducts, 0, ',', '.') }}
                     </p>
                 </div>
             </div>
 
             <!-- 4. GMV Platform -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center shrink-0">
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-[#E8EAF0] dark:border-slate-800 shadow-soft flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 border border-orange-100 dark:border-orange-800/60 flex items-center justify-center shrink-0">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
                 <div class="min-w-0 flex-1">
-                    <p class="text-xs font-semibold text-slate-500">Gross Merchandise Value (GMV)</p>
-                    <p class="text-2xl font-black text-slate-900 tracking-tight mt-0.5">
+                    <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Gross Merchandise Value (GMV)</p>
+                    <p class="text-2xl font-black text-slate-900 dark:text-white tracking-tight mt-0.5">
                         Rp {{ number_format($totalGmv, 0, ',', '.') }}
                     </p>
                 </div>
@@ -74,21 +74,21 @@
         <!-- Middle Section: Performa Transaksi & Status Toko -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <!-- Left: Performa Transaksi (Chart) -->
-            <div class="lg:col-span-8 bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 space-y-4">
+            <div class="lg:col-span-8 bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-3xl border border-[#E8EAF0] dark:border-slate-800 shadow-card space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div>
-                        <h2 class="text-sm font-bold text-slate-900">Performa Transaksi</h2>
+                        <h2 class="text-sm font-bold text-slate-900 dark:text-white">Performa Transaksi</h2>
                         <p class="text-xs text-slate-400 mt-0.5">Tren riil nilai transaksi (GMV) dan volume pesanan 6 bulan terakhir</p>
                     </div>
                     <!-- Chart Legend -->
                     <div class="flex items-center gap-4 text-xs font-semibold">
                         <div class="flex items-center gap-1.5">
                             <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
-                            <span class="text-slate-600">GMV (Rp)</span>
+                            <span class="text-slate-600 dark:text-slate-300">GMV (Rp)</span>
                         </div>
                         <div class="flex items-center gap-1.5">
                             <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                            <span class="text-slate-600">Pesanan</span>
+                            <span class="text-slate-600 dark:text-slate-300">Pesanan</span>
                         </div>
                     </div>
                 </div>
@@ -195,11 +195,11 @@
                 $approvedPercent = $totalShops > 0 ? round(($approvedShopsCount / $totalShops) * 100, 1) : 0;
                 $suspendedPercent = $totalShops > 0 ? round(($suspendedShopsCount / $totalShops) * 100, 1) : 0;
             @endphp
-            <div class="lg:col-span-4 bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 flex flex-col justify-between">
+            <div class="lg:col-span-4 bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-3xl border border-[#E8EAF0] dark:border-slate-800 shadow-card flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between">
-                        <h2 class="text-sm font-bold text-slate-900">Status Toko</h2>
-                        <a href="{{ route('admin.shops.index') }}" class="text-xs font-semibold text-orange-600 hover:text-orange-700 transition">
+                        <h2 class="text-sm font-bold text-slate-900 dark:text-white">Status Toko</h2>
+                        <a href="{{ route('admin.shops.index') }}" class="text-xs font-semibold text-coral-600 hover:text-coral-700 dark:text-coral-400 transition">
                             Lihat semua &rarr;
                         </a>
                     </div>
@@ -272,21 +272,21 @@
                     </div>
                 </div>
 
-                <div class="pt-4 border-t border-slate-100 mt-6 flex items-center justify-between text-xs text-slate-500">
+                <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-6 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                     <span>Total Kemitraan Toko</span>
-                    <span class="font-bold text-slate-900">{{ $totalShops }} toko</span>
+                    <span class="font-bold text-slate-900 dark:text-white">{{ $totalShops }} toko</span>
                 </div>
             </div>
         </div>
 
         <!-- Bottom Section: Aktivitas Terbaru -->
-        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-            <div class="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-[#E8EAF0] dark:border-slate-800 overflow-hidden shadow-card">
+            <div class="p-5 sm:p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                 <div>
-                    <h2 class="text-sm font-bold text-slate-900">Aktivitas Terbaru</h2>
-                    <p class="text-xs text-slate-400 mt-0.5">Log peristiwa sistem, permohonan toko, dan transaksi terakhir</p>
+                    <h2 class="text-sm font-bold text-slate-900 dark:text-white">Aktivitas Terbaru</h2>
+                    <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Log peristiwa sistem, permohonan toko, dan transaksi terakhir</p>
                 </div>
-                <a href="{{ route('admin.orders.index') }}" class="text-xs font-semibold text-orange-600 hover:text-orange-700 transition">
+                <a href="{{ route('admin.orders.index') }}" class="text-xs font-semibold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition">
                     Lihat semua &rarr;
                 </a>
             </div>
@@ -294,7 +294,7 @@
             @if(isset($recentActivities) && $recentActivities->isNotEmpty())
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
-                        <thead class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-100">
+                        <thead class="bg-slate-50/80 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800">
                             <tr>
                                 <th class="py-3.5 px-6">Aktivitas</th>
                                 <th class="py-3.5 px-6">Pengguna</th>
@@ -302,12 +302,12 @@
                                 <th class="py-3.5 px-6 text-center">Status</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100">
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                             @foreach($recentActivities as $item)
-                                <tr class="hover:bg-slate-50/70 transition">
+                                <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition">
                                     <td class="py-4 px-6">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-xl {{ $item['type'] === 'shop' ? 'bg-amber-50 text-amber-600 border border-amber-100' : 'bg-sky-50 text-sky-600 border border-sky-100' }} flex items-center justify-center shrink-0">
+                                            <div class="w-8 h-8 rounded-xl {{ $item['type'] === 'shop' ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-900/50' : 'bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 border border-sky-100 dark:border-sky-900/50' }} flex items-center justify-center shrink-0">
                                                 @if($item['type'] === 'shop')
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -319,20 +319,20 @@
                                                 @endif
                                             </div>
                                             <div>
-                                                <a href="{{ $item['link'] }}" class="font-bold text-slate-800 hover:text-orange-600 transition">
+                                                <a href="{{ $item['link'] }}" class="font-bold text-slate-800 dark:text-slate-200 hover:text-orange-600 dark:hover:text-orange-400 transition">
                                                     {{ $item['title'] }}
                                                 </a>
-                                                <p class="text-[11px] text-slate-400 capitalize">{{ $item['type'] }} event</p>
+                                                <p class="text-[11px] text-slate-400 dark:text-slate-500 capitalize">{{ $item['type'] }} event</p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="py-4 px-6 text-slate-700">
-                                        <p class="font-semibold text-slate-800">{{ $item['user_name'] }}</p>
-                                        <span class="inline-block mt-0.5 px-1.5 py-0.2 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 uppercase">
+                                    <td class="py-4 px-6 text-slate-700 dark:text-slate-300">
+                                        <p class="font-semibold text-slate-800 dark:text-slate-200">{{ $item['user_name'] }}</p>
+                                        <span class="inline-block mt-0.5 px-1.5 py-0.2 rounded text-[10px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 uppercase">
                                             {{ $item['user_role'] }}
                                         </span>
                                     </td>
-                                    <td class="py-4 px-6 text-slate-500 text-[11px]">
+                                    <td class="py-4 px-6 text-slate-500 dark:text-slate-400 text-[11px]">
                                         {{ $item['created_at']->format('d M Y, H:i') }}
                                     </td>
                                     <td class="py-4 px-6 text-center">
@@ -347,13 +347,13 @@
                 </div>
             @else
                 <div class="py-12 px-6 text-center">
-                    <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 flex items-center justify-center mx-auto mb-3">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                     </div>
-                    <p class="text-xs font-semibold text-slate-700">Belum ada aktivitas terekam</p>
-                    <p class="text-[11px] text-slate-400 mt-1 max-w-sm mx-auto">
+                    <p class="text-xs font-semibold text-slate-700 dark:text-slate-300">Belum ada aktivitas terekam</p>
+                    <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-1 max-w-sm mx-auto">
                         Ketika mitra mengajukan toko baru atau pembeli menyelesaikan checkout pesanan, aktivitas sistem akan otomatis muncul di sini.
                     </p>
                 </div>

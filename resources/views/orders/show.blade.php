@@ -3,7 +3,7 @@
         Detail Pesanan {{ $order->order_number }} | NexaMarket
     </x-slot>
 
-    <div class="py-8 sm:py-10 bg-slate-50 min-h-[calc(100vh-18rem)]">
+    <div class="py-8 sm:py-10 min-h-[calc(100vh-18rem)]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <!-- Breadcrumbs -->
             <nav class="flex items-center text-xs text-slate-500 gap-2">
@@ -209,47 +209,6 @@
                                         <span x-text="isLoading ? 'Menyiapkan Pembayaran...' : 'Bayar via Midtrans Snap (Sandbox)'"></span>
                                     </button>
                                 </div>
-
-                                @if(! app()->isProduction() && config('app.env') !== 'production' && ! config('services.midtrans.is_production'))
-                                    <!-- Success Simulation -->
-                                    <form action="{{ route('orders.payment.simulate', $order) }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="result" value="success">
-                                        <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-semibold text-xs transition flex items-center justify-center gap-2">
-                                            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                            </svg>
-                                            Simulasi Cepat Sukses (Lokal QA)
-                                        </button>
-                                    </form>
-
-                                    <!-- Failure and Expired Testing Controls -->
-                                    <div class="pt-2 border-t border-slate-100 space-y-2">
-                                        <span class="text-xs font-semibold text-slate-500 block text-center">
-                                            Opsi Uji Coba Skenario (QA Mock)
-                                        </span>
-                                        <div class="grid grid-cols-2 gap-2">
-                                            <form action="{{ route('orders.payment.simulate', $order) }}" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="result" value="failed">
-                                                <button type="submit" class="w-full py-2 px-3 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 text-xs font-medium transition text-center">
-                                                    Simulasi Gagal
-                                                </button>
-                                            </form>
-                                            <form action="{{ route('orders.payment.simulate', $order) }}" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="result" value="expired">
-                                                <button type="submit" class="w-full py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 text-xs font-medium transition text-center">
-                                                    Simulasi Expired
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-
-                                    <p class="text-[11px] text-slate-400 text-center leading-tight">
-                                        * Simulasi pembayaran lokal NexaMarket (tanpa gateway uang riil).
-                                    </p>
-                                @endif
                             </div>
                         @elseif($order->isPaid())
                             <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-start gap-3">

@@ -21,10 +21,13 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans text-slate-900 antialiased bg-slate-50 min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md px-4 sm:px-0">
+<body class="font-sans text-slate-900 dark:text-white antialiased min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
+    <!-- Soft Gradient Ambient Background System (Auth Mode: Centered Framing) -->
+    <x-ambient-background variant="auth" />
+
+    <div class="sm:mx-auto sm:w-full sm:max-w-md px-4 sm:px-0 relative z-10">
         <!-- Auth Card Container -->
-        <div class="bg-white py-8 px-6 border border-slate-200 rounded-2xl sm:px-10">
+        <div class="bg-white dark:bg-slate-900 py-8 px-6 border border-slate-200/90 dark:border-slate-800 rounded-2xl shadow-sm sm:px-10">
             <!-- Official Brand Header (Inside Form Card) -->
             <div class="text-center mb-6">
                 <a href="/" class="inline-block transition-opacity hover:opacity-90">
@@ -36,7 +39,7 @@
         </div>
 
         <!-- Trust & Security Subtitle -->
-        <div class="mt-6 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
+        <div class="mt-6 text-center text-xs text-slate-500 dark:text-slate-400 flex items-center justify-center gap-2">
             <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>

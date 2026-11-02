@@ -23,8 +23,11 @@
     @livewireStyles
 </head>
 @if (request()->routeIs('admin.*'))
-<body class="font-sans antialiased bg-slate-50 text-slate-900 min-h-full">
-    <div x-data="{ sidebarOpen: false, logoutModalOpen: false }" @keydown.escape.window="sidebarOpen = false; logoutModalOpen = false" class="min-h-screen bg-slate-50 flex">
+<body class="font-sans antialiased text-slate-900 dark:text-white min-h-full">
+    <!-- Soft Gradient Ambient Background System (Admin Mode: Clean & Neutral) -->
+    <x-ambient-background variant="admin" />
+
+    <div x-data="{ sidebarOpen: false, logoutModalOpen: false }" @keydown.escape.window="sidebarOpen = false; logoutModalOpen = false" class="min-h-screen flex relative z-10">
         <!-- Sidebar Backdrop for Mobile/Tablet -->
         <div 
             x-show="sidebarOpen" 
@@ -49,7 +52,7 @@
 
             <!-- Optional Subheader for admin resource pages -->
             @if (isset($header))
-                <div class="bg-white border-b border-slate-200 py-4 px-4 sm:px-6 lg:px-8">
+                <div class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs border-b border-slate-200 dark:border-slate-800 py-4 px-4 sm:px-6 lg:px-8">
                     {{ $header }}
                 </div>
             @endif
@@ -81,7 +84,7 @@
             @endif
 
             <!-- Main Page Content -->
-            <main class="flex-1">
+            <main class="flex-1 relative z-10">
                 {{ $slot ?? '' }}
                 @yield('content')
             </main>
@@ -163,8 +166,11 @@
     @livewireScripts
 </body>
 @elseif (request()->routeIs('seller.*'))
-<body class="font-sans antialiased bg-slate-50 text-slate-900 min-h-full">
-    <div x-data="{ sidebarOpen: false, logoutModalOpen: false }" @keydown.escape.window="sidebarOpen = false; logoutModalOpen = false" class="min-h-screen bg-slate-50 flex">
+<body class="font-sans antialiased text-slate-900 dark:text-white min-h-full">
+    <!-- Soft Gradient Ambient Background System (Seller Mode: Professional with subtle orange accents) -->
+    <x-ambient-background variant="seller" />
+
+    <div x-data="{ sidebarOpen: false, logoutModalOpen: false }" @keydown.escape.window="sidebarOpen = false; logoutModalOpen = false" class="min-h-screen flex relative z-10">
         <!-- Sidebar Backdrop for Mobile/Tablet -->
         <div 
             x-show="sidebarOpen" 
@@ -189,7 +195,7 @@
 
             <!-- Optional Subheader for seller pages -->
             @if (isset($header))
-                <div class="bg-white border-b border-slate-200 py-4 px-4 sm:px-6 lg:px-8">
+                <div class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs border-b border-slate-200 dark:border-slate-800 py-4 px-4 sm:px-6 lg:px-8">
                     {{ $header }}
                 </div>
             @endif
@@ -221,7 +227,7 @@
             @endif
 
             <!-- Main Page Content -->
-            <main class="flex-1">
+            <main class="flex-1 relative z-10">
                 {{ $slot ?? '' }}
                 @yield('content')
             </main>
@@ -301,63 +307,68 @@
     @livewireScripts
 </body>
 @else
-<body class="font-sans antialiased bg-slate-50 text-slate-900 min-h-full flex flex-col">
-    <livewire:layout.navigation />
+<body class="font-sans antialiased text-slate-900 dark:text-white min-h-full flex flex-col relative overflow-x-hidden">
+    <!-- Soft Gradient Ambient Background System (Buyer Mode: Warm & Welcoming) -->
+    <x-ambient-background variant="buyer" />
 
-    <!-- Page Heading -->
-    @if (isset($header))
-        <header class="bg-white border-b border-slate-200">
-            <div class="max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8">
-                {{ $header }}
-            </div>
-        </header>
-    @endif
+    <div class="relative z-10 flex flex-col flex-1 min-h-screen">
+        <livewire:layout.navigation />
 
-    <!-- Flash Status Messages -->
-    @if (session('status') || session('success') || session('error'))
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-            @if (session('status') || session('success'))
-                <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-2xl text-xs sm:text-sm flex items-center justify-between">
-                    <div class="flex items-center gap-2.5">
-                        <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="font-medium">{{ session('status') ?? session('success') }}</span>
-                    </div>
+        <!-- Page Heading -->
+        @if (isset($header))
+            <header class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs border-b border-slate-200 dark:border-slate-800">
+                <div class="max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8">
+                    {{ $header }}
                 </div>
-            @endif
-            @if (session('error'))
-                <div class="bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-2xl text-xs sm:text-sm flex items-center justify-between">
-                    <div class="flex items-center gap-2.5">
-                        <svg class="w-5 h-5 text-rose-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="font-medium">{{ session('error') }}</span>
+            </header>
+        @endif
+
+        <!-- Flash Status Messages -->
+        @if (session('status') || session('success') || session('error'))
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+                @if (session('status') || session('success'))
+                    <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-2xl text-xs sm:text-sm flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span class="font-medium">{{ session('status') ?? session('success') }}</span>
+                        </div>
                     </div>
-                </div>
-            @endif
-        </div>
-    @endif
-
-    <!-- Page Content -->
-    <main class="flex-1">
-        {{ $slot ?? '' }}
-        @yield('content')
-    </main>
-
-    <!-- Simple Workspace Footer -->
-    <footer class="bg-white border-t border-slate-200 text-slate-500 text-xs py-6 mt-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px]">
-            <p>&copy; {{ date('Y') }} NexaMarket Multi-Vendor Platform. Dilindungi hak cipta.</p>
-            <div class="flex items-center gap-4 text-slate-400">
-                <a href="{{ route('products.index') }}" class="hover:text-orange-600 transition">Katalog Publik</a>
-                <span>&bull;</span>
-                <a href="{{ route('dashboard') }}" class="hover:text-orange-600 transition">Dashboard Akun</a>
-                <span>&bull;</span>
-                <span class="text-slate-500">v1.0-release</span>
+                @endif
+                @if (session('error'))
+                    <div class="bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-2xl text-xs sm:text-sm flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <svg class="w-5 h-5 text-rose-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                            </svg>
+                            <span class="font-medium">{{ session('error') }}</span>
+                        </div>
+                    </div>
+                @endif
             </div>
-        </div>
-    </footer>
+        @endif
+
+        <!-- Page Content -->
+        <main class="flex-1">
+            {{ $slot ?? '' }}
+            @yield('content')
+        </main>
+
+        <!-- Simple Workspace Footer -->
+        <footer class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs border-t border-slate-200 dark:border-slate-800 text-slate-500 text-xs py-6 mt-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px]">
+                <p>&copy; {{ date('Y') }} NexaMarket Multi-Vendor Platform. Dilindungi hak cipta.</p>
+                <div class="flex items-center gap-4 text-slate-400">
+                    <a href="{{ route('products.index') }}" class="hover:text-orange-600 transition">Katalog Publik</a>
+                    <span>&bull;</span>
+                    <a href="{{ route('dashboard') }}" class="hover:text-orange-600 transition">Dashboard Akun</a>
+                    <span>&bull;</span>
+                    <span class="text-slate-500">v1.0-release</span>
+                </div>
+            </div>
+        </footer>
+    </div>
     @livewireScripts
 </body>
 @endif

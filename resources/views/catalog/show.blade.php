@@ -3,7 +3,7 @@
         {{ $product->name }} | NexaMarket
     </x-slot>
 
-    <div class="py-6 sm:py-10 bg-slate-50 min-h-[calc(100vh-18rem)]">
+    <div class="py-6 sm:py-10 min-h-[calc(100vh-18rem)]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <!-- Breadcrumbs -->
             <nav class="flex items-center flex-wrap text-xs text-slate-500 gap-1.5 sm:gap-2">

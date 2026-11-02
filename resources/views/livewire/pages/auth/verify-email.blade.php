@@ -36,23 +36,23 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+    <div class="mb-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+        {{ __('Terima kasih telah mendaftar! Sebelum memulai, silakan verifikasi alamat email Anda dengan mengeklik tautan yang baru saja kami kirimkan. Jika Anda tidak menerima email tersebut, kami dengan senang hati akan mengirimkannya kembali.') }}
     </div>
 
     @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
+        <div class="mb-4 font-semibold text-xs sm:text-sm text-emerald-700 dark:text-emerald-400">
+            {{ __('Tautan verifikasi baru telah dikirimkan ke alamat email yang Anda berikan saat pendaftaran.') }}
         </div>
     @endif
 
-    <div class="mt-4 flex items-center justify-between">
+    <div class="mt-6 flex items-center justify-between gap-3">
         <x-primary-button wire:click="sendVerification">
-            {{ __('Resend Verification Email') }}
+            {{ __('Kirim Ulang Email Verifikasi') }}
         </x-primary-button>
 
-        <button wire:click="logout" type="submit" class="underline text-sm text-slate-600 hover:text-slate-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-700">
-            {{ __('Log Out') }}
+        <button wire:click="logout" type="button" class="underline text-xs text-slate-500 dark:text-slate-400 hover:text-coral-600 dark:hover:text-coral-400 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coral-500 cursor-pointer">
+            {{ __('Keluar') }}
         </button>
     </div>
 </div>

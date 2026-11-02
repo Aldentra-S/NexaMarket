@@ -1,7 +1,7 @@
 <!-- Seller Center Sidebar Component -->
 <aside 
     :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
-    class="fixed top-0 bottom-0 left-0 w-64 bg-white border-r border-slate-200 z-50 flex flex-col transition-transform duration-200 ease-in-out select-none"
+    class="fixed top-0 bottom-0 left-0 w-64 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-r border-slate-200 dark:border-slate-800 z-50 flex flex-col transition-transform duration-200 ease-in-out select-none"
     aria-label="Seller Center Navigation"
 >
     <!-- Brand & Workspace Header -->

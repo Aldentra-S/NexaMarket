@@ -11,18 +11,18 @@
         }
     @endphp
 
-    <div class="py-6 sm:py-8 bg-slate-50 min-h-[calc(100vh-18rem)]">
+    <div class="py-6 sm:py-8 min-h-[calc(100vh-18rem)]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
             <!-- Catalog Header & Controls Bar -->
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <!-- Left Title & Subtitle -->
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                         Jelajahi Produk Berkualitas
                     </h1>
-                    <p class="text-xs sm:text-sm text-slate-500 mt-1">
-                        Temukan produk terpercaya dari toko mitra resmi.
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                        Temukan produk terpercaya dari toko mitra resmi bergaransi.
                     </p>
                 </div>
 
@@ -35,9 +35,9 @@
                             @click="catOpen = !catOpen"
                             :aria-expanded="catOpen.toString()"
                             aria-haspopup="true"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200/90 text-xs font-bold text-slate-700 hover:text-orange-600 hover:border-orange-300 transition shadow-2xs focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-[#E8EAF0] dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-coral-600 hover:border-coral-300 transition shadow-2xs focus:outline-none focus-visible:ring-2 focus-visible:ring-coral-500"
                         >
-                            <svg class="w-4 h-4 text-orange-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <svg class="w-4 h-4 text-coral-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
                             </svg>
                             <span class="truncate max-w-[130px] sm:max-w-none">
@@ -57,23 +57,23 @@
                             x-transition:leave="transition ease-in duration-100"
                             x-transition:leave-start="opacity-100 scale-100"
                             x-transition:leave-end="opacity-0 scale-95"
-                            class="absolute left-0 mt-2 w-64 bg-white rounded-2xl border border-slate-200 shadow-xl py-2 z-30 divide-y divide-slate-100"
+                            class="absolute left-0 mt-2 w-64 bg-white dark:bg-slate-900 rounded-2xl border border-[#E8EAF0] dark:border-slate-800 shadow-elevated py-2 z-30 divide-y divide-[#E8EAF0] dark:divide-slate-800"
                             style="display: none;"
                         >
-                            <div class="px-3 pb-2 pt-1 flex items-center justify-between text-xs font-bold text-slate-800">
+                            <div class="px-3 pb-2 pt-1 flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200">
                                 <span>Pilih Kategori</span>
-                                <button type="button" @click="catOpen = false" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500" aria-label="Tutup menu kategori">
+                                <button type="button" @click="catOpen = false" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-coral-500" aria-label="Tutup menu kategori">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                                 </button>
                             </div>
                             <div class="max-h-64 overflow-y-auto space-y-0.5 p-1 scrollbar-thin">
                                 <a
                                     href="{{ route('products.index', array_filter(['q' => $search, 'sort' => $currentSort !== 'terbaru' ? $currentSort : null])) }}"
-                                    class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ empty($currentCategory) ? 'bg-orange-50 text-orange-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}"
+                                    class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 {{ empty($currentCategory) ? 'bg-[#FFF0E9] dark:bg-coral-950/40 text-coral-700 dark:text-coral-300 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800' }}"
                                 >
                                     <span>Semua Kategori</span>
                                     @if(empty($currentCategory))
-                                        <svg class="w-4 h-4 text-orange-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                        <svg class="w-4 h-4 text-coral-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                                     @endif
                                 </a>
                                 @foreach($categories as $category)
@@ -82,11 +82,11 @@
                                     @endphp
                                     <a
                                         href="{{ route('products.index', array_filter(['category' => $category->slug, 'q' => $search, 'sort' => $currentSort !== 'terbaru' ? $currentSort : null])) }}"
-                                        class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ $isSelected ? 'bg-orange-50 text-orange-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}"
+                                        class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 {{ $isSelected ? 'bg-[#FFF0E9] dark:bg-coral-950/40 text-coral-700 dark:text-coral-300 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800' }}"
                                     >
                                         <span class="truncate pr-2">{{ $category->name }}</span>
                                         @if($isSelected)
-                                            <svg class="w-4 h-4 text-orange-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                            <svg class="w-4 h-4 text-coral-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                                         @endif
                                     </a>
                                 @endforeach
@@ -95,27 +95,27 @@
                     </div>
 
                     <!-- Products Count -->
-                    <span class="text-xs sm:text-sm text-slate-500 whitespace-nowrap">
-                        Menampilkan <strong class="font-bold text-slate-900">{{ $products->total() }}</strong> produk
+                    <span class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                        Menampilkan <strong class="font-bold text-slate-900 dark:text-white">{{ $products->total() }}</strong> produk
                     </span>
 
                     <!-- Sort Filter Pills -->
-                    <div class="inline-flex items-center rounded-xl bg-white border border-slate-200/90 p-1 shadow-2xs">
+                    <div class="inline-flex items-center rounded-xl bg-white dark:bg-slate-900 border border-[#E8EAF0] dark:border-slate-800 p-1 shadow-2xs">
                         <a
                             href="{{ route('products.index', array_filter(['category' => $currentCategory, 'q' => $search, 'sort' => 'terbaru'])) }}"
-                            class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ ($currentSort === 'terbaru' || empty($currentSort)) ? 'bg-orange-50/70 text-orange-600 font-bold border border-orange-200 shadow-2xs' : 'text-slate-600 hover:text-slate-900 font-medium' }}"
+                            class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs transition focus:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 {{ ($currentSort === 'terbaru' || empty($currentSort)) ? 'bg-[#FFF0E9] dark:bg-coral-950/40 text-coral-600 dark:text-coral-300 font-semibold border border-coral-200 dark:border-coral-800/60 shadow-2xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium' }}"
                         >
                             Terbaru
                         </a>
                         <a
                             href="{{ route('products.index', array_filter(['category' => $currentCategory, 'q' => $search, 'sort' => 'termurah'])) }}"
-                            class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ $currentSort === 'termurah' ? 'bg-orange-50/70 text-orange-600 font-bold border border-orange-200 shadow-2xs' : 'text-slate-600 hover:text-slate-900 font-medium' }}"
+                            class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs transition focus:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 {{ $currentSort === 'termurah' ? 'bg-[#FFF0E9] dark:bg-coral-950/40 text-coral-600 dark:text-coral-300 font-semibold border border-coral-200 dark:border-coral-800/60 shadow-2xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium' }}"
                         >
                             Harga Terendah
                         </a>
                         <a
                             href="{{ route('products.index', array_filter(['category' => $currentCategory, 'q' => $search, 'sort' => 'termahal'])) }}"
-                            class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ $currentSort === 'termahal' ? 'bg-orange-50/70 text-orange-600 font-bold border border-orange-200 shadow-2xs' : 'text-slate-600 hover:text-slate-900 font-medium' }}"
+                            class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs transition focus:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 {{ $currentSort === 'termahal' ? 'bg-[#FFF0E9] dark:bg-coral-950/40 text-coral-600 dark:text-coral-300 font-semibold border border-coral-200 dark:border-coral-800/60 shadow-2xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium' }}"
                         >
                             Harga Tertinggi
                         </a>
@@ -129,11 +129,11 @@
                     <span class="text-slate-400 font-medium">Filter aktif:</span>
 
                     @if ($activeCategory)
-                        <span class="inline-flex items-center gap-1.5 pl-3 pr-1 py-1 rounded-full font-semibold bg-orange-50 text-orange-700 border border-orange-200 shadow-2xs">
+                        <span class="inline-flex items-center gap-1.5 pl-3 pr-1 py-1 rounded-full font-semibold bg-[#FFF0E9] dark:bg-coral-950/40 text-coral-700 dark:text-coral-300 border border-coral-200 dark:border-coral-800/60 shadow-2xs">
                             <span>Kategori: <strong>{{ $activeCategory->name }}</strong></span>
                             <a
                                 href="{{ route('products.index', array_filter(['q' => $search, 'sort' => $currentSort !== 'terbaru' ? $currentSort : null])) }}"
-                                class="w-6 h-6 inline-flex items-center justify-center rounded-full text-orange-700 hover:bg-orange-200/80 hover:text-orange-950 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                                class="w-6 h-6 inline-flex items-center justify-center rounded-full text-coral-700 dark:text-coral-300 hover:bg-coral-200/80 hover:text-coral-950 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-coral-500"
                                 title="Hapus filter kategori {{ $activeCategory->name }}"
                                 aria-label="Hapus filter kategori {{ $activeCategory->name }}"
                             >
@@ -145,11 +145,11 @@
                     @endif
 
                     @if ($search)
-                        <span class="inline-flex items-center gap-1.5 pl-3 pr-1 py-1 rounded-full font-semibold bg-slate-100 text-slate-800 border border-slate-200 shadow-2xs">
+                        <span class="inline-flex items-center gap-1.5 pl-3 pr-1 py-1 rounded-full font-semibold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 shadow-2xs">
                             <span>Pencarian: <strong>"{{ $search }}"</strong></span>
                             <a
                                 href="{{ route('products.index', array_filter(['category' => $currentCategory, 'sort' => $currentSort !== 'terbaru' ? $currentSort : null])) }}"
-                                class="w-6 h-6 inline-flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-200 hover:text-slate-900 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                                class="w-6 h-6 inline-flex items-center justify-center rounded-full text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-coral-500"
                                 title="Hapus filter pencarian {{ $search }}"
                                 aria-label="Hapus filter pencarian {{ $search }}"
                             >
@@ -183,17 +183,17 @@
                 </div>
             @else
                 <!-- Empty State -->
-                <div class="bg-white border border-slate-200 rounded-3xl p-8 sm:p-14 text-center max-w-lg mx-auto space-y-4 shadow-2xs">
-                    <div class="w-16 h-16 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center mx-auto shadow-2xs">
+                <div class="bg-white dark:bg-slate-900 border border-[#E8EAF0] dark:border-slate-800 rounded-3xl p-8 sm:p-14 text-center max-w-lg mx-auto space-y-4 shadow-card">
+                    <div class="w-16 h-16 bg-[#FFF0E9] dark:bg-coral-950/40 text-coral-600 dark:text-coral-400 rounded-2xl flex items-center justify-center mx-auto border border-coral-200/80 dark:border-coral-800/60 shadow-2xs">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
                     <div class="space-y-1">
-                        <h2 class="text-base sm:text-lg font-bold text-slate-900">
+                        <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
                             Tidak Ada Produk Ditemukan
                         </h2>
-                        <p class="text-xs sm:text-sm text-slate-500 max-w-xs mx-auto">
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-xs mx-auto">
                             @if ($search || $currentCategory)
                                 Tidak ada produk yang cocok dengan kriteria filter saat ini. Coba kata kunci lain atau reset filter.
                             @else
@@ -205,7 +205,7 @@
                         <div class="pt-2">
                             <a
                                 href="{{ route('products.index') }}"
-                                class="inline-flex items-center px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs transition shadow-2xs"
+                                class="inline-flex items-center px-5 py-2.5 rounded-xl bg-coral-500 hover:bg-coral-600 active:bg-coral-700 text-white font-semibold text-xs transition shadow-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-coral-500"
                             >
                                 Reset Filter Pencarian
                             </a>

@@ -38,28 +38,43 @@
     @endphp
 
     <div class="space-y-12 sm:space-y-16 pb-16">
-        <!-- Hero Section (Shopcart by Musemind Style) -->
+        <!-- Hero Section (Shopcart by Musemind Style — Rich Premium Gradient) -->
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
-            <div class="relative overflow-hidden rounded-3xl bg-orange-600 text-white p-6 sm:p-10 lg:p-12 border border-orange-500">
-                <div class="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div class="relative overflow-hidden rounded-3xl hero-premium-surface text-white p-6 sm:p-10 lg:p-12 border border-orange-400/40 shadow-xl">
+                <!-- Multi-Layer Rich Lighting & Geometric Atmosphere -->
+                <div class="absolute inset-0 pointer-events-none select-none overflow-hidden z-0" aria-hidden="true">
+                    <!-- 1. Deep Contrast Shade behind Left Headline (Visual Depth & Crisp Typography) -->
+                    <div class="absolute -top-16 -left-20 w-[420px] h-[420px] sm:w-[580px] sm:h-[580px] rounded-full bg-gradient-to-br from-[#C22E02]/65 via-[#D83B08]/35 to-transparent blur-3xl"></div>
+
+                    <!-- 2. Soft Radial Coral Glow around Upper-Right Region -->
+                    <div class="absolute -top-24 -right-20 w-[380px] h-[380px] sm:w-[540px] sm:h-[540px] rounded-full bg-gradient-to-bl from-[#FF7A45]/70 via-[#FF6B35]/40 to-transparent blur-2xl"></div>
+
+                    <!-- 3. Warm Amber Sunset Glow near Lower-Right Region -->
+                    <div class="absolute -bottom-20 -right-20 w-[360px] h-[360px] sm:w-[500px] sm:h-[500px] rounded-full bg-gradient-to-tl from-[#FFA767]/60 via-[#FF9A52]/30 to-transparent blur-2xl"></div>
+
+                    <!-- 4. Subtle Top Edge Shimmer Highlight -->
+                    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
+
+                    <!-- 5. Precision Abstract Geometric Curves (Integrated into gradient background) -->
+                    <div class="hidden sm:block absolute -top-16 -right-16 w-80 h-80 lg:w-[480px] lg:h-[480px] rounded-full border border-white/15"></div>
+                    <div class="hidden lg:block absolute -top-4 -right-4 w-64 h-64 lg:w-[360px] lg:h-[360px] rounded-full border border-white/10"></div>
+                    <div class="hidden xl:block absolute -bottom-24 -right-24 w-[540px] h-[540px] rounded-full border border-dashed border-white/10"></div>
+                </div>
+
+                <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                     <!-- Left Hero Content -->
                     <div class="lg:col-span-7 space-y-5 text-left">
-                        <div class="inline-flex max-w-full items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-[11px] sm:text-xs font-semibold text-white border border-white/20">
-                            <span class="w-2 h-2 rounded-full bg-amber-300 shrink-0"></span>
-                            <span class="truncate sm:overflow-visible sm:whitespace-normal">Penawaran Terbaik &bull; Belanja Mudah, Hidup Lebih Baik</span>
-                        </div>
-
-                        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight text-white">
+                        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight text-white drop-shadow-xs">
                             Belanja Produk Pilihan dari Ribuan Mitra Resmi
                         </h1>
 
-                        <p class="text-xs sm:text-base text-orange-100 max-w-xl leading-relaxed">
+                        <p class="text-xs sm:text-base text-orange-50/95 max-w-xl leading-relaxed font-normal">
                             Platform marketplace multi-vendor terpercaya di Indonesia. Nikmati ribuan produk berkualitas, kepastian garansi toko mitra, dan perlindungan pembayaran digital Midtrans.
                         </p>
 
                         <!-- CTA Actions -->
                         <div class="flex flex-wrap items-center gap-3 pt-2">
-                            <a href="{{ route('products.index') }}" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-white text-orange-600 hover:bg-orange-50 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-2xs">
+                            <a href="{{ route('products.index') }}" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-white text-orange-600 hover:bg-orange-50 active:bg-orange-100 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-sm hover:shadow-md hover:scale-[1.02] transform duration-150">
                                 <span>Buka Katalog Belanja</span>
                                 <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
@@ -68,32 +83,32 @@
 
                             @auth
                                 @if (auth()->user()->isSeller())
-                                    <a href="{{ route('seller.dashboard') }}" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-xs sm:text-sm border border-white/30 transition text-center">
+                                    <a href="{{ route('seller.dashboard') }}" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-white/15 hover:bg-white/25 active:bg-white/30 text-white font-semibold text-xs sm:text-sm border border-white/30 backdrop-blur-xs transition text-center shadow-2xs">
                                         Kelola Toko Saya
                                     </a>
                                 @else
-                                    <a href="{{ route('buyer.shop.apply') }}" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-xs sm:text-sm border border-white/30 transition text-center">
+                                    <a href="{{ route('buyer.shop.apply') }}" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-white/15 hover:bg-white/25 active:bg-white/30 text-white font-semibold text-xs sm:text-sm border border-white/30 backdrop-blur-xs transition text-center shadow-2xs">
                                         Buka Toko Mitra Gratis
                                     </a>
                                 @endif
                             @else
-                                <a href="{{ route('register') }}" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-xs sm:text-sm border border-white/30 transition text-center">
+                                <a href="{{ route('register') }}" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-white/15 hover:bg-white/25 active:bg-white/30 text-white font-semibold text-xs sm:text-sm border border-white/30 backdrop-blur-xs transition text-center shadow-2xs">
                                     Daftar Akun Gratis
                                 </a>
                             @endauth
                         </div>
 
                         <!-- Mini Value Highlights -->
-                        <div class="pt-4 border-t border-white/20 flex flex-wrap items-center gap-3 sm:gap-6 text-xs text-orange-100">
-                            <span class="flex items-center gap-1.5 font-medium">
+                        <div class="pt-4 border-t border-white/20 flex flex-wrap items-center gap-3 sm:gap-6 text-xs text-orange-100/95 font-medium">
+                            <span class="flex items-center gap-1.5">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                 100% Toko Mitra Resmi
                             </span>
-                            <span class="flex items-center gap-1.5 font-medium">
+                            <span class="flex items-center gap-1.5">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                 Midtrans Snap Guaranteed
                             </span>
-                            <span class="flex items-center gap-1.5 font-medium">
+                            <span class="flex items-center gap-1.5">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                 Pengiriman Cepat
                             </span>
@@ -103,8 +118,8 @@
                     <!-- Right Hero Visual Showcase Card (Shopcart Featured Spotlight) -->
                     <div class="lg:col-span-5 hidden lg:block">
                         @if($spotlightProduct)
-                            <div class="bg-white rounded-2xl p-5 text-slate-900 border border-white/30 max-w-sm mx-auto shadow-2xs">
-                                <div class="relative aspect-square w-full rounded-xl overflow-hidden bg-slate-50 mb-4 border border-slate-100">
+                            <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 text-slate-900 dark:text-slate-100 border border-white/40 dark:border-slate-800 max-w-sm mx-auto shadow-elevated transition-transform duration-200 hover:-translate-y-0.5">
+                                <div class="relative aspect-square w-full rounded-xl overflow-hidden bg-slate-50 dark:bg-slate-800 mb-4 border border-slate-100 dark:border-slate-700">
                                     <img
                                         src="{{ $spotlightProduct->thumbnail_url }}"
                                         alt="{{ $spotlightProduct->name }}"
@@ -116,7 +131,7 @@
                                 </div>
                                 <div class="space-y-1.5">
                                     <div class="flex items-center justify-between text-xs">
-                                        <span class="text-slate-500 font-medium truncate max-w-[180px]">{{ $spotlightProduct->shop->name ?? 'Toko Resmi' }}</span>
+                                        <span class="text-slate-500 dark:text-slate-400 font-medium truncate max-w-[180px]">{{ $spotlightProduct->shop->name ?? 'Toko Resmi' }}</span>
                                         <span class="text-amber-500 font-bold flex items-center gap-1">
                                             <svg class="w-3.5 h-3.5 fill-current text-amber-500" viewBox="0 0 20 20">
                                                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
@@ -124,10 +139,10 @@
                                             <span>4.8</span>
                                         </span>
                                     </div>
-                                    <h3 class="font-bold text-slate-900 text-base line-clamp-1 hover:text-orange-600 transition">
+                                    <h3 class="font-bold text-slate-900 dark:text-slate-100 text-base line-clamp-1 hover:text-orange-600 transition">
                                         <a href="{{ route('products.show', $spotlightProduct->slug) }}">{{ $spotlightProduct->name }}</a>
                                     </h3>
-                                    <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+                                    <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
                                         <div>
                                             <span class="text-xs text-orange-600 font-bold">Rp</span>
                                             <span class="text-xl font-black text-orange-600 tracking-tight">{{ number_format($spotlightProduct->price, 0, ',', '.') }}</span>
@@ -172,9 +187,9 @@
                     @foreach ($popularCategories as $cat)
                         <a
                             href="{{ route('products.index', ['category' => $cat->slug]) }}"
-                            class="group bg-white rounded-2xl p-4 border border-slate-200/90 hover:border-orange-500 transition text-center flex flex-col items-center justify-center gap-2.5 h-full shadow-2xs"
+                            class="group bg-white dark:bg-slate-900 rounded-2xl p-4 border border-[#E8EAF0] dark:border-slate-800 hover:border-coral-400 dark:hover:border-coral-500 hover:shadow-card transition text-center flex flex-col items-center justify-center gap-2.5 h-full shadow-soft"
                         >
-                            <div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition-colors flex items-center justify-center shrink-0">
+                            <div class="w-12 h-12 rounded-xl bg-[#FFF0E9] dark:bg-coral-950/40 text-coral-600 dark:text-coral-400 group-hover:bg-coral-500 group-hover:text-white transition-colors flex items-center justify-center shrink-0 border border-coral-100 dark:border-coral-900/40">
                                 @php
                                     $catLower = strtolower($cat->name);
                                 @endphp
@@ -211,15 +226,10 @@
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div>
-                        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-orange-50 text-orange-700 text-xs font-bold border border-orange-200 mb-1">
-                            <svg class="w-3.5 h-3.5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span>Promo Terbatas Hari Ini</span>
-                        </div>
-                        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                             Penawaran Terbaik Hari Ini
                         </h2>
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">Produk dengan diskon dan harga penawaran istimewa hari ini</p>
                     </div>
                     <a href="{{ route('products.index', ['sort' => 'terbaru']) }}" class="text-xs font-semibold text-orange-600 hover:text-orange-700 flex items-center gap-1 group self-start sm:self-auto shrink-0">
                         <span>Lihat Semua Promo</span>
@@ -237,13 +247,12 @@
 
         <!-- Services To Help You Shop Section (Shopcart Value Proposition Architecture) -->
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-10 space-y-8 shadow-2xs">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-[#E8EAF0] dark:border-slate-800 p-6 sm:p-10 space-y-8 shadow-card">
                 <div class="max-w-xl space-y-1">
-                    <span class="text-xs font-bold text-orange-600">Jaminan Transaksi Resmi</span>
-                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                         Layanan Terpercaya Untuk Anda
                     </h2>
-                    <p class="text-xs sm:text-sm text-slate-500">
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
                         Kami berkomitmen menghadirkan pengalaman belanja online yang aman, cepat, dan transparan bagi setiap pembeli di Indonesia.
                     </p>
                 </div>
@@ -300,15 +309,10 @@
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                    <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-orange-50 text-orange-700 text-xs font-bold border border-orange-200 mb-1">
-                        <svg class="w-3.5 h-3.5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                        <span>Rekomendasi Marketplace</span>
-                    </div>
-                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                         Produk Pilihan
                     </h2>
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">Rekomendasi produk terbaik dari toko resmi dan mitra terverifikasi</p>
                 </div>
                 <a href="{{ route('products.index') }}" class="text-xs font-semibold text-orange-600 hover:text-orange-700 flex items-center gap-1 group self-start sm:self-auto shrink-0">
                     <span>Lihat Semua Produk</span>
@@ -353,24 +357,24 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                     @foreach ($featuredShops as $fShop)
-                        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 space-y-4 hover:border-orange-500 transition-colors shadow-2xs">
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-[#E8EAF0] dark:border-slate-800 p-5 space-y-4 hover:border-coral-400 dark:hover:border-coral-500 transition-all shadow-soft hover:shadow-card">
                             <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 rounded-xl bg-orange-600 text-white font-black text-lg flex items-center justify-center shrink-0 shadow-2xs">
+                                <div class="w-12 h-12 rounded-xl bg-coral-500 text-white font-black text-lg flex items-center justify-center shrink-0 shadow-2xs">
                                     {{ strtoupper(substr($fShop->name, 0, 1)) }}
                                 </div>
                                 <div class="min-w-0">
-                                    <h3 class="font-bold text-slate-900 text-sm truncate">
+                                    <h3 class="font-bold text-slate-900 dark:text-white text-sm truncate">
                                         {{ $fShop->name }}
                                     </h3>
-                                    <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700">
+                                    <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                         Mitra Terverifikasi
                                     </span>
                                 </div>
                             </div>
-                            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                                <span class="text-slate-500 font-medium">{{ $fShop->products_count }} Produk Aktif</span>
-                                <a href="{{ route('products.index') }}" class="text-orange-600 font-bold hover:text-orange-700">
+                            <div class="pt-3 border-t border-[#E8EAF0] dark:border-slate-800 flex items-center justify-between text-xs">
+                                <span class="text-slate-500 dark:text-slate-400 font-medium">{{ $fShop->products_count }} Produk Aktif</span>
+                                <a href="{{ route('products.index') }}" class="text-coral-600 dark:text-coral-400 font-bold hover:text-coral-700">
                                     Katalog &rarr;
                                 </a>
                             </div>
@@ -382,60 +386,60 @@
 
         <!-- Multi-Vendor Ecosystem & Role Explanation Section (Required by Test & Architecture) -->
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-            <div class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-10 space-y-8 shadow-2xs">
+            <div class="bg-white dark:bg-slate-900 border border-[#E8EAF0] dark:border-slate-800 rounded-3xl p-6 sm:p-10 space-y-8 shadow-card">
                 <div class="max-w-2xl space-y-2">
-                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                         Ekosistem Marketplace NexaMarket
                     </h2>
-                    <p class="text-xs sm:text-sm text-slate-600">
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
                         NexaMarket menghubungkan seluruh ekosistem jual beli online di Indonesia dengan tata kelola hak akses yang aman dan terstruktur.
                     </p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- Peran Pembeli (Buyer) -->
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-                        <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-sm">
+                    <div class="p-6 rounded-2xl bg-[#F7F8FA] dark:bg-slate-800/60 border border-[#E8EAF0] dark:border-slate-800 space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-[#FFF0E9] dark:bg-coral-950/40 text-coral-600 dark:text-coral-400 border border-coral-200/60 dark:border-coral-800/40 flex items-center justify-center font-bold text-sm">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
                         </div>
-                        <h3 class="font-bold text-slate-900 text-base">Peran Pembeli (Buyer)</h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">
+                        <h3 class="font-bold text-slate-900 dark:text-white text-base">Peran Pembeli (Buyer)</h3>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                             Jelajahi berbagai kategori produk unggulan, kelola keranjang belanja multi-vendor, dan bayar pesanan secara aman melalui gateway Midtrans Snap.
                         </p>
                         <div class="pt-2">
-                            <a href="{{ route('products.index') }}" class="text-xs font-semibold text-orange-600 hover:text-orange-700">
+                            <a href="{{ route('products.index') }}" class="text-xs font-semibold text-coral-600 dark:text-coral-400 hover:text-coral-700">
                                 Mulai Belanja Sekarang &rarr;
                             </a>
                         </div>
                     </div>
 
                     <!-- Peran Penjual (Seller) -->
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">
+                    <div class="p-6 rounded-2xl bg-[#F7F8FA] dark:bg-slate-800/60 border border-[#E8EAF0] dark:border-slate-800 space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-[#E6F5F0] dark:bg-teal-950/40 text-teal-700 dark:text-teal-400 border border-teal-200/60 dark:border-teal-800/40 flex items-center justify-center font-bold text-sm">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                         </div>
-                        <h3 class="font-bold text-slate-900 text-base">Peran Penjual (Seller)</h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">
+                        <h3 class="font-bold text-slate-900 dark:text-white text-base">Peran Penjual (Seller)</h3>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                             Daftarkan toko resmi Anda, kelola katalog produk, pantau stok barang, dan proses pemenuhan pesanan masuk melalui Seller Center profesional.
                         </p>
                         <div class="pt-2">
-                            <a href="{{ route('buyer.shop.apply') }}" class="text-xs font-semibold text-orange-600 hover:text-orange-700">
+                            <a href="{{ route('buyer.shop.apply') }}" class="text-xs font-semibold text-coral-600 dark:text-coral-400 hover:text-coral-700">
                                 Buka Toko Mitra &rarr;
                             </a>
                         </div>
                     </div>
 
                     <!-- Peran Administrator -->
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-                        <div class="w-10 h-10 rounded-xl bg-slate-200 text-slate-800 flex items-center justify-center font-bold text-sm">
+                    <div class="p-6 rounded-2xl bg-[#F7F8FA] dark:bg-slate-800/60 border border-[#E8EAF0] dark:border-slate-800 space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 flex items-center justify-center font-bold text-sm">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                         </div>
-                        <h3 class="font-bold text-slate-900 text-base">Peran Administrator</h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">
+                        <h3 class="font-bold text-slate-900 dark:text-white text-base">Peran Administrator</h3>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                             Pengawasan penuh operasional platform, verifikasi dan approval toko mitra baru, pemantauan transaksi gateway, dan laporan analitik bisnis.
                         </p>
                         <div class="pt-2">
-                            <span class="text-xs font-semibold text-slate-500">
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">
                                 Perlindungan Sistem Terpusat
                             </span>
                         </div>

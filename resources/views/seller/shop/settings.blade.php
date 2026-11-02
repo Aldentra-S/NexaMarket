@@ -2,10 +2,10 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div>
-                <h2 class="font-bold text-xl text-slate-900 leading-tight">
+                <h2 class="font-bold text-xl text-slate-900 dark:text-white leading-tight">
                     {{ __('Pengaturan & Profil Toko') }}
                 </h2>
-                <p class="text-xs text-slate-500 mt-0.5">Perbarui identitas toko, deskripsi etalase, kontak resmi, dan alamat pengiriman barang</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Perbarui identitas toko, deskripsi etalase, kontak resmi, dan alamat pengiriman barang</p>
             </div>
         </div>
     </x-slot>
@@ -14,28 +14,28 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <!-- Flash Message -->
             @if (session('status') || session('success'))
-                <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-medium">
+                <div class="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 text-emerald-800 dark:text-emerald-300 text-xs sm:text-sm font-medium">
                     {{ session('status') ?? session('success') }}
                 </div>
             @endif
 
             <!-- Verification Status Card -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-[#E8EAF0] dark:border-slate-800 shadow-soft flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div class="space-y-1">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/60">
                         Status Toko: Terverifikasi (Approved)
                     </span>
-                    <h3 class="text-lg font-bold text-slate-900 mt-1">{{ $shop->name }}</h3>
-                    <p class="text-xs text-slate-500">Domain URL Toko: <span class="font-semibold text-slate-700">/shop/{{ $shop->slug }}</span></p>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-1">{{ $shop->name }}</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Domain URL Toko: <span class="font-semibold text-slate-700 dark:text-slate-300">/shop/{{ $shop->slug }}</span></p>
                 </div>
-                <div class="text-left sm:text-right text-xs text-slate-500">
-                    <div>Disetujui sejak: <strong class="text-slate-800">{{ $shop->approved_at?->format('d M Y') ?? 'Resmi' }}</strong></div>
-                    <div class="mt-0.5">Pemilik: <strong class="text-slate-800">{{ $user->name }}</strong></div>
+                <div class="text-left sm:text-right text-xs text-slate-500 dark:text-slate-400">
+                    <div>Disetujui sejak: <strong class="text-slate-800 dark:text-slate-200">{{ $shop->approved_at?->format('d M Y') ?? 'Resmi' }}</strong></div>
+                    <div class="mt-0.5">Pemilik: <strong class="text-slate-800 dark:text-slate-200">{{ $user->name }}</strong></div>
                 </div>
             </div>
 
             <!-- Shop Settings Form Card -->
-            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-[#E8EAF0] dark:border-slate-800 overflow-hidden shadow-card">
                 <form method="POST" action="{{ route('seller.shop.settings.update') }}" class="p-6 sm:p-8 space-y-6">
                     @csrf
                     @method('PUT')
@@ -52,7 +52,7 @@
                             required 
                             autofocus 
                         />
-                        <p class="text-[11px] text-slate-400 mt-1">Nama toko akan tampil di etalase produk, katalog publik, dan halaman invoice pembeli.</p>
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">Nama toko akan tampil di etalase produk, katalog publik, dan halaman invoice pembeli.</p>
                         <x-input-error class="mt-2" :messages="$errors->get('name')" />
                     </div>
 
@@ -63,10 +63,10 @@
                             id="description" 
                             name="description" 
                             rows="4" 
-                            class="mt-1 block w-full border-slate-300 focus:border-orange-500 focus:ring-orange-500 rounded-xl text-xs sm:text-sm text-slate-900 leading-relaxed" 
+                            class="mt-1 block w-full bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-orange-500 focus:ring-orange-500 rounded-xl text-xs sm:text-sm leading-relaxed" 
                             required
                         >{{ old('description', $shop->description) }}</textarea>
-                        <p class="text-[11px] text-slate-400 mt-1">Jelaskan jenis produk yang Anda tawarkan, komitmen pelayanan, dan keunggulan toko Anda.</p>
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">Jelaskan jenis produk yang Anda tawarkan, komitmen pelayanan, dan keunggulan toko Anda.</p>
                         <x-input-error class="mt-2" :messages="$errors->get('description')" />
                     </div>
 
@@ -83,7 +83,7 @@
                                 :value="old('phone', $shop->phone)" 
                                 placeholder="Contoh: 081234567890" 
                             />
-                            <p class="text-[11px] text-slate-400 mt-1">Kontak toko untuk koordinasi operasional dan konfirmasi pengiriman.</p>
+                            <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">Kontak toko untuk koordinasi operasional dan konfirmasi pengiriman.</p>
                             <x-input-error class="mt-2" :messages="$errors->get('phone')" />
                         </div>
 
@@ -98,14 +98,14 @@
                                 :value="old('address', $shop->address)" 
                                 placeholder="Kota asal pengiriman barang..." 
                             />
-                            <p class="text-[11px] text-slate-400 mt-1">Alamat asal kurir untuk perhitungan pengiriman barang.</p>
+                            <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">Alamat asal kurir untuk perhitungan pengiriman barang.</p>
                             <x-input-error class="mt-2" :messages="$errors->get('address')" />
                         </div>
                     </div>
 
                     <!-- Actions -->
-                    <div class="flex items-center justify-end space-x-3 pt-6 border-t border-slate-100">
-                        <a href="{{ route('seller.dashboard') }}" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 transition">
+                    <div class="flex items-center justify-end space-x-3 pt-6 border-t border-slate-100 dark:border-slate-800">
+                        <a href="{{ route('seller.dashboard') }}" class="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">
                             Batal
                         </a>
                         <x-primary-button>

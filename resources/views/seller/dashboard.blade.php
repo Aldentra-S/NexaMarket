@@ -34,80 +34,80 @@
             <!-- 2. Four KPI Cards (Matching Mockup) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- KPI 1: Produk Aktif -->
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-[#E8EAF0] dark:border-slate-800 shadow-soft flex items-center justify-between">
                     <div>
-                        <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 border border-orange-100 flex items-center justify-center mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 border border-orange-100 dark:border-orange-800/60 flex items-center justify-center mb-3">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                             </svg>
                         </div>
-                        <p class="text-xs font-semibold text-slate-500">Produk Aktif</p>
-                        <p class="text-2xl font-black text-slate-900 tracking-tight mt-0.5">{{ $publishedProducts }}</p>
+                        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Produk Aktif</p>
+                        <p class="text-2xl font-black text-slate-900 dark:text-white tracking-tight mt-0.5">{{ $publishedProducts }}</p>
                         <p class="text-[11px] text-slate-400 mt-1">Dari {{ $totalProducts }} total</p>
                     </div>
-                    <a href="{{ route('seller.products.index') }}" class="text-slate-300 hover:text-orange-600 transition font-bold text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded p-1" title="Lihat semua produk">&rarr;</a>
+                    <a href="{{ route('seller.products.index') }}" class="text-slate-300 dark:text-slate-600 hover:text-orange-600 dark:hover:text-orange-400 transition font-bold text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded p-1" title="Lihat semua produk">&rarr;</a>
                 </div>
 
                 <!-- KPI 2: Pesanan Baru -->
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-[#E8EAF0] dark:border-slate-800 shadow-soft flex items-center justify-between">
                     <div>
-                        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-800/60 flex items-center justify-center mb-3">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                             </svg>
                         </div>
-                        <p class="text-xs font-semibold text-slate-500">Pesanan Baru</p>
-                        <p class="text-2xl font-black text-slate-900 tracking-tight mt-0.5">{{ $newOrdersCount }}</p>
+                        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Pesanan Baru</p>
+                        <p class="text-2xl font-black text-slate-900 dark:text-white tracking-tight mt-0.5">{{ $newOrdersCount }}</p>
                         <p class="text-[11px] text-slate-400 mt-1">Perlu diproses</p>
                     </div>
-                    <a href="{{ route('seller.orders.index') }}" class="text-slate-300 hover:text-orange-600 transition font-bold text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded p-1" title="Lihat pesanan masuk">&rarr;</a>
+                    <a href="{{ route('seller.orders.index') }}" class="text-slate-300 dark:text-slate-600 hover:text-orange-600 dark:hover:text-orange-400 transition font-bold text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded p-1" title="Lihat pesanan masuk">&rarr;</a>
                 </div>
 
                 <!-- KPI 3: Perlu Diproses -->
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-[#E8EAF0] dark:border-slate-800 shadow-soft flex items-center justify-between">
                     <div>
-                        <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 border border-sky-100 dark:border-sky-800/60 flex items-center justify-center mb-3">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
-                        <p class="text-xs font-semibold text-slate-500">Perlu Diproses</p>
-                        <p class="text-2xl font-black text-slate-900 tracking-tight mt-0.5">{{ $processingOrdersCount }}</p>
+                        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Perlu Diproses</p>
+                        <p class="text-2xl font-black text-slate-900 dark:text-white tracking-tight mt-0.5">{{ $processingOrdersCount }}</p>
                         <p class="text-[11px] text-slate-400 mt-1">Menunggu konfirmasi</p>
                     </div>
-                    <a href="{{ route('seller.orders.index') }}" class="text-slate-300 hover:text-orange-600 transition font-bold text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded p-1" title="Proses pesanan">&rarr;</a>
+                    <a href="{{ route('seller.orders.index') }}" class="text-slate-300 dark:text-slate-600 hover:text-orange-600 dark:hover:text-orange-400 transition font-bold text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded p-1" title="Proses pesanan">&rarr;</a>
                 </div>
 
                 <!-- KPI 4: Pendapatan -->
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-[#E8EAF0] dark:border-slate-800 shadow-soft flex items-center justify-between">
                     <div>
-                        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800/60 flex items-center justify-center mb-3">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
                         </div>
-                        <p class="text-xs font-semibold text-slate-500">Total Pendapatan Terverifikasi</p>
-                        <p class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-0.5">
+                        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Total Pendapatan Terverifikasi</p>
+                        <p class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight mt-0.5">
                             Rp {{ number_format($totalRevenue, 0, ',', '.') }}
                         </p>
-                        <p class="text-[11px] text-emerald-600 font-semibold mt-1">Bulan ini</p>
+                        <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-1">Bulan ini</p>
                     </div>
-                    <span class="text-slate-300 text-sm font-bold">&bull;</span>
+                    <span class="text-slate-300 dark:text-slate-600 text-sm font-bold">&bull;</span>
                 </div>
             </div>
 
             <!-- 3. Middle Row: Sales Trend (Line Chart) & Order Status (Donut Chart) -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <!-- Penjualan 7 Hari Terakhir (Line Chart) -->
-                <div class="lg:col-span-8 bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs flex flex-col justify-between">
+                <div class="lg:col-span-8 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-[#E8EAF0] dark:border-slate-800 shadow-card flex flex-col justify-between">
                     <div>
-                        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                        <div class="flex items-center justify-between pb-4 border-b border-[#E8EAF0] dark:border-slate-800">
                             <div>
-                                <h3 class="font-bold text-sm sm:text-base text-slate-900">Penjualan 7 Hari Terakhir</h3>
-                                <p class="text-xs text-slate-500">Performa transaksi dan omzet harian toko</p>
+                                <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">Penjualan 7 Hari Terakhir</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Performa transaksi dan omzet harian toko</p>
                             </div>
                             <div class="relative">
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-slate-50 border border-slate-200 rounded-xl">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-[#F7F8FA] dark:bg-slate-800 border border-[#E8EAF0] dark:border-slate-700 rounded-xl">
                                     <span>7 hari terakhir</span>
                                     <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -189,11 +189,11 @@
                 </div>
 
                 <!-- Status Pesanan (Donut Chart) -->
-                <div class="lg:col-span-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs flex flex-col justify-between">
+                <div class="lg:col-span-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-[#E8EAF0] dark:border-slate-800 shadow-card flex flex-col justify-between">
                     <div>
-                        <div class="pb-4 border-b border-slate-100">
-                            <h3 class="font-bold text-sm sm:text-base text-slate-900">Status Pesanan</h3>
-                            <p class="text-xs text-slate-500">Distribusi pesanan toko</p>
+                        <div class="pb-4 border-b border-[#E8EAF0] dark:border-slate-800">
+                            <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">Status Pesanan</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Distribusi pesanan toko</p>
                         </div>
 
                         <!-- Donut Graphic Representation -->
@@ -279,11 +279,11 @@
             </div>
 
             <!-- 4. Pesanan Terbaru Table (Matching Mockup) -->
-            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs">
-                <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-[#E8EAF0] dark:border-slate-800 overflow-hidden shadow-card">
+                <div class="p-6 border-b border-[#E8EAF0] dark:border-slate-800 flex items-center justify-between">
                     <div>
-                        <h3 class="font-bold text-base text-slate-900">Pesanan Terbaru</h3>
-                        <p class="text-xs text-slate-500 mt-0.5">Daftar transaksi pesanan terakhir yang masuk ke toko Anda</p>
+                        <h3 class="font-bold text-base text-slate-900 dark:text-white">Pesanan Terbaru</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Daftar transaksi pesanan terakhir yang masuk ke toko Anda</p>
                     </div>
                     <a href="{{ route('seller.orders.index') }}" class="inline-flex items-center gap-1 text-xs font-bold text-orange-600 hover:text-orange-700 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded">
                         <span>Lihat Semua</span>
@@ -292,8 +292,8 @@
                 </div>
 
                 <div class="overflow-x-auto">
-                    <table class="min-w-[700px] w-full divide-y divide-slate-100 text-xs">
-                        <thead class="bg-slate-50 text-slate-500 font-semibold">
+                    <table class="min-w-[700px] w-full divide-y divide-[#E8EAF0] dark:divide-slate-800 text-xs">
+                        <thead class="bg-[#F7F8FA] dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 font-semibold">
                             <tr>
                                 <th scope="col" class="px-6 py-3.5 text-left">No. Pesanan</th>
                                 <th scope="col" class="px-6 py-3.5 text-left">Produk</th>
@@ -303,7 +303,7 @@
                                 <th scope="col" class="px-6 py-3.5 text-right">Tanggal</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100 bg-white">
+                        <tbody class="divide-y divide-[#E8EAF0] dark:divide-slate-800 bg-white dark:bg-slate-900">
                             @forelse ($recentOrders as $so)
                                 <tr class="hover:bg-slate-50/70 transition">
                                     <!-- No. Pesanan -->

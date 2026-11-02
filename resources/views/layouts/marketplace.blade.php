@@ -22,12 +22,27 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="font-sans antialiased bg-slate-50 text-slate-900 min-h-full flex flex-col" x-data="{ mobileMenuOpen: false, logoutModalOpen: false }" @keydown.escape.window="mobileMenuOpen = false; logoutModalOpen = false">
-    <!-- Main Marketplace Header -->
+<body class="font-sans antialiased text-slate-900 dark:text-white min-h-full flex flex-col relative overflow-x-hidden" x-data="{ mobileMenuOpen: false, logoutModalOpen: false }" @keydown.escape.window="mobileMenuOpen = false; logoutModalOpen = false">
     @php
         $headerCategories = \App\Models\Category::active()->orderBy('name')->get();
+
+        // Page-specific ambient background determination
+        if (isset($ambientVariant)) {
+            $bgVariant = $ambientVariant;
+        } elseif (request()->routeIs('products.show')) {
+            $bgVariant = 'product';
+        } elseif (request()->routeIs('products.index')) {
+            $bgVariant = 'catalog';
+        } else {
+            $bgVariant = 'marketplace';
+        }
     @endphp
-    <header @keydown.escape.window="mobileMenuOpen = false" class="sticky top-0 z-40 bg-white border-b border-slate-200/80 shadow-2xs">
+
+    <!-- Soft Gradient Ambient Background System -->
+    <x-ambient-background :variant="$bgVariant" />
+
+    <!-- Main Marketplace Header -->
+    <header @keydown.escape.window="mobileMenuOpen = false" class="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 shadow-2xs transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-50">
             <div class="flex items-center justify-between h-20 gap-4 lg:gap-8">
                 <!-- Brand Logo -->
@@ -253,7 +268,7 @@
         </div>
 
         <!-- Secondary Sub-Navbar (Shopcart Style) -->
-        <div class="hidden lg:block border-t border-slate-100 bg-white text-xs text-slate-700">
+        <div class="hidden lg:block border-t border-slate-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-xs text-slate-700 dark:text-slate-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-11">
                 <div class="flex items-center gap-6">
                     <!-- Categories Dropdown Trigger -->
@@ -511,12 +526,12 @@
     </header>
 
     <!-- Main Content Slot -->
-    <main class="flex-1">
+    <main class="flex-1 relative z-10">
         {{ $slot }}
     </main>
 
     <!-- Marketplace Footer -->
-    <footer class="bg-white border-t border-slate-200 mt-auto">
+    <footer class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs border-t border-slate-200 dark:border-slate-800 mt-auto relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
                 <!-- Col 1: Brand & Tagline -->

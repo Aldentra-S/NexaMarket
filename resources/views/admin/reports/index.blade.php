@@ -30,36 +30,36 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <!-- Headline Financial & Operational KPIs -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white p-5 rounded-2xl border border-slate-200">
-                    <div class="text-xs font-semibold text-slate-500">Gross Merchandise Value (GMV)</div>
-                    <div class="text-xl sm:text-2xl font-bold text-emerald-700 mt-2">
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-[#E8EAF0] dark:border-slate-800 shadow-soft">
+                    <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">Gross Merchandise Value (GMV)</div>
+                    <div class="text-xl sm:text-2xl font-bold text-emerald-700 dark:text-emerald-400 mt-2">
                         Rp {{ number_format($totalGmv, 0, ',', '.') }}
                     </div>
-                    <p class="text-[11px] text-slate-500 mt-1">Total nilai transaksi berbayar</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Total nilai transaksi berbayar</p>
                 </div>
 
-                <div class="bg-white p-5 rounded-2xl border border-slate-200">
-                    <div class="text-xs font-semibold text-slate-500">Barang Terjual</div>
-                    <div class="text-xl sm:text-2xl font-bold text-slate-900 mt-2">
-                        {{ number_format($totalSoldUnits, 0, ',', '.') }} <span class="text-xs font-normal text-slate-500">unit</span>
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-[#E8EAF0] dark:border-slate-800 shadow-soft">
+                    <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">Barang Terjual</div>
+                    <div class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-2">
+                        {{ number_format($totalSoldUnits, 0, ',', '.') }} <span class="text-xs font-normal text-slate-500 dark:text-slate-400">unit</span>
                     </div>
-                    <p class="text-[11px] text-slate-500 mt-1">Akumulasi seluruh pesanan sukses</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Akumulasi seluruh pesanan sukses</p>
                 </div>
 
-                <div class="bg-white p-5 rounded-2xl border border-slate-200">
-                    <div class="text-xs font-semibold text-slate-500">Pesanan Terselesaikan</div>
-                    <div class="text-xl sm:text-2xl font-bold text-slate-900 mt-2">
-                        {{ $completedOrdersCount }} <span class="text-xs font-normal text-slate-500">pesanan</span>
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-[#E8EAF0] dark:border-slate-800 shadow-soft">
+                    <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">Pesanan Terselesaikan</div>
+                    <div class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-2">
+                        {{ $completedOrdersCount }} <span class="text-xs font-normal text-slate-500 dark:text-slate-400">pesanan</span>
                     </div>
-                    <p class="text-[11px] text-slate-500 mt-1">Telah diterima oleh pembeli</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Telah diterima oleh pembeli</p>
                 </div>
 
-                <div class="bg-white p-5 rounded-2xl border border-slate-200">
-                    <div class="text-xs font-semibold text-slate-500">Total Akumulasi Pesanan</div>
-                    <div class="text-xl sm:text-2xl font-bold text-slate-900 mt-2">
-                        {{ $totalOrdersCount }} <span class="text-xs font-normal text-slate-500">pesanan</span>
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-[#E8EAF0] dark:border-slate-800 shadow-soft">
+                    <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">Total Akumulasi Pesanan</div>
+                    <div class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-2">
+                        {{ $totalOrdersCount }} <span class="text-xs font-normal text-slate-500 dark:text-slate-400">pesanan</span>
                     </div>
-                    <p class="text-[11px] text-slate-500 mt-1">Seluruh pesanan masuk di sistem</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Seluruh pesanan masuk di sistem</p>
                 </div>
             </div>
 
@@ -67,13 +67,13 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <!-- Left: Categories & Distribution (6 cols) -->
                 <div class="lg:col-span-6 space-y-6">
-                    <div class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
-                        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-[#E8EAF0] dark:border-slate-800 p-6 space-y-4 shadow-soft">
+                        <div class="flex items-center justify-between border-b border-[#E8EAF0] dark:border-slate-800 pb-4">
                             <div>
-                                <h3 class="font-bold text-sm text-slate-900">Distribusi Produk per Kategori</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">Taksonomi katalog produk dengan keterisian terbanyak</p>
+                                <h3 class="font-bold text-sm text-slate-900 dark:text-white">Distribusi Produk per Kategori</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Taksonomi katalog produk dengan keterisian terbanyak</p>
                             </div>
-                            <a href="{{ route('admin.categories.index') }}" class="text-xs font-semibold text-emerald-700 hover:underline">
+                            <a href="{{ route('admin.categories.index') }}" class="text-xs font-semibold text-coral-600 hover:text-coral-700 dark:text-coral-400 hover:underline">
                                 Kelola &rarr;
                             </a>
                         </div>
@@ -81,32 +81,32 @@
                         @if($categoriesReport->isNotEmpty())
                             <div class="space-y-3">
                                 @foreach($categoriesReport as $category)
-                                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs">
+                                    <div class="p-3 rounded-xl bg-[#F7F8FA] dark:bg-slate-800/60 border border-[#E8EAF0] dark:border-slate-800 flex items-center justify-between text-xs">
                                         <div>
-                                            <span class="font-bold text-slate-900">{{ $category->name }}</span>
+                                            <span class="font-bold text-slate-900 dark:text-white">{{ $category->name }}</span>
                                             <span class="text-[11px] text-slate-400 block mt-0.5">Slug: {{ $category->slug }}</span>
                                         </div>
-                                        <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                                        <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60">
                                             {{ $category->products_count }} produk
                                         </span>
                                     </div>
                                 @endforeach
                             </div>
                         @else
-                            <p class="text-xs text-slate-500 text-center py-6">Belum ada data kategori.</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 text-center py-6">Belum ada data kategori.</p>
                         @endif
                     </div>
                 </div>
 
                 <!-- Right: Top Active Shops (6 cols) -->
                 <div class="lg:col-span-6 space-y-6">
-                    <div class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
-                        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-[#E8EAF0] dark:border-slate-800 p-6 space-y-4 shadow-soft">
+                        <div class="flex items-center justify-between border-b border-[#E8EAF0] dark:border-slate-800 pb-4">
                             <div>
-                                <h3 class="font-bold text-sm text-slate-900">Mitra Penjual Aktif</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">Toko terverifikasi dengan aktivitas etalase &amp; pemenuhan pesanan</p>
+                                <h3 class="font-bold text-sm text-slate-900 dark:text-white">Mitra Penjual Aktif</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Toko terverifikasi dengan aktivitas etalase &amp; pemenuhan pesanan</p>
                             </div>
-                            <a href="{{ route('admin.shops.index') }}" class="text-xs font-semibold text-emerald-700 hover:underline">
+                            <a href="{{ route('admin.shops.index') }}" class="text-xs font-semibold text-coral-600 hover:text-coral-700 dark:text-coral-400 hover:underline">
                                 Semua Toko &rarr;
                             </a>
                         </div>
@@ -114,17 +114,17 @@
                         @if($topShops->isNotEmpty())
                             <div class="space-y-3">
                                 @foreach($topShops as $shop)
-                                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs">
+                                    <div class="p-3 rounded-xl bg-[#F7F8FA] dark:bg-slate-800/60 border border-[#E8EAF0] dark:border-slate-800 flex items-center justify-between text-xs">
                                         <div>
-                                            <a href="{{ route('admin.shops.show', $shop) }}" class="font-bold text-slate-900 hover:text-emerald-700 transition">
+                                            <a href="{{ route('admin.shops.show', $shop) }}" class="font-bold text-slate-900 dark:text-white hover:text-coral-600 dark:hover:text-coral-400 transition">
                                                 {{ $shop->name }}
                                             </a>
-                                            <span class="text-[11px] text-slate-500 block mt-0.5">
+                                            <span class="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5">
                                                 {{ $shop->products_count }} produk etalase
                                             </span>
                                         </div>
                                         <div class="text-right">
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-200 text-slate-800">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200">
                                                 {{ $shop->shop_orders_count }} pesanan
                                             </span>
                                         </div>
@@ -132,28 +132,28 @@
                                 @endforeach
                             </div>
                         @else
-                            <p class="text-xs text-slate-500 text-center py-6">Belum ada mitra toko yang disetujui.</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 text-center py-6">Belum ada mitra toko yang disetujui.</p>
                         @endif
                     </div>
                 </div>
             </div>
 
             <!-- Recent Settled Transactions Table -->
-            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                <div class="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-[#E8EAF0] dark:border-slate-800 overflow-hidden shadow-card">
+                <div class="p-5 sm:p-6 border-b border-[#E8EAF0] dark:border-slate-800 flex items-center justify-between">
                     <div>
-                        <h3 class="font-bold text-sm text-slate-900">Transaksi Berhasil Terbaru</h3>
-                        <p class="text-xs text-slate-500 mt-0.5">Daftar transaksi yang telah terbayar dan masuk ke sistem</p>
+                        <h3 class="font-bold text-sm text-slate-900 dark:text-white">Transaksi Berhasil Terbaru</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Daftar transaksi yang telah terbayar dan masuk ke sistem</p>
                     </div>
-                    <a href="{{ route('admin.payments.index') }}" class="text-xs font-semibold text-emerald-700 hover:text-emerald-800">
+                    <a href="{{ route('admin.payments.index') }}" class="text-xs font-semibold text-coral-600 hover:text-coral-700 dark:text-coral-400">
                         Audit Pembayaran &rarr;
                     </a>
                 </div>
 
                 @if($recentSettlements->isNotEmpty())
                     <div class="overflow-x-auto">
-                        <table class="min-w-[650px] w-full divide-y divide-slate-100 text-xs">
-                            <thead class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-100">
+                        <table class="min-w-[650px] w-full divide-y divide-[#E8EAF0] dark:divide-slate-800 text-xs">
+                            <thead class="bg-[#F7F8FA] dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 font-semibold border-b border-[#E8EAF0] dark:border-slate-800">
                                 <tr>
                                     <th scope="col" class="px-6 py-3.5 text-left">No. Pesanan</th>
                                     <th scope="col" class="px-6 py-3.5 text-left">Pembeli</th>
@@ -163,31 +163,31 @@
                                     <th scope="col" class="px-6 py-3.5 text-right">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100 bg-white">
+                            <tbody class="divide-y divide-[#E8EAF0] dark:divide-slate-800 bg-white dark:bg-slate-900">
                                 @foreach($recentSettlements as $order)
-                                    <tr class="hover:bg-slate-50/70 transition">
-                                        <td class="px-6 py-4 whitespace-nowrap font-bold text-slate-900">
+                                    <tr class="hover:bg-[#F7F8FA]/60 dark:hover:bg-slate-800/40 transition">
+                                        <td class="px-6 py-4 whitespace-nowrap font-bold text-slate-900 dark:text-white">
                                             {{ $order->order_number }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="font-medium text-slate-800">{{ $order->user->name ?? 'User' }}</div>
+                                            <div class="font-medium text-slate-800 dark:text-slate-200">{{ $order->user->name ?? 'User' }}</div>
                                             <div class="text-[11px] text-slate-400">{{ $order->user->email ?? '-' }}</div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-slate-600">
+                                        <td class="px-6 py-4 whitespace-nowrap text-slate-600 dark:text-slate-300">
                                             @foreach($order->shopOrders as $so)
-                                                <span class="inline-block px-2 py-0.5 bg-slate-100 rounded text-[11px] mr-1">
+                                                <span class="inline-block px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-[11px] mr-1">
                                                     {{ $so->shop_name ?? ($so->shop->name ?? 'Toko') }}
                                                 </span>
                                             @endforeach
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right font-bold text-emerald-700">
+                                        <td class="px-6 py-4 whitespace-nowrap text-right font-bold text-emerald-700 dark:text-emerald-400">
                                             {{ $order->formattedTotal() }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-slate-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-slate-500 dark:text-slate-400">
                                             {{ $order->paid_at ? $order->paid_at->format('d M Y, H:i') : '-' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right font-medium">
-                                            <a href="{{ route('admin.orders.show', $order) }}" class="text-xs font-semibold text-emerald-700 hover:underline">
+                                            <a href="{{ route('admin.orders.show', $order) }}" class="text-xs font-semibold text-coral-600 hover:text-coral-700 dark:text-coral-400 hover:underline">
                                                 Detail &rarr;
                                             </a>
                                         </td>

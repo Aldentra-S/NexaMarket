@@ -14,7 +14,7 @@
                     Dibuat pada: {{ $order->created_at->format('d M Y, H:i') }} WIB &bull; Pembeli: {{ $order->user->name ?? 'User' }}
                 </p>
             </div>
-            <a href="{{ route('admin.orders.index') }}" class="text-xs font-semibold text-slate-600 hover:text-emerald-700 transition">
+            <a href="{{ route('admin.orders.index') }}" class="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-coral-600 dark:hover:text-coral-400 transition">
                 &larr; Kembali ke Daftar Pesanan
             </a>
         </div>

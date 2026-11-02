@@ -1,7 +1,7 @@
 <!-- Admin Sidebar Component -->
 <aside 
     :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
-    class="fixed top-0 bottom-0 left-0 w-64 bg-white border-r border-slate-200 z-50 flex flex-col transition-transform duration-200 ease-in-out select-none"
+    class="fixed top-0 bottom-0 left-0 w-64 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-r border-slate-200 dark:border-slate-800 z-50 flex flex-col transition-transform duration-200 ease-in-out select-none"
     aria-label="Admin Navigation"
 >
     <!-- Brand & Workspace Header -->
@@ -44,7 +44,7 @@
         <div class="space-y-1">
             <a 
                 href="{{ route('admin.dashboard') }}" 
-                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition relative group {{ request()->routeIs('admin.dashboard') ? 'bg-orange-50 text-orange-600 font-bold border-l-4 border-orange-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs transition group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ request()->routeIs('admin.dashboard') ? 'bg-orange-50 text-orange-700 font-bold shadow-2xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium' }}"
             >
                 <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.dashboard') ? 'text-orange-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -62,7 +62,7 @@
             <!-- Persetujuan Toko -->
             <a 
                 href="{{ route('admin.shops.index') }}" 
-                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition relative group {{ request()->routeIs('admin.shops.*') ? 'bg-orange-50 text-orange-600 font-bold border-l-4 border-orange-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs transition group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ request()->routeIs('admin.shops.*') ? 'bg-orange-50 text-orange-700 font-bold shadow-2xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium' }}"
             >
                 <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.shops.*') ? 'text-orange-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -73,7 +73,7 @@
             <!-- Kategori Produk -->
             <a 
                 href="{{ route('admin.categories.index') }}" 
-                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition relative group {{ request()->routeIs('admin.categories.*') ? 'bg-orange-50 text-orange-600 font-bold border-l-4 border-orange-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs transition group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ request()->routeIs('admin.categories.*') ? 'bg-orange-50 text-orange-700 font-bold shadow-2xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium' }}"
             >
                 <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.categories.*') ? 'text-orange-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5a1.99 1.99 0 011.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V5a2 2 0 012-2z" />
@@ -84,7 +84,7 @@
             <!-- Pengguna -->
             <a 
                 href="{{ route('admin.users.index') }}" 
-                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition relative group {{ request()->routeIs('admin.users.*') ? 'bg-orange-50 text-orange-600 font-bold border-l-4 border-orange-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs transition group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ request()->routeIs('admin.users.*') ? 'bg-orange-50 text-orange-700 font-bold shadow-2xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium' }}"
             >
                 <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.users.*') ? 'text-orange-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -95,7 +95,7 @@
             <!-- Produk -->
             <a 
                 href="{{ route('admin.products.index') }}" 
-                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition relative group {{ request()->routeIs('admin.products.*') ? 'bg-orange-50 text-orange-600 font-bold border-l-4 border-orange-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs transition group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ request()->routeIs('admin.products.*') ? 'bg-orange-50 text-orange-700 font-bold shadow-2xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium' }}"
             >
                 <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.products.*') ? 'text-orange-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -106,7 +106,7 @@
             <!-- Pesanan -->
             <a 
                 href="{{ route('admin.orders.index') }}" 
-                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition relative group {{ request()->routeIs('admin.orders.*') ? 'bg-orange-50 text-orange-600 font-bold border-l-4 border-orange-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs transition group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ request()->routeIs('admin.orders.*') ? 'bg-orange-50 text-orange-700 font-bold shadow-2xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium' }}"
             >
                 <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.orders.*') ? 'text-orange-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -117,7 +117,7 @@
             <!-- Pembayaran -->
             <a 
                 href="{{ route('admin.payments.index') }}" 
-                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition relative group {{ request()->routeIs('admin.payments.*') ? 'bg-orange-50 text-orange-600 font-bold border-l-4 border-orange-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs transition group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ request()->routeIs('admin.payments.*') ? 'bg-orange-50 text-orange-700 font-bold shadow-2xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium' }}"
             >
                 <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.payments.*') ? 'text-orange-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
@@ -128,7 +128,7 @@
             <!-- Refund -->
             <a 
                 href="{{ route('admin.refunds.index') }}" 
-                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition relative group {{ request()->routeIs('admin.refunds.*') ? 'bg-orange-50 text-orange-600 font-bold border-l-4 border-orange-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs transition group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ request()->routeIs('admin.refunds.*') ? 'bg-orange-50 text-orange-700 font-bold shadow-2xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium' }}"
             >
                 <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.refunds.*') ? 'text-orange-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -146,7 +146,7 @@
             <!-- Laporan -->
             <a 
                 href="{{ route('admin.reports.index') }}" 
-                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition relative group {{ request()->routeIs('admin.reports.*') ? 'bg-orange-50 text-orange-600 font-bold border-l-4 border-orange-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs transition group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ request()->routeIs('admin.reports.*') ? 'bg-orange-50 text-orange-700 font-bold shadow-2xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium' }}"
             >
                 <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.reports.*') ? 'text-orange-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -164,7 +164,7 @@
             <!-- Profil Akun -->
             <a 
                 href="{{ route('admin.profile') }}" 
-                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition relative group {{ request()->routeIs('admin.profile*') ? 'bg-orange-50 text-orange-600 font-bold border-l-4 border-orange-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs transition group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 {{ request()->routeIs('admin.profile*') ? 'bg-orange-50 text-orange-700 font-bold shadow-2xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium' }}"
             >
                 <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.profile*') ? 'text-orange-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />

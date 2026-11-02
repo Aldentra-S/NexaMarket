@@ -5,8 +5,8 @@
     'actionUrl' => null,
 ])
 
-<div {{ $attributes->merge(['class' => 'bg-white rounded-2xl border border-slate-200 p-8 sm:p-12 text-center max-w-lg mx-auto']) }}>
-    <div class="w-14 h-14 bg-emerald-50 text-emerald-800 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-emerald-200">
+<div {{ $attributes->merge(['class' => 'bg-white dark:bg-slate-900 rounded-3xl border border-[#E8EAF0] dark:border-slate-800 p-8 sm:p-12 text-center max-w-lg mx-auto shadow-card']) }}>
+    <div class="w-14 h-14 bg-[#FFF0E9] dark:bg-coral-950/40 text-coral-600 dark:text-coral-400 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-coral-200/80 dark:border-coral-800/60 shadow-2xs">
         @if (isset($icon) && $icon->isNotEmpty())
             {{ $icon }}
         @else
@@ -16,18 +16,18 @@
         @endif
     </div>
 
-    <h3 class="text-base font-bold text-slate-900 mb-1">
+    <h3 class="text-base font-bold text-slate-900 dark:text-white mb-1 tracking-tight">
         {{ $title }}
     </h3>
 
     @if ($description)
-        <p class="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto mb-6 leading-relaxed">
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6 leading-relaxed">
             {{ $description }}
         </p>
     @endif
 
     @if ($actionText && $actionUrl)
-        <a href="{{ $actionUrl }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs transition focus:ring-2 focus:ring-emerald-700 focus:ring-offset-2">
+        <a href="{{ $actionUrl }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-coral-500 hover:bg-coral-600 active:bg-coral-700 text-white font-semibold text-xs sm:text-sm transition focus:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 focus-visible:ring-offset-2 shadow-soft">
             <span>{{ $actionText }}</span>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
@@ -37,4 +37,3 @@
 
     {{ $slot }}
 </div>
-

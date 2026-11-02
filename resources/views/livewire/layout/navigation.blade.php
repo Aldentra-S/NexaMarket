@@ -16,7 +16,7 @@ new class extends Component
     }
 }; ?>
 
-<nav x-data="{ open: false, logoutModalOpen: false }" @keydown.escape.window="open = false; logoutModalOpen = false" class="bg-white border-b border-slate-200 relative z-40">
+<nav x-data="{ open: false, logoutModalOpen: false }" @keydown.escape.window="open = false; logoutModalOpen = false" class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 relative z-40 transition-colors">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-50">
         <div class="flex justify-between h-16">
