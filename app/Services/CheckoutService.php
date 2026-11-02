@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\OrderStatus;
 use App\Enums\ProductStatus;
 use App\Enums\ShopStatus;
+use App\Models\Address;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -95,18 +96,6 @@ class CheckoutService
                 ];
             }
 
-            // Create Parent Order
-            $orderNumber = 'ORD-' . now()->format('Ymd') . '-' . strtoupper(Str::random(6));
-
-            $order = Order::create([
-                'user_id' => $user->id,
-                'order_number' => $orderNumber,
-                'status' => OrderStatus::PENDING,
-                'total_amount' => $totalAmount,
-                'idempotency_key' => $idempotencyKey,
-                'notes' => $data['notes'] ?? null,
-            ]);
-
             // Group locked items by shop for multi-vendor splitting
             $groupedByShop = [];
             foreach ($lockedProducts as $itemData) {
@@ -114,9 +103,61 @@ class CheckoutService
                 $groupedByShop[$shopId][] = $itemData;
             }
 
+            // Resolve shipping address (if provided, verify ownership; otherwise use default if available)
+            $addressId = $data['address_id'] ?? null;
+            $address = null;
+
+            if (! empty($addressId)) {
+                $address = Address::where('id', $addressId)
+                    ->where('user_id', $user->id)
+                    ->first();
+
+                if (! $address) {
+                    throw ValidationException::withMessages([
+                        'address_id' => 'Alamat pengiriman yang dipilih tidak valid atau bukan milik Anda.',
+                    ]);
+                }
+            } else {
+                $address = $user->defaultAddress();
+            }
+
+            // Calculate multi-vendor shipping cost per shop based on shop configuration
+            $totalShippingCost = 0.00;
+            $shopShippingCosts = [];
+            foreach ($groupedByShop as $shopId => $items) {
+                $shop = $items[0]['product']->shop;
+                $shopCost = (float) ($shop->shipping_cost ?? 0.00);
+                $shopShippingCosts[$shopId] = $shopCost;
+                $totalShippingCost = (float) bcadd((string) $totalShippingCost, (string) $shopCost, 2);
+            }
+
+            $grandTotal = (float) bcadd((string) $totalAmount, (string) $totalShippingCost, 2);
+
+            // Create Parent Order
+            $orderNumber = 'ORD-' . now()->format('Ymd') . '-' . strtoupper(Str::random(6));
+
+            $order = Order::create([
+                'user_id' => $user->id,
+                'order_number' => $orderNumber,
+                'status' => OrderStatus::PENDING,
+                'total_amount' => $grandTotal,
+                'idempotency_key' => $idempotencyKey,
+                'notes' => $data['notes'] ?? null,
+                'shipping_recipient_name' => $address?->recipient_name,
+                'shipping_phone' => $address?->phone,
+                'shipping_province' => $address?->province,
+                'shipping_city' => $address?->city,
+                'shipping_district' => $address?->district,
+                'shipping_postal_code' => $address?->postal_code,
+                'shipping_address' => $address ? ($address->address_line . ($address->village ? ', Kel. ' . $address->village : '')) : null,
+                'shipping_delivery_notes' => $address?->delivery_notes,
+                'shipping_cost_total' => $totalShippingCost,
+            ]);
+
             $shopOrderIndex = 1;
             foreach ($groupedByShop as $shopId => $items) {
                 $shop = $items[0]['product']->shop;
+                $shopShippingCost = $shopShippingCosts[$shopId] ?? 0.00;
 
                 $shopSubtotal = 0.00;
                 foreach ($items as $item) {
@@ -130,6 +171,7 @@ class CheckoutService
                     'order_number' => $orderNumber . '-S' . $shopOrderIndex++,
                     'status' => OrderStatus::PENDING,
                     'subtotal' => $shopSubtotal,
+                    'shipping_cost' => $shopShippingCost,
                 ]);
 
                 foreach ($items as $item) {

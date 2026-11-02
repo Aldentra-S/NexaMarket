@@ -29,6 +29,18 @@ class UpdateOrderStatusRequest extends FormRequest
                 'string',
                 Rule::enum(OrderStatus::class),
             ],
+            'courier' => [
+                Rule::requiredIf(fn () => $this->status === OrderStatus::SHIPPED->value && ($this->has('courier') || $this->has('tracking_number'))),
+                'nullable',
+                'string',
+                'max:50',
+            ],
+            'tracking_number' => [
+                Rule::requiredIf(fn () => $this->status === OrderStatus::SHIPPED->value && ($this->has('courier') || $this->has('tracking_number'))),
+                'nullable',
+                'string',
+                'max:100',
+            ],
         ];
     }
 
@@ -41,6 +53,8 @@ class UpdateOrderStatusRequest extends FormRequest
     {
         return [
             'status' => 'status pesanan',
+            'courier' => 'kurir pengiriman',
+            'tracking_number' => 'nomor resi',
         ];
     }
 }

@@ -54,6 +54,7 @@ class ShopSettingsController extends Controller
         $shop->description = $request->validated('description');
         $shop->phone = $request->validated('phone');
         $shop->address = $request->validated('address');
+        $shop->shipping_cost = (float) $request->validated('shipping_cost', 0);
         $shop->save();
 
         return redirect()->route('seller.shop.settings')

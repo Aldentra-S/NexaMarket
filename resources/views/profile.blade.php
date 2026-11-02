@@ -66,6 +66,9 @@
                     </div>
 
                     <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+                        <a href="{{ route('buyer.addresses.index') }}" class="flex-1 sm:flex-none text-center px-4 py-2.5 rounded-xl border border-[#E8EAF0] dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:border-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition shadow-2xs">
+                            Buku Alamat ({{ $user->addresses()->count() }})
+                        </a>
                         <a href="#edit-profil" class="flex-1 sm:flex-none text-center px-4 py-2.5 rounded-xl border border-[#E8EAF0] dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:border-coral-400 hover:text-coral-600 dark:hover:text-coral-400 transition shadow-2xs">
                             Edit Profil
                         </a>

@@ -73,8 +73,10 @@ class OrderController extends Controller
         Gate::authorize('update', $shopOrder);
 
         $targetStatus = OrderStatus::from($request->validated('status'));
+        $courier = $request->validated('courier');
+        $trackingNumber = $request->validated('tracking_number');
 
-        $fulfillmentService->updateStatus($shopOrder, $targetStatus);
+        $fulfillmentService->updateStatus($shopOrder, $targetStatus, $courier, $trackingNumber);
 
         return redirect()->route('seller.orders.show', $shopOrder)
             ->with('success', "Status pesanan {$shopOrder->order_number} berhasil diperbarui menjadi {$targetStatus->label()}.");

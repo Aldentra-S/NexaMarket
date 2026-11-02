@@ -103,9 +103,19 @@
                         </div>
 
                         <!-- Subtotal Footer -->
-                        <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
-                            <span class="text-xs font-semibold text-slate-600">Subtotal Pesanan Toko</span>
-                            <span class="text-lg font-bold text-orange-600">{{ $shopOrder->formattedSubtotal() }}</span>
+                        <div class="p-6 bg-slate-50 border-t border-slate-100 space-y-2 text-xs">
+                            <div class="flex justify-between items-center text-slate-600">
+                                <span>Subtotal Produk:</span>
+                                <span class="font-bold text-slate-900">{{ $shopOrder->formattedSubtotal() }}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-slate-600">
+                                <span>Ongkos Kirim Toko:</span>
+                                <span class="font-bold text-slate-900">{{ $shopOrder->formattedShippingCost() }}</span>
+                            </div>
+                            <div class="pt-2 border-t border-slate-200/80 flex justify-between items-center">
+                                <span class="font-bold text-slate-800 text-sm">Total Pesanan Toko:</span>
+                                <span class="text-lg font-black text-orange-600">{{ $shopOrder->formattedTotal() }}</span>
+                            </div>
                         </div>
                     </div>
 
@@ -119,10 +129,22 @@
                                 <div class="text-slate-600">{{ $shopOrder->order->user->email ?? '-' }}</div>
                             </div>
                             <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
-                                <span class="text-slate-500 block font-semibold">Alamat Penerima</span>
-                                <div class="text-slate-800 leading-relaxed">
-                                    {{ $shopOrder->order->shipping_address ?? 'Alamat standar terdaftar di profil pembeli' }}
-                                </div>
+                                <span class="text-slate-500 block font-semibold">Penerima & Alamat Kirim</span>
+                                @if($shopOrder->order->hasShippingAddress())
+                                    <div class="font-bold text-slate-900">{{ $shopOrder->order->shipping_recipient_name }} ({{ $shopOrder->order->shipping_phone }})</div>
+                                    <div class="text-slate-700 leading-relaxed mt-1">
+                                        {{ $shopOrder->order->formattedShippingAddress() }}
+                                    </div>
+                                    @if($shopOrder->order->shipping_delivery_notes)
+                                        <div class="text-amber-800 bg-amber-50/80 px-2 py-1 rounded text-[11px] mt-1.5 border border-amber-200/60 inline-block">
+                                            <span class="font-semibold">Catatan Kurir:</span> {{ $shopOrder->order->shipping_delivery_notes }}
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="text-slate-700 leading-relaxed">
+                                        {{ $shopOrder->order->shipping_address ?? 'Alamat standar terdaftar di profil pembeli' }}
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
@@ -174,25 +196,88 @@
                                     </form>
                                 </div>
                             @elseif($shopOrder->status->isProcessing())
-                                <div class="space-y-3">
+                                <div class="space-y-4">
                                     <p class="text-xs text-sky-800 bg-sky-50 p-3 rounded-xl border border-sky-100 leading-relaxed">
-                                        Pesanan sedang diproses. Bila pesanan telah selesai dikemas dan siap/sudah dikirim, tandai pesanan sebagai dikirim.
+                                        Pesanan sedang diproses. Bila pesanan telah selesai dikemas, pilih kurir pengiriman dan masukkan nomor resi untuk mengirimkan barang ke pembeli.
                                     </p>
-                                    <form method="POST" action="{{ route('seller.orders.status.update', $shopOrder) }}">
+                                    <form method="POST" action="{{ route('seller.orders.status.update', $shopOrder) }}" class="space-y-3">
                                         @csrf
                                         @method('PATCH')
                                         <input type="hidden" name="status" value="shipped">
+
+                                        <div>
+                                            <label for="courier" class="block text-xs font-bold text-slate-700 mb-1">
+                                                Kurir Pengiriman <span class="text-rose-500">*</span>
+                                            </label>
+                                            <select id="courier" name="courier" required class="w-full text-xs rounded-xl border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+                                                <option value="">-- Pilih Kurir Pengiriman --</option>
+                                                @foreach(\App\Models\ShopOrder::COURIERS as $courierKey => $courierName)
+                                                    <option value="{{ $courierKey }}" @selected(old('courier', $shopOrder->courier) === $courierKey)>{{ $courierName }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <label for="tracking_number" class="block text-xs font-bold text-slate-700 mb-1">
+                                                Nomor Resi (Tracking Number) <span class="text-rose-500">*</span>
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="tracking_number"
+                                                name="tracking_number"
+                                                value="{{ old('tracking_number', $shopOrder->tracking_number) }}"
+                                                required
+                                                placeholder="Contoh: JP1234567890"
+                                                maxlength="100"
+                                                class="w-full text-xs rounded-xl border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 uppercase font-mono tracking-wider"
+                                            >
+                                        </div>
+
                                         <button type="submit" 
-                                                class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white text-xs font-bold rounded-xl transition shadow-xs">
-                                            Tandai Telah Dikirim &rarr;
+                                                class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white text-xs font-bold rounded-xl transition shadow-xs gap-2">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+                                            </svg>
+                                            Tandai Telah Dikirim & Input Resi
                                         </button>
                                     </form>
                                 </div>
                             @elseif($shopOrder->status->isShipped())
-                                <div class="space-y-3">
-                                    <p class="text-xs text-slate-700 bg-slate-100 p-3 rounded-xl border border-slate-200 leading-relaxed">
-                                        Pesanan dalam proses pengiriman. Konfirmasi penyelesaian setelah pesanan sampai atau diterima pembeli.
-                                    </p>
+                                <div class="space-y-4" x-data="{ copied: false }">
+                                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-slate-500 font-semibold">Kurir Pengiriman:</span>
+                                            <span class="font-bold text-slate-900 px-2 py-0.5 rounded-md bg-white border border-slate-200">{{ $shopOrder->courier ?? 'Manual' }}</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-slate-500 font-semibold">Nomor Resi:</span>
+                                            <div class="flex items-center gap-1.5 font-mono font-bold text-slate-900">
+                                                <span>{{ $shopOrder->tracking_number ?? '-' }}</span>
+                                                @if($shopOrder->tracking_number)
+                                                    <button
+                                                        type="button"
+                                                        @click="navigator.clipboard.writeText('{{ $shopOrder->tracking_number }}'); copied = true; setTimeout(() => copied = false, 2000)"
+                                                        class="p-1 rounded hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition"
+                                                        title="Salin Resi"
+                                                    >
+                                                        <svg x-show="!copied" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                                        </svg>
+                                                        <svg x-show="copied" x-cloak class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                                        </svg>
+                                                    </button>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        @if($shopOrder->shipped_at)
+                                            <div class="flex justify-between items-center text-slate-500">
+                                                <span>Waktu Kirim:</span>
+                                                <span class="font-medium text-slate-700">{{ $shopOrder->shipped_at->format('d M Y, H:i') }}</span>
+                                            </div>
+                                        @endif
+                                    </div>
+
                                     <form method="POST" action="{{ route('seller.orders.status.update', $shopOrder) }}">
                                         @csrf
                                         @method('PATCH')
@@ -204,11 +289,42 @@
                                     </form>
                                 </div>
                             @elseif($shopOrder->status->isCompleted())
-                                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs">
-                                    <strong class="font-bold text-sm block mb-1">Pesanan Telah Selesai</strong>
-                                    <p class="text-slate-600 leading-relaxed">
-                                        Seluruh alur pemenuhan pesanan ini telah selesai dan tercatat resmi di sistem marketplace.
-                                    </p>
+                                <div class="space-y-4" x-data="{ copied: false }">
+                                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs space-y-2">
+                                        <strong class="font-bold text-sm block mb-1">Pesanan Telah Selesai</strong>
+                                        <p class="text-slate-600 leading-relaxed">
+                                            Seluruh alur pemenuhan pesanan ini telah selesai dan tercatat resmi di sistem marketplace.
+                                        </p>
+                                        @if($shopOrder->courier || $shopOrder->tracking_number)
+                                            <div class="pt-2 border-t border-slate-200/80 space-y-1">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-slate-500">Kurir:</span>
+                                                    <span class="font-bold text-slate-800">{{ $shopOrder->courier ?? '-' }}</span>
+                                                </div>
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-slate-500">Resi:</span>
+                                                    <div class="flex items-center gap-1.5 font-mono font-bold text-slate-800">
+                                                        <span>{{ $shopOrder->tracking_number ?? '-' }}</span>
+                                                        @if($shopOrder->tracking_number)
+                                                            <button
+                                                                type="button"
+                                                                @click="navigator.clipboard.writeText('{{ $shopOrder->tracking_number }}'); copied = true; setTimeout(() => copied = false, 2000)"
+                                                                class="p-0.5 rounded hover:bg-slate-200 text-slate-500 hover:text-slate-800"
+                                                                title="Salin Resi"
+                                                            >
+                                                                <svg x-show="!copied" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                                                </svg>
+                                                                <svg x-show="copied" x-cloak class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                                                </svg>
+                                                            </button>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             @elseif($shopOrder->status->isPending())
                                 <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 text-xs">

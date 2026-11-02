@@ -42,6 +42,7 @@ class UpdateShopSettingsRequest extends FormRequest
             'description' => ['required', 'string', 'min:10', 'max:1000'],
             'phone' => ['nullable', 'string', 'max:30'],
             'address' => ['nullable', 'string', 'max:500'],
+            'shipping_cost' => ['nullable', 'numeric', 'min:0'],
         ];
     }
 

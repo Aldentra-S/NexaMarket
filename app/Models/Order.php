@@ -27,6 +27,15 @@ class Order extends Model
         'notes',
         'paid_at',
         'cancelled_at',
+        'shipping_recipient_name',
+        'shipping_phone',
+        'shipping_province',
+        'shipping_city',
+        'shipping_district',
+        'shipping_postal_code',
+        'shipping_address',
+        'shipping_delivery_notes',
+        'shipping_cost_total',
     ];
 
     /**
@@ -37,6 +46,7 @@ class Order extends Model
     protected $attributes = [
         'status' => OrderStatus::PENDING,
         'total_amount' => 0.00,
+        'shipping_cost_total' => 0.00,
     ];
 
     /**
@@ -49,6 +59,7 @@ class Order extends Model
         return [
             'status' => OrderStatus::class,
             'total_amount' => 'decimal:2',
+            'shipping_cost_total' => 'decimal:2',
             'paid_at' => 'datetime',
             'cancelled_at' => 'datetime',
         ];
@@ -84,6 +95,59 @@ class Order extends Model
     public function formattedTotal(): string
     {
         return 'Rp ' . number_format((float) $this->total_amount, 0, ',', '.');
+    }
+
+    /**
+     * Format the total shipping cost into Indonesian Rupiah currency display.
+     */
+    public function formattedShippingCost(): string
+    {
+        $cost = (float) $this->shipping_cost_total;
+        if ($cost <= 0) {
+            return 'Gratis Ongkir';
+        }
+
+        return 'Rp ' . number_format($cost, 0, ',', '.');
+    }
+
+    /**
+     * Calculate sum of item subtotals excluding shipping cost.
+     */
+    public function itemsSubtotal(): float
+    {
+        return (float) $this->shopOrders->sum('subtotal');
+    }
+
+    /**
+     * Format items subtotal into Indonesian Rupiah currency display.
+     */
+    public function formattedItemsSubtotal(): string
+    {
+        return 'Rp ' . number_format($this->itemsSubtotal(), 0, ',', '.');
+    }
+
+    /**
+     * Check if this order contains a saved shipping address snapshot.
+     */
+    public function hasShippingAddress(): bool
+    {
+        return ! empty($this->shipping_address);
+    }
+
+    /**
+     * Get a formatted multiline shipping address string.
+     */
+    public function formattedShippingAddress(): string
+    {
+        $parts = [
+            $this->shipping_address,
+            $this->shipping_district ? 'Kec. ' . $this->shipping_district : null,
+            $this->shipping_city,
+            $this->shipping_province,
+            $this->shipping_postal_code,
+        ];
+
+        return implode(', ', array_filter($parts));
     }
 
     /**

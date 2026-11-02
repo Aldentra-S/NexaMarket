@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\RefundController as AdminRefundController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\ShopApprovalController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Buyer\AddressController as BuyerAddressController;
 use App\Http\Controllers\Buyer\DashboardController as BuyerDashboardController;
 use App\Http\Controllers\Buyer\ShopOnboardingController;
 use App\Http\Controllers\CartController;
@@ -73,6 +74,10 @@ Route::middleware(['auth', 'role:buyer'])->prefix('buyer')->name('buyer.')->grou
     Route::get('/area', fn () => response()->json(['status' => 'ok', 'message' => 'Buyer Area Access Granted']))->name('area');
     Route::get('/shop/apply', [ShopOnboardingController::class, 'create'])->name('shop.apply');
     Route::post('/shop/apply', [ShopOnboardingController::class, 'store'])->name('shop.store');
+
+    // Address Book Management
+    Route::resource('addresses', BuyerAddressController::class);
+    Route::patch('addresses/{address}/default', [BuyerAddressController::class, 'setDefault'])->name('addresses.default');
 });
 
 // Seller Routes (Protected by auth, role buyer, and approved shop)

@@ -45,6 +45,19 @@
                                 </div>
                             </div>
 
+                            @if($shopOrder->courier || $shopOrder->tracking_number)
+                                <div class="bg-sky-50/70 border-b border-sky-100 px-5 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+                                    <div class="flex items-center gap-2 text-sky-900">
+                                        <span class="font-semibold">Kurir:</span>
+                                        <span class="font-bold bg-white px-2 py-0.5 rounded border border-sky-200">{{ $shopOrder->courier ?? '-' }}</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-slate-600 font-semibold">Resi:</span>
+                                        <span class="font-mono font-bold text-slate-900 bg-white px-2 py-0.5 rounded border border-slate-200">{{ $shopOrder->tracking_number ?? '-' }}</span>
+                                    </div>
+                                </div>
+                            @endif
+
                             <div class="divide-y divide-slate-100">
                                 @foreach($shopOrder->items as $item)
                                     <div class="p-5 flex items-start justify-between gap-4">
@@ -72,9 +85,19 @@
                                 @endforeach
                             </div>
 
-                            <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-between items-center text-xs">
-                                <span class="font-semibold text-slate-600">Subtotal Toko:</span>
-                                <span class="font-bold text-slate-900">{{ $shopOrder->formattedSubtotal() }}</span>
+                            <div class="p-4 bg-slate-50 border-t border-slate-100 space-y-1.5 text-xs">
+                                <div class="flex justify-between items-center text-slate-600">
+                                    <span>Subtotal Produk:</span>
+                                    <span class="font-bold text-slate-900">{{ $shopOrder->formattedSubtotal() }}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-slate-600">
+                                    <span>Ongkos Kirim Toko:</span>
+                                    <span class="font-bold text-slate-900">{{ $shopOrder->formattedShippingCost() }}</span>
+                                </div>
+                                <div class="pt-1.5 border-t border-slate-200/80 flex justify-between items-center">
+                                    <span class="font-bold text-slate-800">Total Toko:</span>
+                                    <span class="font-bold text-orange-600">{{ $shopOrder->formattedTotal() }}</span>
+                                </div>
                             </div>
                         </div>
                     @endforeach
@@ -89,10 +112,22 @@
                                 <div class="text-slate-600">{{ $order->user->email ?? '-' }}</div>
                             </div>
                             <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
-                                <span class="text-slate-500 block font-semibold">Alamat Penerima</span>
-                                <div class="text-slate-800 leading-relaxed">
-                                    {{ $order->shipping_address ?? 'Alamat terdaftar di profil akun pembeli' }}
-                                </div>
+                                <span class="text-slate-500 block font-semibold">Penerima & Alamat Kirim</span>
+                                @if($order->hasShippingAddress())
+                                    <div class="font-bold text-slate-900">{{ $order->shipping_recipient_name }} ({{ $order->shipping_phone }})</div>
+                                    <div class="text-slate-800 leading-relaxed mt-1">
+                                        {{ $order->formattedShippingAddress() }}
+                                    </div>
+                                    @if($order->shipping_delivery_notes)
+                                        <div class="text-amber-800 bg-amber-50/80 px-2 py-1 rounded text-[11px] mt-1.5 border border-amber-200/60 inline-block">
+                                            <span class="font-semibold">Catatan Kurir:</span> {{ $order->shipping_delivery_notes }}
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="text-slate-800 leading-relaxed">
+                                        {{ $order->shipping_address ?? 'Alamat terdaftar di profil akun pembeli' }}
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
@@ -129,6 +164,16 @@
                             <div class="flex justify-between items-center py-2 border-b border-slate-100">
                                 <span class="text-slate-500">Jumlah Toko Terlibat:</span>
                                 <span class="font-semibold text-slate-900">{{ $order->shopOrders->count() }} Toko</span>
+                            </div>
+
+                            <div class="flex justify-between items-center py-2 border-b border-slate-100">
+                                <span class="text-slate-500">Subtotal Produk:</span>
+                                <span class="font-semibold text-slate-900">{{ $order->formattedItemsSubtotal() }}</span>
+                            </div>
+
+                            <div class="flex justify-between items-center py-2 border-b border-slate-100">
+                                <span class="text-slate-500">Total Ongkos Kirim:</span>
+                                <span class="font-semibold text-slate-900">{{ $order->formattedShippingCost() }}</span>
                             </div>
 
                             <div class="flex justify-between items-center pt-2">

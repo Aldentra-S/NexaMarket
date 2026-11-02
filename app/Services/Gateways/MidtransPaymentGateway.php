@@ -60,15 +60,21 @@ class MidtransPaymentGateway implements PaymentGatewayInterface
             $errorUrl = str_replace(['{order}', '{order_id}'], [(string) $order->id, (string) $order->id], $errorUrl);
         }
 
+        $customerDetails = [
+            'first_name' => $order->shipping_recipient_name ?: ($order->user->name ?? 'Pelanggan'),
+            'email' => $order->user->email ?? 'customer@nexamarket.com',
+        ];
+
+        if (!empty($order->shipping_phone)) {
+            $customerDetails['phone'] = $order->shipping_phone;
+        }
+
         return [
             'transaction_details' => [
                 'order_id' => $paymentNumber,
                 'gross_amount' => $grossAmount,
             ],
-            'customer_details' => [
-                'first_name' => $order->user->name ?? 'Pelanggan',
-                'email' => $order->user->email ?? 'customer@nexamarket.com',
-            ],
+            'customer_details' => $customerDetails,
             'item_details' => $itemDetails,
             'callbacks' => [
                 'finish' => $finishUrl,
@@ -121,6 +127,15 @@ class MidtransPaymentGateway implements PaymentGatewayInterface
                     'price' => (int) round((float) $item->unit_price),
                     'quantity' => (int) $item->quantity,
                     'name' => mb_substr($item->product_name, 0, 50),
+                ];
+            }
+
+            if ((float) $shopOrder->shipping_cost > 0) {
+                $itemDetails[] = [
+                    'id' => 'shipping-shop-' . $shopOrder->id,
+                    'price' => (int) round((float) $shopOrder->shipping_cost),
+                    'quantity' => 1,
+                    'name' => mb_substr('Ongkir: ' . $shopOrder->shop_name, 0, 50),
                 ];
             }
         }

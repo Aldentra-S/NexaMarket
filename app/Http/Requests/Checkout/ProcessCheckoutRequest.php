@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Checkout;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProcessCheckoutRequest extends FormRequest
 {
@@ -23,6 +24,11 @@ class ProcessCheckoutRequest extends FormRequest
     {
         return [
             'idempotency_key' => ['nullable', 'string', 'max:100'],
+            'address_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('addresses', 'id')->where('user_id', $this->user()?->id),
+            ],
             'notes' => ['nullable', 'string', 'max:1000'],
         ];
     }

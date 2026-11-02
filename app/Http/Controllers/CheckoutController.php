@@ -30,13 +30,34 @@ class CheckoutController extends Controller
 
         $hasUnavailableItems = $items->contains(fn ($item) => ! $item->isAvailable());
 
+        $addresses = $request->user()->addresses()->latest('is_default')->latest('id')->get();
+        $selectedAddressId = (int) $request->query('address_id', old('address_id', 0));
+        $selectedAddress = $selectedAddressId > 0
+            ? $addresses->firstWhere('id', $selectedAddressId)
+            : ($addresses->firstWhere('is_default', true) ?? $addresses->first());
+
+        $shippingCostsByShop = [];
+        foreach ($groupedItems as $shopId => $shopItems) {
+            $shop = $shopItems->first()->product->shop;
+            $shippingCostsByShop[$shopId] = (float) ($shop->shipping_cost ?? 0.00);
+        }
+
+        $totalShippingCost = array_sum($shippingCostsByShop);
+        $subtotal = (float) $cart->subtotal();
+        $grandTotal = $subtotal + $totalShippingCost;
+
         return view('checkout.index', [
             'cart' => $cart,
             'items' => $items,
             'groupedItems' => $groupedItems,
             'hasUnavailableItems' => $hasUnavailableItems,
-            'subtotal' => $cart->subtotal(),
+            'subtotal' => $subtotal,
             'totalQuantity' => $cart->totalQuantity(),
+            'addresses' => $addresses,
+            'selectedAddress' => $selectedAddress,
+            'shippingCostsByShop' => $shippingCostsByShop,
+            'totalShippingCost' => $totalShippingCost,
+            'grandTotal' => $grandTotal,
         ]);
     }
 

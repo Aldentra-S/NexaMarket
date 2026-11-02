@@ -15,9 +15,13 @@ class FulfillmentService
      *
      * @throws ValidationException
      */
-    public function updateStatus(ShopOrder $shopOrder, OrderStatus $targetStatus): ShopOrder
-    {
-        return DB::transaction(function () use ($shopOrder, $targetStatus) {
+    public function updateStatus(
+        ShopOrder $shopOrder,
+        OrderStatus $targetStatus,
+        ?string $courier = null,
+        ?string $trackingNumber = null
+    ): ShopOrder {
+        return DB::transaction(function () use ($shopOrder, $targetStatus, $courier, $trackingNumber) {
             // Lock the shop order record to prevent concurrent updates
             /** @var ShopOrder $freshShopOrder */
             $freshShopOrder = ShopOrder::where('id', $shopOrder->id)->lockForUpdate()->firstOrFail();
@@ -29,10 +33,23 @@ class FulfillmentService
                 ]);
             }
 
-            // Update only the status column of the shop order
-            $freshShopOrder->update([
+            // Prepare update payload
+            $updatePayload = [
                 'status' => $targetStatus,
-            ]);
+            ];
+
+            if ($targetStatus === OrderStatus::SHIPPED) {
+                if ($courier !== null) {
+                    $updatePayload['courier'] = $courier;
+                }
+                if ($trackingNumber !== null) {
+                    $updatePayload['tracking_number'] = $trackingNumber;
+                }
+                $updatePayload['shipped_at'] = now();
+            }
+
+            // Update shop order
+            $freshShopOrder->update($updatePayload);
 
             // If the child shop order is completed, inspect if all sibling child orders under the parent order are completed
             if ($targetStatus === OrderStatus::COMPLETED) {

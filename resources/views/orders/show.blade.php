@@ -44,12 +44,42 @@
             @endif
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
-                <!-- Left Column: Child Shop Orders & Items -->
+                <!-- Left Column: Shipping Address & Child Shop Orders -->
                 <div class="lg:col-span-8 space-y-6">
+                    <!-- Shipping Information Card -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 space-y-3">
+                        <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+                            <div class="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-bold text-slate-900 text-sm sm:text-base">Informasi Pengiriman</h3>
+                        </div>
+
+                        <div class="space-y-1.5 text-xs sm:text-sm">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="font-bold text-slate-900">{{ $order->shipping_recipient_name ?: $order->user->name }}</span>
+                                @if($order->shipping_phone)
+                                    <span class="text-xs text-slate-500 font-medium">({{ $order->shipping_phone }})</span>
+                                @endif
+                            </div>
+                            <p class="text-slate-700 leading-relaxed text-xs sm:text-sm">
+                                {{ $order->hasShippingAddress() ? $order->formattedShippingAddress() : ($order->shipping_address ?? 'Alamat standar profil pembeli') }}
+                            </p>
+                            @if($order->shipping_delivery_notes)
+                                <p class="text-xs text-amber-800 bg-amber-50/80 rounded-lg px-2.5 py-1 mt-2 inline-block border border-amber-200/60">
+                                    <span class="font-medium">Catatan Kurir:</span> {{ $order->shipping_delivery_notes }}
+                                </p>
+                            @endif
+                        </div>
+                    </div>
+
                     @foreach($order->shopOrders as $shopOrder)
-                        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden" x-data="{ copied: false }">
                             <!-- Shop Header -->
-                            <div class="bg-orange-50/60 px-5 sm:px-6 py-3.5 border-b border-orange-100 flex items-center justify-between">
+                            <div class="bg-orange-50/60 px-5 sm:px-6 py-3.5 border-b border-orange-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                 <div>
                                     <span class="text-xs text-slate-500 block">Child Order: {{ $shopOrder->order_number }}</span>
                                     <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2 mt-0.5">
@@ -57,11 +87,46 @@
                                         <span class="text-[11px] bg-orange-100 text-orange-700 font-semibold px-2 py-0.5 rounded-full border border-orange-200">Toko Mitra</span>
                                     </h3>
                                 </div>
-                                <div class="text-right">
-                                    <span class="text-xs text-slate-500 block">Subtotal Toko</span>
-                                    <span class="font-bold text-orange-600 text-sm">{{ $shopOrder->formattedSubtotal() }}</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border {{ $shopOrder->status->badgeColor() }}">
+                                        {{ $shopOrder->status->label() }}
+                                    </span>
                                 </div>
                             </div>
+
+                            <!-- Tracking Info Bar (If Shipped or Completed) -->
+                            @if($shopOrder->isShipped() || $shopOrder->courier || $shopOrder->tracking_number)
+                                <div class="bg-sky-50/70 border-b border-sky-100 px-5 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+                                    <div class="flex items-center gap-2 text-sky-900">
+                                        <svg class="w-4 h-4 text-sky-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+                                        </svg>
+                                        <span class="font-semibold">Kurir:</span>
+                                        <span class="font-bold bg-white px-2 py-0.5 rounded border border-sky-200">{{ $shopOrder->courier ?? 'Ekspedisi' }}</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-slate-600 font-semibold">No. Resi:</span>
+                                        <div class="flex items-center gap-1.5 font-mono font-bold text-slate-900 bg-white px-2 py-0.5 rounded border border-slate-200">
+                                            <span>{{ $shopOrder->tracking_number ?? '-' }}</span>
+                                            @if($shopOrder->tracking_number)
+                                                <button
+                                                    type="button"
+                                                    @click="navigator.clipboard.writeText('{{ $shopOrder->tracking_number }}'); copied = true; setTimeout(() => copied = false, 2000)"
+                                                    class="p-0.5 rounded hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition"
+                                                    title="Salin No. Resi"
+                                                >
+                                                    <svg x-show="!copied" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                                    </svg>
+                                                    <svg x-show="copied" x-cloak class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                                    </svg>
+                                                </button>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
 
                             <!-- Order Items -->
                             <div class="divide-y divide-slate-100 px-5 sm:px-6">
@@ -94,6 +159,18 @@
                                     </div>
                                 @endforeach
                             </div>
+
+                            <!-- Shop Subtotal & Shipping Footer -->
+                            <div class="bg-slate-50/70 px-5 sm:px-6 py-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                                <div class="flex items-center gap-2 text-slate-600">
+                                    <span>Ongkos Kirim:</span>
+                                    <span class="font-bold text-slate-900">{{ $shopOrder->formattedShippingCost() }}</span>
+                                </div>
+                                <div class="text-left sm:text-right">
+                                    <span class="text-slate-500">Subtotal Toko:</span>
+                                    <span class="font-bold text-orange-600 ml-1">Rp {{ number_format((float) $shopOrder->subtotal + (float) $shopOrder->shipping_cost, 0, ',', '.') }}</span>
+                                </div>
+                            </div>
                         </div>
                     @endforeach
 
@@ -124,6 +201,16 @@
                         <div class="flex justify-between text-slate-600">
                             <span>Total Kuantitas</span>
                             <span class="font-semibold text-slate-900">{{ $order->totalQuantity() }} barang</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Subtotal Produk</span>
+                            <span class="font-semibold text-slate-900">{{ $order->formattedItemsSubtotal() }}</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Total Ongkos Kirim</span>
+                            <span class="font-semibold {{ (float) $order->shipping_cost_total > 0 ? 'text-slate-900' : 'text-emerald-600' }}">
+                                {{ $order->formattedShippingCost() }}
+                            </span>
                         </div>
                     </div>
 

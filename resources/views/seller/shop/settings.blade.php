@@ -103,6 +103,26 @@
                         </div>
                     </div>
 
+                    <!-- Flat Shipping Cost -->
+                    <div>
+                        <x-input-label for="shipping_cost" :value="__('Tarif Ongkos Kirim Tetap Toko (Rp)')" />
+                        <div class="relative mt-1">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-xs font-semibold text-slate-500 dark:text-slate-400 pointer-events-none">Rp</span>
+                            <x-text-input 
+                                id="shipping_cost" 
+                                name="shipping_cost" 
+                                type="number" 
+                                step="1000" 
+                                min="0" 
+                                class="block w-full pl-9" 
+                                :value="old('shipping_cost', (int) $shop->shipping_cost)" 
+                                placeholder="0" 
+                            />
+                        </div>
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">Biaya pengiriman manual per pesanan untuk toko Anda (masukkan 0 untuk Gratis Ongkir). Nilai ini akan ditagihkan ke pembeli saat checkout.</p>
+                        <x-input-error class="mt-2" :messages="$errors->get('shipping_cost')" />
+                    </div>
+
                     <!-- Actions -->
                     <div class="flex items-center justify-end space-x-3 pt-6 border-t border-slate-100 dark:border-slate-800">
                         <a href="{{ route('seller.dashboard') }}" class="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">

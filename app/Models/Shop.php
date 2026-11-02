@@ -23,6 +23,7 @@ class Shop extends Model
         'description',
         'phone',
         'address',
+        'shipping_cost',
     ];
 
     /**
@@ -32,6 +33,7 @@ class Shop extends Model
      */
     protected $attributes = [
         'status' => ShopStatus::PENDING,
+        'shipping_cost' => 0.00,
     ];
 
     /**
@@ -43,6 +45,7 @@ class Shop extends Model
     {
         return [
             'status' => ShopStatus::class,
+            'shipping_cost' => 'decimal:2',
             'approved_at' => 'datetime',
             'suspended_at' => 'datetime',
         ];
@@ -90,6 +93,19 @@ class Shop extends Model
     public function shopOrders(): HasMany
     {
         return $this->hasMany(ShopOrder::class);
+    }
+
+    /**
+     * Format shop shipping rate into Indonesian Rupiah currency display.
+     */
+    public function formattedShippingCost(): string
+    {
+        $cost = (float) $this->shipping_cost;
+        if ($cost <= 0) {
+            return 'Gratis Ongkir';
+        }
+
+        return 'Rp ' . number_format($cost, 0, ',', '.');
     }
 }
 
